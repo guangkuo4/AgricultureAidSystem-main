@@ -1,0 +1,175 @@
+/* 管理端全局样式 - 深色科技风格 */
+
+:root {
+  --admin-dark-900: #0a1628;
+  --admin-dark-800: #0f243e;
+  --admin-dark-700: #163659;
+  --admin-blue-500: #2196f3;
+  --admin-blue-400: #42a5f5;
+  --admin-cyan-400: #26c6da;
+  --admin-text-900: #e3f2fd;
+  --admin-text-700: #bbdefb;
+  --admin-text-500: #90caf9;
+  --admin-surface: rgba(15, 36, 62, 0.86);
+  --admin-border: rgba(33, 150, 243, 0.18);
+  --admin-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --admin-shadow-hover: 0 16px 42px rgba(0, 0, 0, 0.45);
+  --admin-radius: 12px;
+  --admin-transition: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 全局背景 - 高优先级 */
+html, body {
+  background: radial-gradient(900px 260px at 20% 0%, rgba(33, 150, 243, 0.18), rgba(33, 150, 243, 0) 60%),
+              radial-gradient(760px 260px at 75% 10%, rgba(38, 198, 218, 0.12), rgba(38, 198, 218, 0) 60%),
+              linear-gradient(180deg, #0a1628 0%, #0f243e 65%) !important;
+  color: var(--admin-text-900) !important;
+}
+
+/* 通用卡片样式 - 高优先级 */
+.el-card,
+.card,
+.list-card,
+.detail-card {
+  border-radius: var(--admin-radius) !important;
+  border: 1px solid var(--admin-border) !important;
+  background: linear-gradient(180deg, rgba(15, 36, 62, 0.92), rgba(15, 36, 62, 0.72)) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28) !important;
+  transition: transform var(--admin-transition), box-shadow var(--admin-transition), border-color var(--admin-transition) !important;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: saturate(1.2) blur(10px);
+}
+
+.el-card:hover,
+.card:hover,
+.list-card:hover,
+.detail-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: var(--admin-shadow-hover) !important;
+  border-color: rgba(33, 150, 243, 0.35) !important;
+}
+
+/* 通用按钮样式 */
+.el-button--primary {
+  border-color: var(--admin-blue-500) !important;
+  background: linear-gradient(135deg, var(--admin-blue-400), var(--admin-blue-500)) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 10px 26px rgba(33, 150, 243, 0.30) !important;
+  transition: transform var(--admin-transition), box-shadow var(--admin-transition), filter var(--admin-transition) !important;
+}
+
+.el-button--primary:hover {
+  filter: brightness(1.05) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 34px rgba(33, 150, 243, 0.40) !important;
+}
+
+/* 输入框样式 */
+.el-input__inner {
+  border: 1px solid rgba(33, 150, 243, 0.18) !important;
+  border-radius: 10px !important;
+  background: rgba(10, 22, 40, 0.72) !important;
+  color: var(--admin-text-900) !important;
+  transition: all var(--admin-transition) !important;
+}
+
+.el-input__inner::placeholder {
+  color: rgba(187, 222, 251, 0.5) !important;
+}
+
+.el-input__inner:focus {
+  border-color: rgba(33, 150, 243, 0.55) !important;
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.22) !important;
+  background: rgba(10, 22, 40, 0.88) !important;
+}
+
+/* 分页样式 */
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  border: 1px solid var(--admin-border) !important;
+  border-radius: 10px !important;
+  background: rgba(15, 36, 62, 0.72) !important;
+  color: var(--admin-text-700) !important;
+  transition: all var(--admin-transition) !important;
+}
+
+.el-pagination .btn-prev:hover:not(:disabled),
+.el-pagination .btn-next:hover:not(:disabled) {
+  color: var(--admin-blue-400) !important;
+  border-color: var(--admin-blue-500) !important;
+  background: rgba(33, 150, 243, 0.10) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.20) !important;
+}
+
+.el-pagination .el-pager .number {
+  border: 1px solid var(--admin-border) !important;
+  border-radius: 10px !important;
+  background: rgba(15, 36, 62, 0.72) !important;
+  color: var(--admin-text-700) !important;
+  transition: all var(--admin-transition) !important;
+}
+
+.el-pagination .el-pager .number:hover {
+  color: var(--admin-blue-400) !important;
+  border-color: var(--admin-blue-500) !important;
+  background: rgba(33, 150, 243, 0.10) !important;
+  transform: translateY(-2px) !important;
+}
+
+.el-pagination .el-pager .number.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--admin-blue-400), var(--admin-blue-500)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.40) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 统计卡片 */
+.content > div > div {
+  border-radius: 16px !important;
+  border: 1px solid var(--admin-border) !important;
+  background: linear-gradient(135deg, rgba(15, 36, 62, 0.92), rgba(22, 54, 89, 0.72)) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.30) !important;
+  transition: transform var(--admin-transition), box-shadow var(--admin-transition) !important;
+  backdrop-filter: saturate(1.2) blur(10px);
+  overflow: hidden;
+}
+
+.content > div > div:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 50px rgba(33, 150, 243, 0.20) !important;
+  border-color: rgba(33, 150, 243, 0.35) !important;
+}
+
+/* ECharts 容器 */
+.echarts1,
+.echarts2,
+.echarts3,
+.echarts4,
+.echarts5 {
+  border-radius: 16px !important;
+  border: 1px solid var(--admin-border) !important;
+  background: linear-gradient(180deg, rgba(15, 36, 62, 0.86), rgba(15, 36, 62, 0.66)) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25) !important;
+  transition: transform var(--admin-transition), box-shadow var(--admin-transition) !important;
+}
+
+.echarts1:hover,
+.echarts2:hover,
+.echarts3:hover,
+.echarts4:hover,
+.echarts5:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(33, 150, 243, 0.15) !important;
+  border-color: rgba(33, 150, 243, 0.28) !important;
+}
+
+/* 减少动画 - 可访问性 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

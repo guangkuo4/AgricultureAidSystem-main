@@ -1,0 +1,127 @@
+/* 用户端全局样式 - 农业绿主题 */
+
+:root {
+  --ag-green-900: #1b5e20;
+  --ag-green-800: #2e7d32;
+  --ag-green-700: #388e3c;
+  --ag-green-500: #4caf50;
+  --ag-green-400: #66bb6a;
+  --ag-green-100: #e8f5e9;
+  --ag-green-050: #f1f8e9;
+  --ag-text-900: #1b2b1b;
+  --ag-text-700: #2f3a2f;
+  --ag-text-500: #607060;
+  --ag-surface: rgba(255, 255, 255, 0.86);
+  --ag-border: rgba(46, 125, 50, 0.14);
+  --ag-shadow: 0 10px 30px rgba(16, 24, 16, 0.10);
+  --ag-shadow-hover: 0 16px 42px rgba(16, 24, 16, 0.16);
+  --ag-radius: 12px;
+  --ag-transition: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 全局背景 - 高优先级 */
+html, body {
+  background: radial-gradient(900px 260px at 20% 0%, rgba(102, 187, 106, 0.18), rgba(102, 187, 106, 0) 60%),
+              radial-gradient(760px 260px at 75% 10%, rgba(76, 175, 80, 0.12), rgba(76, 175, 80, 0) 60%),
+              linear-gradient(180deg, #f7fbf6 0%, #ffffff 65%) !important;
+}
+
+/* 通用卡片样式 - 高优先级 */
+.el-card,
+.card,
+.list-card,
+.detail-card {
+  border-radius: var(--ag-radius) !important;
+  border: 1px solid var(--ag-border) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72)) !important;
+  box-shadow: 0 10px 28px rgba(16, 24, 16, 0.08) !important;
+  transition: transform var(--ag-transition), box-shadow var(--ag-transition), border-color var(--ag-transition) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.el-card:hover,
+.card:hover,
+.list-card:hover,
+.detail-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: var(--ag-shadow-hover) !important;
+  border-color: rgba(46, 125, 50, 0.20) !important;
+}
+
+/* 通用按钮样式 */
+.el-button--primary {
+  border-color: var(--ag-green-700) !important;
+  background: linear-gradient(135deg, var(--ag-green-400), var(--ag-green-700)) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 10px 26px rgba(56, 142, 60, 0.20) !important;
+  transition: transform var(--ag-transition), box-shadow var(--ag-transition), filter var(--ag-transition) !important;
+}
+
+.el-button--primary:hover {
+  filter: brightness(1.02) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 34px rgba(56, 142, 60, 0.26) !important;
+}
+
+/* 输入框样式 */
+.el-input__inner {
+  border: 1px solid rgba(46, 125, 50, 0.12) !important;
+  border-radius: 10px !important;
+  background: #f8faf8 !important;
+  transition: all var(--ag-transition) !important;
+}
+
+.el-input__inner:focus {
+  border-color: rgba(46, 125, 50, 0.42) !important;
+  box-shadow: 0 0 0 4px rgba(102, 187, 106, 0.18) !important;
+  background: #fff !important;
+}
+
+/* 分页样式 */
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  border: 1px solid var(--ag-border) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  transition: all var(--ag-transition) !important;
+}
+
+.el-pagination .btn-prev:hover:not(:disabled),
+.el-pagination .btn-next:hover:not(:disabled) {
+  color: var(--ag-green-800) !important;
+  border-color: var(--ag-green-700) !important;
+  background: rgba(46, 125, 50, 0.06) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15) !important;
+}
+
+.el-pagination .el-pager .number {
+  border: 1px solid var(--ag-border) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  transition: all var(--ag-transition) !important;
+}
+
+.el-pagination .el-pager .number:hover {
+  color: var(--ag-green-800) !important;
+  border-color: var(--ag-green-700) !important;
+  background: rgba(46, 125, 50, 0.06) !important;
+  transform: translateY(-2px) !important;
+}
+
+.el-pagination .el-pager .number.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--ag-green-400), var(--ag-green-800)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 减少动画 - 可访问性 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

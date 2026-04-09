@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.QiyeruzhuDao">
+
+    <resultMap type="com.entity.QiyeruzhuEntity" id="qiyeruzhuMap">
+        <result property="qiyemingcheng" column="qiyemingcheng"/>
+        <result property="lianxiren" column="lianxiren"/>
+        <result property="lianxidianhua" column="lianxidianhua"/>
+        <result property="yingyezhizhao" column="yingyezhizhao"/>
+        <result property="shenqingzhanghao" column="shenqingzhanghao"/>
+        <result property="shenqingmima" column="shenqingmima"/>
+        <result property="sfsh" column="sfsh"/>
+        <result property="shhf" column="shhf"/>
+        <result property="shenhetime" column="shenhetime"/>
+    </resultMap>
+
+    <select id="selectListVO" resultType="com.entity.vo.QiyeruzhuVO">
+        SELECT * FROM qiyeruzhu qiyeruzhu
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectVO" resultType="com.entity.vo.QiyeruzhuVO">
+        SELECT qiyeruzhu.* FROM qiyeruzhu qiyeruzhu
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectListView" resultType="com.entity.view.QiyeruzhuView">
+        SELECT qiyeruzhu.* FROM qiyeruzhu qiyeruzhu
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectView" resultType="com.entity.view.QiyeruzhuView">
+        SELECT * FROM qiyeruzhu qiyeruzhu
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+</mapper>
+
