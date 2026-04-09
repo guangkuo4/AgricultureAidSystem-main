@@ -2,7 +2,6 @@ package com.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -17,10 +16,5 @@ public class CorsConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 映射 upload 目录
-        registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:" + System.getProperty("user.dir") + "/upload/");
-    }
+    // 静态映射 /upload/** 已在 InterceptorConfig 中注册（WebMvcConfigurationSupport 会覆盖默认 MVC，需与之一致）
 }

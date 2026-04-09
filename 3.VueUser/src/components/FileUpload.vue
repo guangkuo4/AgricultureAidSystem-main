@@ -84,7 +84,7 @@ export default {
     // 上传文件成功后执行
     handleUploadSuccess(res, file, fileList) {
       if (res && res.code === 0) {
-        fileList[fileList.length - 1]["url"] = "upload/" + file.response.file;
+        fileList[fileList.length - 1]["url"] = "upload/" + res.file;
         this.setFileList(fileList);
         this.$emit("change", this.fileUrlList.join(","));
       } else {

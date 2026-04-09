@@ -1,5 +1,8 @@
 package com.config;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -27,6 +30,14 @@ public class InterceptorConfig extends WebMvcConfigurationSupport{
 	 */
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// 必须先注册 /upload/**，否则会被下面的 /** 抢走且 classpath 下没有 upload，导致轮播图等上传图片 404
+		Path uploadDir = Paths.get(System.getProperty("user.dir"), "upload");
+		String uploadLocation = uploadDir.toUri().toString();
+		if (!uploadLocation.endsWith("/")) {
+			uploadLocation += "/";
+		}
+		registry.addResourceHandler("/upload/**").addResourceLocations(uploadLocation);
+
 		registry.addResourceHandler("/**")
         .addResourceLocations("classpath:/resources/")
         .addResourceLocations("classpath:/static/")

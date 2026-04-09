@@ -207,6 +207,14 @@ export default {
 		      } else {
 		        this.$message.error(res.data.msg);
 		      }
+		    }).catch((err) => {
+		      let msg = "网络异常，请确认后端已启动在 http://localhost:8080";
+		      if (err.body && typeof err.body === "object" && err.body.msg) {
+		        msg = err.body.msg;
+		      } else if (err.statusText) {
+		        msg = err.statusText;
+		      }
+		      this.$message.error(msg);
 		    });
 		  } else {
 		    return false;

@@ -143,11 +143,11 @@ export default {
     },
 
     goBack() {
-      window.location.href = 'http://localhost:8080';
+      window.location.href = 'http://localhost:8082';
     },
 
     goToApply() {
-      window.open('http://localhost:8080/#/index/qiyeruzhuApply', '_blank');
+      window.open('http://localhost:8082/#/index/qiyeruzhuApply', '_blank');
     },
 
     login() {
@@ -192,6 +192,9 @@ export default {
         } else {
           this.$message.error(data.msg);
         }
+      }).catch((err) => {
+        const msg = (err.response && err.response.data && err.response.data.msg) || err.message || "网络异常，请确认后端已启动在 http://localhost:8080";
+        this.$message.error(msg);
       });
     },
   }

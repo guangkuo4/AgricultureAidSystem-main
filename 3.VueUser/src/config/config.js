@@ -1,6 +1,6 @@
 export default {
-    baseUrl: 'http://localhost:8080/springboot2855f2n2/',
-	name: '/springboot2855f2n2',
+    baseUrl: 'http://localhost:8080/',
+	name: '',
     indexNav: [
         {
             name: '助农商品',

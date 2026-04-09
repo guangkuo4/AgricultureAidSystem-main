@@ -2,7 +2,7 @@
   <div class="carousel-container">
     <el-carousel :interval="5000" type="card" height="400px">
       <el-carousel-item v-for="(item, index) in carouselData" :key="index">
-        <img :src="item.value.substring(0,4)=='http' ? item.value : $base.url+item.value" alt="轮播图" style="width: 100%; height: 100%; object-fit: cover;">
+        <img :src="carouselImgSrc(item)" alt="轮播图" style="width: 100%; height: 100%; object-fit: cover;">
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -20,6 +20,17 @@ export default {
     this.getCarouselData();
   },
   methods: {
+    carouselImgSrc(item) {
+      const v = (item && item.value ? String(item.value) : "").trim();
+      if (!v) {
+        return "";
+      }
+      if (v.startsWith("http://") || v.startsWith("https://")) {
+        return v;
+      }
+      const base = (this.$base.url || "").replace(/\/?$/, "/");
+      return base + v.replace(/^\//, "");
+    },
     getCarouselData() {
       this.$http({
         url: "config/list",
@@ -33,6 +44,7 @@ export default {
         }
       }).catch(err => {
         console.error('轮播图数据获取失败:', err);
+        this.carouselData = [];
       });
     }
   }

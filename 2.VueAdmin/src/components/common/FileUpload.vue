@@ -82,19 +82,32 @@ export default {
     handleBeforeUpload(file) {
 	
     },
-    // 上传文件成功后执行
+    // 上传文件成功后执行（el-upload 在部分环境下会把响应解析成字符串）
     handleUploadSuccess(res, file, fileList) {
-      if (res && res.code === 0) {
-        fileList[fileList.length - 1]["url"] = "upload/" + file.response.file;
+      let body = res;
+      if (typeof body === "string") {
+        try {
+          body = JSON.parse(body);
+        } catch (e) {
+          this.$message.error("上传响应无效，请检查接口是否返回 JSON");
+          return;
+        }
+      }
+      if (body && body.code === 0 && body.file) {
+        fileList[fileList.length - 1]["url"] = "upload/" + body.file;
         this.setFileList(fileList);
         this.$emit("change", this.fileUrlList.join(","));
       } else {
-        this.$message.error(res.msg);
+        this.$message.error((body && body.msg) || "上传失败");
       }
     },
     // 图片上传失败
     handleUploadErr(err, file, fileList) {
-      this.$message.error("文件上传失败");
+      let msg = "文件上传失败";
+      if (err && err.message) {
+        msg += "：" + err.message;
+      }
+      this.$message.error(msg);
     },
     // 移除图片
     handleRemove(file, fileList) {
@@ -115,7 +128,7 @@ export default {
       var fileArray = [];
       var fileUrlArray = [];
       // 有些图片不是公开的，所以需要携带token信息做权限校验
-      var token = storage.get("token");
+      var token = storage.get("Token");
       let _this = this;
       fileList.forEach(function(item, index) {
         var url = item.url.split("?")[0];

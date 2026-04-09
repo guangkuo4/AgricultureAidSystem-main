@@ -93,7 +93,9 @@
 			<div v-if="$route.path === '/index/home'" class="banner-preview">
 				<el-carousel :style='{"width":"100%","margin":"0 auto"}' trigger="click" indicator-position="inside" arrow="always" type="default" direction="vertical" height="600px" :autoplay="true" :interval="3000" :loop="true">
 					<el-carousel-item :style='{"borderRadius":"8px","width":"100%","height":"100%"}' v-for="item in carouselList" :key="item.id">
-						<el-image @click="carouselClick(item.url)" :style='{"objectFit":"cover","width":"100%","height":"100%","borderRadius":"8px"}' :src="baseUrl + item.value" fit="cover"></el-image>
+						<el-image @click="carouselClick(item.url)" :style='{"objectFit":"cover","width":"100%","height":"100%","borderRadius":"8px"}' :src="carouselImgSrc(item)" fit="cover">
+							<div slot="error" class="carousel-img-error">图片加载失败</div>
+						</el-image>
 					</el-carousel-item>
 				</el-carousel>
 				<div class="hero-overlay">
@@ -436,13 +438,28 @@ export default {
                 duration: 1000,
             });
         },
+		carouselImgSrc(item) {
+			const v = (item && item.value ? String(item.value) : "").trim();
+			if (!v) {
+				return "";
+			}
+			if (v.startsWith("http://") || v.startsWith("https://")) {
+				return v;
+			}
+			const base = (this.baseUrl || "").replace(/\/?$/, "/");
+			return base + v.replace(/^\//, "");
+		},
 		getCarousel() {
 			// 获取轮播图数据，按名称排序
 			this.$http.get('config/list', {params: { page: 1, limit: 10, sort: 'id', order: 'asc' }}).then(res => {
-				if (res.data.code == 0) {
+				if (res.data.code == 0 && res.data.data && res.data.data.list) {
 					// 只保留有图片的轮播图
 					this.carouselList = res.data.data.list.filter(item => item.value && item.value.trim() !== '');
+				} else {
+					this.carouselList = [];
 				}
+			}).catch(() => {
+				this.carouselList = [];
 			});
 		},
 		// 轮播图跳转
@@ -622,6 +639,18 @@ export default {
 
 	.banner-preview {
 		padding: 14px 24px 0;
+	}
+
+	.carousel-img-error {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		min-height: 200px;
+		color: #999;
+		font-size: 14px;
+		background: #f2f3f5;
 	}
 
 	.banner-preview ::v-deep .el-carousel {

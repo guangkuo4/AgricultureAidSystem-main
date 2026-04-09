@@ -175,8 +175,9 @@ export default {
 		},
 		zhunongshangpinChat1() {
 			this.$nextTick(()=>{
-
-        var zhunongshangpinChart1 = echarts.init(document.getElementById("zhunongshangpinChart1"),'macarons');
+        const chartDom = document.getElementById("zhunongshangpinChart1");
+        if (!chartDom) return;
+        var zhunongshangpinChart1 = echarts.init(chartDom,'macarons');
         this.$http({
             url: `zhunongshangpin/value/chanpinmingcheng/alllimittimes`,
             method: "get",
@@ -242,8 +243,9 @@ export default {
 
     zhunongshangpinChat2() {
       this.$nextTick(()=>{
-
-        var zhunongshangpinChart2 = echarts.init(document.getElementById("zhunongshangpinChart2"),'macarons');
+        const chartDom = document.getElementById("zhunongshangpinChart2");
+        if (!chartDom) return;
+        var zhunongshangpinChart2 = echarts.init(chartDom,'macarons');
         this.$http({
             url: "zhunongshangpin/group/chanpinfenlei",
             method: "get",
@@ -320,8 +322,9 @@ export default {
 		},
 		zhunongtuopinChat1() {
 			this.$nextTick(()=>{
-
-        var zhunongtuopinChart1 = echarts.init(document.getElementById("zhunongtuopinChart1"),'macarons');
+        const chartDom = document.getElementById("zhunongtuopinChart1");
+        if (!chartDom) return;
+        var zhunongtuopinChart1 = echarts.init(chartDom,'macarons');
         this.$http({
             url: "zhunongtuopin/group/wenzhangfenlei",
             method: "get",
@@ -386,8 +389,9 @@ export default {
 
     zhunongtuopinChat2() {
       this.$nextTick(()=>{
-
-        var zhunongtuopinChart2 = echarts.init(document.getElementById("zhunongtuopinChart2"),'macarons');
+        const chartDom = document.getElementById("zhunongtuopinChart2");
+        if (!chartDom) return;
+        var zhunongtuopinChart2 = echarts.init(chartDom,'macarons');
         this.$http({
             url: "zhunongtuopin/group/fabushijian",
             method: "get",
@@ -465,8 +469,9 @@ export default {
 		},
 		nongjixuetangChat1() {
 			this.$nextTick(()=>{
-
-        var nongjixuetangChart1 = echarts.init(document.getElementById("nongjixuetangChart1"),'macarons');
+        const chartDom = document.getElementById("nongjixuetangChart1");
+        if (!chartDom) return;
+        var nongjixuetangChart1 = echarts.init(chartDom,'macarons');
         this.$http({
             url: "nongjixuetang/group/kechengfenlei",
             method: "get",

@@ -56,9 +56,6 @@ export default {
   computed: {
     // 计算属性的 getter
     getActionUrl: function() {
-		console.log(123)
-		this.fileList = []
-      // return base.url + this.action + "?token=" + storage.get("token");
       return `/${this.$base.name}/` + this.action;
     }
   },
@@ -87,7 +84,7 @@ export default {
     // 上传文件成功后执行
     handleUploadSuccess(res, file, fileList) {
       if (res && res.code === 0) {
-        fileList[fileList.length - 1]["url"] = "upload/" + file.response.file;
+        fileList[fileList.length - 1]["url"] = "upload/" + res.file;
         this.setFileList(fileList);
         this.$emit("change", this.fileUrlList.join(","));
         this.$message.success("文件导入成功");
@@ -118,7 +115,7 @@ export default {
       var fileArray = [];
       var fileUrlArray = [];
       // 有些图片不是公开的，所以需要携带token信息做权限校验
-      var token = storage.get("token");
+      var token = storage.get("Token");
       let _this = this;
       fileList.forEach(function(item, index) {
         var url = item.url.split("?")[0];

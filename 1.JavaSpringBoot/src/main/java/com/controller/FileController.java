@@ -1,15 +1,8 @@
 package com.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,26 +36,24 @@ public class FileController{
 	 * 上传文件
 	 */
 	@RequestMapping("/upload")
-    @IgnoreAuth
+	@IgnoreAuth
 	public R upload(@RequestParam("file") MultipartFile file,String type) throws Exception {
 		if (file.isEmpty()) {
 			throw new EIException("上传文件不能为空");
 		}
 		String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-		File path = new File(ResourceUtils.getURL("classpath:static").getPath());
-		if(!path.exists()) {
-		    path = new File("");
-		}
-		File upload = new File(path.getAbsolutePath(),"/upload/");
-		if(!upload.exists()) {
-		    upload.mkdirs();
+		// 使用项目根目录下的 upload 文件夹
+		String uploadPath = System.getProperty("user.dir") + File.separator + "upload" + File.separator;
+		File uploadDir = new File(uploadPath);
+		if(!uploadDir.exists()) {
+		    uploadDir.mkdirs();
 		}
 		String fileName = new Date().getTime()+"."+fileExt;
         if(StringUtils.isNotBlank(type) && type.contains("_template")) {
             fileName = type + "."+fileExt;
-            new File(upload.getAbsolutePath()+"/"+fileName).deleteOnExit();
+            new File(uploadPath+fileName).deleteOnExit();
         }
-		File dest = new File(upload.getAbsolutePath()+"/"+fileName);
+		File dest = new File(uploadPath+fileName);
 		file.transferTo(dest);
 		/**
   		 * 如果使用idea或者eclipse重启项目，发现之前上传的图片或者文件丢失，将下面一行代码注释打开
@@ -94,15 +82,13 @@ public class FileController{
 	@RequestMapping("/download")
 	public ResponseEntity<byte[]> download(@RequestParam String fileName) {
 		try {
-			File path = new File(ResourceUtils.getURL("classpath:static").getPath());
-			if(!path.exists()) {
-			    path = new File("");
+			// 使用与上传相同的路径
+			String uploadPath = System.getProperty("user.dir") + File.separator + "upload" + File.separator;
+			File uploadDir = new File(uploadPath);
+			if(!uploadDir.exists()) {
+			    uploadDir.mkdirs();
 			}
-			File upload = new File(path.getAbsolutePath(),"/upload/");
-			if(!upload.exists()) {
-			    upload.mkdirs();
-			}
-			File file = new File(upload.getAbsolutePath()+"/"+fileName);
+			File file = new File(uploadPath+fileName);
 			if(file.exists()){
 				/*if(!fileService.canRead(file, SessionManager.getSessionUser())){
 					getResponse().sendError(403);

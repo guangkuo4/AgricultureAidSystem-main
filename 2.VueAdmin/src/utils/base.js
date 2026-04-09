@@ -1,10 +1,12 @@
 const base = {
     get() {
         return {
-            url : "http://localhost:8084/springboot2855f2n2/",
-            name: "springboot2855f2n2",
+            // 静态资源、轮播图拼接用后端真实地址（与 devServer 端口区分）
+            url : "http://localhost:8080/",
+            // 与 vue.config.js 中 /api 代理一致，上传组件路径为 /api/file/upload
+            name: "api",
             // 退出到首页链接
-            indexUrl: 'http://localhost:8084/springboot2855f2n2/front/dist/index.html'
+            indexUrl: 'http://localhost:8082/index.html'
         };
     },
     getProjectName(){

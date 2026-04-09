@@ -32,13 +32,14 @@ lintOnSave: false,
         port: 8081, //指定端口
         hot: true, // 开启热更新
         https: false, // 是否开启https模式
-        proxy: { // 请求代理服务器
-            '/springboot2855f2n2': { //带上api前缀的
-                target: 'http://localhost:8080/springboot2855f2n2/', //代理目标地址
+        proxy: {
+            // 管理端 devServer 占用 8081，后端 API 使用 8080，避免端口冲突；所有接口经 /api 转发
+            '/api': {
+                target: 'http://localhost:8080',
                 changeOrigin: true,
                 secure: false,
-                pathRewrite: { // 在发出请求后将/api替换为''空值，这样不影响接口请求
-                    '^/springboot2855f2n2': ''
+                pathRewrite: {
+                    '^/api': ''
                 }
             }
         }

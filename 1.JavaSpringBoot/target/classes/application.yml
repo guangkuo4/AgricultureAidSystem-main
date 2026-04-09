@@ -2,9 +2,9 @@
 server:
     tomcat:
         uri-encoding: UTF-8
-    port: 8085
+    port: 8080
     servlet:
-        context-path: /springboot2855f2n2
+        context-path: /
 
 
 spring:
