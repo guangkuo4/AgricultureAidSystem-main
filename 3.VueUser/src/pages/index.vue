@@ -1,6 +1,6 @@
 <template>
 	<div class="main-containers">
-		<div class="body-containers" :style='{"minHeight":"100vh"}'>
+		<div class="body-containers">
 		<div class="site-header-shell">
 		<div class="top-container">
 			<!-- 品牌标识区域 -->
@@ -449,6 +449,8 @@
 		<!-- 路由页面内容 -->
 		<router-view id="scrollView"></router-view>
 
+		<!-- 时令精选 + 信任条 + 页脚：整体贴底，避免与导航栏之间被 flex 撑出大块空白 -->
+		<div class="index-page-tail">
 		<!-- 时令精选推荐 -->
 		<div class="featured-section" v-if="featuredList.length">
 			<div class="featured-section__hd">
@@ -684,6 +686,7 @@
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 	</div>
 </div>
@@ -985,6 +988,9 @@ export default {
 		--site-header-offset: 136px;
 		position: relative;
 		min-height: 100vh;
+		min-height: 100dvh;
+		display: flex;
+		flex-direction: column;
 		padding-top: var(--site-header-offset) !important;
 		margin: 0;
 		overflow-x: hidden;
@@ -2286,7 +2292,7 @@ export default {
 
 	/* ========== 平台优势信任条 ========== */
 	.trust-bar {
-		margin: 28px 0 20px;
+		margin: 20px 0 0;
 		position: relative;
 		z-index: 1;
 	}
@@ -2354,12 +2360,22 @@ export default {
 		margin-top: 3px;
 	}
 
+	/* 时令精选 / 信任条 / 页脚：作为一整块贴住视口底部（空白留在购物车等内容上方） */
+	.index-page-tail {
+		margin-top: auto;
+		flex-shrink: 0;
+		width: 100%;
+	}
+	.index-page-tail > .trust-bar:first-child {
+		margin-top: 0;
+	}
+
 	/* ========== Footer 底部（通栏铺满视口，仅内容区保留与轮播一致的左右内边距） ========== */
 	.bottom-preview {
-		padding: 40px 0 30px;
+		padding: 12px 0 0;
 		width: 100%;
 		max-width: none;
-		margin: 20px 0 0;
+		margin-bottom: 0;
 		box-sizing: border-box;
 		position: relative;
 		z-index: 1;
@@ -2369,10 +2385,11 @@ export default {
 		border-left: none;
 		border-right: none;
 		border-top: 1px solid var(--ag-border);
-		border-bottom: 1px solid var(--ag-border);
-		background: linear-gradient(180deg, rgba(241, 248, 233, 0.97), rgba(255, 255, 255, 0.97));
+		border-bottom: none;
+		/* 底部保持浅绿，避免渐变到纯白导致版权条像「悬在空白上」 */
+		background: linear-gradient(180deg, rgba(241, 248, 233, 0.98), rgba(228, 245, 233, 0.99));
 		box-shadow: none;
-		padding: 36px var(--banner-inline-pad);
+		padding: 36px var(--banner-inline-pad) 0;
 		position: relative;
 		overflow: hidden;
 	}
@@ -2598,7 +2615,7 @@ export default {
 
 	.footer-bottom {
 		margin-top: 24px;
-		padding-top: 20px;
+		padding: 20px 0 16px;
 		border-top: 1px dashed var(--ag-border);
 		display: flex;
 		align-items: center;
@@ -2688,8 +2705,8 @@ export default {
 		.hero-card { max-width: calc(100vw - 60px); }
 		.hero-title { font-size: 18px; }
 		.footer-grid { grid-template-columns: 1fr; }
-		.bottom-preview { padding: 24px 0 20px; }
-		.footer { padding: 24px var(--banner-inline-pad); }
+		.bottom-preview { padding: 8px 0 0; }
+		.footer { padding: 24px var(--banner-inline-pad) 0; }
 		.section-hd { justify-content: flex-end; }
 		.section-hd__text { text-align: right; }
 		.stats-bar__inner { padding: 16px 20px; gap: 0; }

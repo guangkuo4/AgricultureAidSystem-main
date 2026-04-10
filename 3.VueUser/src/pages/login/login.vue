@@ -80,6 +80,7 @@
 <script>
 import menu from '@/config/menu'
 import loginBg from '@/assets/login-bg.png'
+import ErrorHandler from '@/utils/errorHandler'
 export default {
 	data() {
 		return {
@@ -130,10 +131,19 @@ export default {
 	},
 	created() {
 		this.roleMenus = menu.list()
+		console.log('Role menus:', this.roleMenus);
 		for(let item in this.roleMenus) {
 		    if(this.roleMenus[item].hasFrontLogin=='是') {
 		        this.roles.push(this.roleMenus[item]);
 		    }
+		}
+		console.log('Roles:', this.roles);
+		// 如果只有一个角色，自动选择
+		if (this.roles.length === 1) {
+		    this.role = this.roles[0].roleName;
+		    this.loginForm.tableName = this.roles[0].tableName;
+		    console.log('Auto selected role:', this.role);
+		    console.log('Auto selected table name:', this.loginForm.tableName);
 		}
 	},
     methods: {
@@ -171,51 +181,68 @@ export default {
 	  selectChange(e){
 		  this.role = e
 	  },
-      submitForm(formName) {
+      submitForm: function(formName) {
         if (this.roles.length!=1) {
             if (!this.role) {
-                this.$message.error("请选择登录用户类型");
+                ErrorHandler.showError("请选择登录用户类型");
                 return false;
             }
         } else {
             this.role = this.roles[0].roleName;
             this.loginForm.tableName = this.roles[0].tableName;
         }
+		console.log('Submit form:', formName);
+		console.log('Role:', this.role);
+		console.log('Table name:', this.loginForm.tableName);
 		this.loginPost(formName)
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-	  loginPost(formName) {
+	  loginPost: function(formName) {
 		this.$refs[formName].validate((valid) => {
 		  if (valid) {
-		    this.$http.get(`${this.loginForm.tableName}/login`, {params: this.loginForm}).then(res => {
-		      if (res.data.code === 0) {
-		        localStorage.setItem('frontToken', res.data.token);
-		        localStorage.setItem('UserTableName', this.loginForm.tableName);
-		        localStorage.setItem('username', this.loginForm.username);
-		        localStorage.setItem('adminName', this.loginForm.username);
-		        localStorage.setItem('frontSessionTable', this.loginForm.tableName);
-		        localStorage.setItem('frontRole', this.role);
-		        localStorage.setItem('keyPath', 0);
-		        this.$router.push('/');
-		        this.$message({
-		          message: '登录成功',
-		          type: 'success',
-		          duration: 1500,
-		        });
+		    // 检查 tableName 是否存在
+		    if (!this.loginForm.tableName) {
+		      // 尝试从 roles 中获取第一个角色的 tableName
+		      if (this.roles && this.roles.length > 0) {
+		        this.loginForm.tableName = this.roles[0].tableName;
+		        this.role = this.roles[0].roleName;
+		        console.log('Auto selected table name from roles:', this.loginForm.tableName);
 		      } else {
-		        this.$message.error(res.data.msg);
+		        // 如果没有角色，设置默认值
+		        this.loginForm.tableName = 'yonghu';
+		        this.role = '用户';
+		        console.log('Set default table name:', this.loginForm.tableName);
 		      }
-		    }).catch((err) => {
-		      let msg = "网络异常，请确认后端已启动在 http://localhost:8080";
-		      if (err.body && typeof err.body === "object" && err.body.msg) {
-		        msg = err.body.msg;
-		      } else if (err.statusText) {
-		        msg = err.statusText;
-		      }
-		      this.$message.error(msg);
-		    });
+		    }
+		    
+		    console.log('Login form data:', this.loginForm);
+		    console.log('API URL:', `${this.loginForm.tableName}/login`);
+		    
+		    try {
+		      this.$http.get(`${this.loginForm.tableName}/login`, {params: this.loginForm}).then(res => {
+		        console.log('Login response:', res);
+		        if (res.data && res.data.code === 0) {
+	          localStorage.setItem('frontToken', res.data.token);
+	          localStorage.setItem('UserTableName', this.loginForm.tableName);
+	          localStorage.setItem('username', this.loginForm.username);
+	          localStorage.setItem('adminName', this.loginForm.username);
+	          localStorage.setItem('frontSessionTable', this.loginForm.tableName);
+	          localStorage.setItem('frontRole', this.role);
+	          localStorage.setItem('keyPath', 0);
+	          this.$router.push('/');
+	        } else {
+		          ErrorHandler.showError(res.data && res.data.msg || '登录失败，请检查账号和密码');
+		        }
+		      }).catch((err) => {
+		        console.error('Login error:', err);
+		        ErrorHandler.showError("网络异常，请确认后端已启动在 http://localhost:8080");
+		      });
+		    } catch (error) {
+		      console.error('Login exception:', error);
+		      ErrorHandler.showError('登录过程中发生错误，请稍后重试');
+		    }
 		  } else {
 		    return false;
 		  }
@@ -238,6 +265,9 @@ export default {
 	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 	position: relative;
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
 	&::before {
 		content: "";
@@ -259,12 +289,14 @@ export default {
 }
 
 .container {
-	min-height: 100vh;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	position: relative;
 	z-index: 1;
+	padding: 0 20px;
+	box-sizing: border-box;
 }
 
 .login-card {

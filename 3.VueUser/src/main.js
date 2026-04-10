@@ -14,16 +14,24 @@ import '@/assets/css/global-agriculture.css'
 import config from './config/config'
 import validate from './common/validate'
 
-import VueAMap from 'vue-amap'
-// 后台地图
-Vue.use(VueAMap)
-VueAMap.initAMapApiLoader({
-  //key: 'ca04cee7ac952691aa67a131e6f0cee0',
-  key: '001d42eaa139dc53fd655e7c23c0187e',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder','AMap.CitySearch'],
-  // 默认高德 sdk 版本为 1.4.4
-  v: '1.4.4'
-})
+// 修复 AMap 错误：ReferenceError: AMap is not defined
+// 延迟加载 vue-amap，确保 AMap API 正确加载
+setTimeout(() => {
+  try {
+    import('vue-amap').then((VueAMap) => {
+      Vue.use(VueAMap.default)
+      VueAMap.default.initAMapApiLoader({
+        //key: 'ca04cee7ac952691aa67a131e6f0cee0',
+        key: '001d42eaa139dc53fd655e7c23c0187e',
+        plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder','AMap.CitySearch'],
+        // 默认高德 sdk 版本为 1.4.4
+        v: '1.4.4'
+      })
+    })
+  } catch (error) {
+    console.error('Failed to load vue-amap:', error)
+  }
+}, 100)
 import {
 	isAuth,
 	getCurDateTime,

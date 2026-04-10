@@ -621,10 +621,191 @@ html, body {
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
 
-/* ========== 响应式基础 ========== */
+/* ========== 响应式设计 ========== */
+
+/* 大型桌面设备 */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* 中型桌面设备 */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 90%;
+  }
+  
+  .section-header__title {
+    font-size: 20px;
+  }
+  
+  .section-header__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+/* 平板设备 */
+@media (max-width: 992px) {
+  .container {
+    max-width: 95%;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .section-header__title {
+    font-size: 18px;
+  }
+  
+  .section-header__icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  
+  .category-tag {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+  
+  .el-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* 小型平板设备 */
 @media (max-width: 768px) {
   :root {
     --ag-radius-lg: 12px;
     --ag-radius-xl: 16px;
+  }
+  
+  .container {
+    max-width: 98%;
+  }
+  
+  .section-header__title {
+    font-size: 16px;
+  }
+  
+  .section-header__icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  .category-tag {
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+  
+  .el-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .empty-state {
+    padding: 40px 16px;
+  }
+  
+  .empty-state i {
+    font-size: 60px;
+  }
+  
+  .empty-state__title {
+    font-size: 16px;
+  }
+  
+  .empty-state__desc {
+    font-size: 13px;
+  }
+}
+
+/* 移动设备 */
+@media (max-width: 576px) {
+  .container {
+    max-width: 100%;
+    padding: 0 12px;
+  }
+  
+  .section-header__title {
+    font-size: 15px;
+  }
+  
+  .section-header__icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .category-tag {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  
+  .el-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .empty-state {
+    padding: 30px 12px;
+  }
+  
+  .empty-state i {
+    font-size: 50px;
+  }
+  
+  .empty-state__title {
+    font-size: 14px;
+  }
+  
+  .empty-state__desc {
+    font-size: 12px;
+  }
+}
+
+/* 小型移动设备 */
+@media (max-width: 375px) {
+  .container {
+    padding: 0 8px;
+  }
+  
+  .section-header__title {
+    font-size: 14px;
+  }
+  
+  .section-header__icon {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .el-button {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  .empty-state {
+    padding: 20px 8px;
+  }
+  
+  .empty-state i {
+    font-size: 40px;
+  }
+  
+  .empty-state__title {
+    font-size: 13px;
+  }
+  
+  .empty-state__desc {
+    font-size: 11px;
   }
 }

@@ -105,21 +105,21 @@
         <el-tab-pane label="个人中心">
           <div :style='{"fontSize":"20px","fontWeight":"bold","color":"#1a1a1a","marginBottom":"25px","paddingBottom":"15px","borderBottom":"2px solid rgba(46, 125, 50, 0.1)"}'>编辑资料</div>
           <el-form class="center-preview-pv" ref="sessionForm" :model="sessionForm" :rules="rules" label-width="100px">
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="农户账号" prop="nonghuzhanghao">
-              <el-input v-model="sessionForm.nonghuzhanghao" placeholder="农户账号" readonly :style='{"background":"#f5f5f5"}'></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户账号" prop="nonghuzhanghao">
+              <el-input v-model="sessionForm.nonghuzhanghao" placeholder="农户账号" readonly :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0","background":"#f5f5f5"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="农户姓名" prop="nonghuxingming">
-              <el-input v-model="sessionForm.nonghuxingming" placeholder="请输入农户姓名"></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户姓名" prop="nonghuxingming">
+              <el-input v-model="sessionForm.nonghuxingming" placeholder="请输入农户姓名" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="性别">
-              <el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :style='{"width":"100%"}'>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="性别">
+              <el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :style='{"width":"100%","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'>
                 <el-option v-for="(item, index) in dynamicProp.xingbie" :key="index" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="农户电话" prop="nonghudianhua">
-              <el-input v-model="sessionForm.nonghudianhua" placeholder="请输入农户电话"></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户电话" prop="nonghudianhua">
+              <el-input v-model="sessionForm.nonghudianhua" placeholder="请输入农户电话" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="头像">
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="头像">
               <file-upload
                 tip="点击上传头像"
                 action="file/upload"
@@ -130,30 +130,30 @@
               ></file-upload>
             </el-form-item>
 
-            <el-form-item class="balance" :style='{"marginBottom":"20px"}' v-if="userTableName=='nonghu'" label="余额">
-              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center"}'>
-                <el-input v-model="sessionForm.money" placeholder="余额" readonly :style='{"width":"300px","marginRight":"15px"}'></el-input>
-                <el-button @click="dialogFormVisibleMoney = true" :style='{"border":"0","cursor":"pointer","padding":"0 25px","margin":"0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"8px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px","boxShadow":"0 4px 12px rgba(46, 125, 50, 0.3)"}'>
-                  <i class="el-icon-credit-pay" style="margin-right: 5px;"></i>点我充值
+            <el-form-item class="balance" :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="余额">
+              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}'>
+                <el-input v-model="sessionForm.money" placeholder="余额" readonly :style='{"width":"250px","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
+                <el-button @click="dialogFormVisibleMoney = true" :style='{"padding":"0 20px","margin":"0","outline":"none","color":"#2E7D32","borderRadius":"6px","background":"#f0f9f0","width":"auto","lineHeight":"40px","fontSize":"13px","height":"40px","boxShadow":"0 2px 8px rgba(46, 125, 50, 0.15)","border":"1px solid #d4e6d4","transition":"all 0.3s ease"}'>
+                  <i class="el-icon-credit-pay" style="margin-right: 4px;"></i>充值
                 </el-button>
               </div>
             </el-form-item>
 
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="用户账号" prop="yonghuzhanghao">
-              <el-input v-model="sessionForm.yonghuzhanghao" placeholder="用户账号" readonly :style='{"background":"#f5f5f5"}'></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="用户账号" prop="yonghuzhanghao">
+              <el-input v-model="sessionForm.yonghuzhanghao" placeholder="用户账号" readonly :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0","background":"#f5f5f5"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="用户姓名" prop="yonghuxingming">
-              <el-input v-model="sessionForm.yonghuxingming" placeholder="请输入用户姓名"></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="用户姓名" prop="yonghuxingming">
+              <el-input v-model="sessionForm.yonghuxingming" placeholder="请输入用户姓名" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="性别">
-              <el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :style='{"width":"100%"}'>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="性别">
+              <el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :style='{"width":"100%","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'>
                 <el-option v-for="(item, index) in dynamicProp.xingbie" :key="index" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="用户电话" prop="yonghudianhua">
-              <el-input v-model="sessionForm.yonghudianhua" placeholder="请输入用户电话"></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="用户电话" prop="yonghudianhua">
+              <el-input v-model="sessionForm.yonghudianhua" placeholder="请输入用户电话" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="头像">
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="头像">
               <file-upload
                 tip="点击上传头像"
                 action="file/upload"
@@ -164,20 +164,20 @@
               ></file-upload>
             </el-form-item>
 
-            <el-form-item class="balance" :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="余额">
-              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center"}'>
-                <el-input v-model="sessionForm.money" placeholder="余额" readonly :style='{"width":"300px","marginRight":"15px"}'></el-input>
-                <el-button @click="dialogFormVisibleMoney = true" :style='{"border":"0","cursor":"pointer","padding":"0 25px","margin":"0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"8px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px","boxShadow":"0 4px 12px rgba(46, 125, 50, 0.3)"}'>
-                  <i class="el-icon-credit-pay" style="margin-right: 5px;"></i>点我充值
+            <el-form-item class="balance" :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="余额">
+              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}'>
+                <el-input v-model="sessionForm.money" placeholder="余额" readonly :style='{"width":"250px","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
+                <el-button @click="dialogFormVisibleMoney = true" :style='{"padding":"0 20px","margin":"0","outline":"none","color":"#2E7D32","borderRadius":"6px","background":"#f0f9f0","width":"auto","lineHeight":"40px","fontSize":"13px","height":"40px","boxShadow":"0 2px 8px rgba(46, 125, 50, 0.15)","border":"1px solid #d4e6d4","transition":"all 0.3s ease"}'>
+                  <i class="el-icon-credit-pay" style="margin-right: 4px;"></i>充值
                 </el-button>
               </div>
             </el-form-item>
 
-            <el-form-item class="balance" :style='{"marginBottom":"20px"}' v-if="userTableName=='yonghu'" label="会员">
-              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center"}'>
-                <el-input v-model="sessionForm.vip" placeholder="会员" readonly :style='{"width":"300px","marginRight":"15px"}'></el-input>
-                <el-button @click="dialogFormVisibleVip = true" :style='{"border":"0","cursor":"pointer","padding":"0 25px","margin":"0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"8px","background":"linear-gradient(135deg, #FFD700 0%, #FFA500 100%)","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px","boxShadow":"0 4px 12px rgba(255, 215, 0, 0.3)"}'>
-                  <i class="el-icon-medal" style="margin-right: 5px;"></i>会员购买
+            <el-form-item class="balance" :style='{"marginBottom":"24px"}' v-if="userTableName=='yonghu'" label="会员">
+              <div :style='{"flexWrap":"wrap","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}'>
+                <el-input v-model="sessionForm.vip" placeholder="会员" readonly :style='{"width":"250px","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
+                <el-button @click="dialogFormVisibleVip = true" :style='{"padding":"0 20px","margin":"0","outline":"none","color":"#FFA500","borderRadius":"6px","background":"#fff8e6","width":"auto","lineHeight":"40px","fontSize":"13px","height":"40px","boxShadow":"0 2px 8px rgba(255, 215, 0, 0.15)","border":"1px solid #ffebcc","transition":"all 0.3s ease"}'>
+                  <i class="el-icon-medal" style="margin-right: 4px;"></i>会员
                 </el-button>
               </div>
             </el-form-item>
@@ -303,6 +303,7 @@
 </template>
 
 <script>
+import ErrorHandler from '@/utils/errorHandler'
   import config from '@/config/config'
   import menu from '@/config/menu'
   import Vue from 'vue'
@@ -389,7 +390,7 @@
       setSession(){
         localStorage.setItem('sessionForm',JSON.stringify(this.sessionForm))
       },
-      onSubmit(formName) {
+      onSubmit: ErrorHandler.wrapAsync(async function(formName) {
         if(`nonghu` == this.userTableName && this.sessionForm.touxiang!=null){
           this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl,"g"),"");
         }
@@ -401,31 +402,35 @@
             this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
               if (res.data.code == 0) {
                 this.setSession()
-                this.$message({ message: '更新成功', type: 'success', duration: 1500 });
+                ErrorHandler.showSuccess('更新成功');
+              } else {
+                ErrorHandler.showError(res.data.msg);
               }
+            }).catch((err) => {
+              ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
             });
           } else {
             return false;
           }
         });
-      },
+      }),
       nonghutouxiangHandleAvatarSuccess(fileUrls) {
         this.sessionForm.touxiang = fileUrls;
       },
       yonghutouxiangHandleAvatarSuccess(fileUrls) {
         this.sessionForm.touxiang = fileUrls;
       },
-      chongzhi() {
+      chongzhi: ErrorHandler.wrapAsync(async function() {
         if (this.chongzhiForm.money == '') {
-          this.$message({ message: '请输入充值金额', type: 'error', duration: 1500 });
+          ErrorHandler.showError('请输入充值金额');
           return;
         }
         if (this.chongzhiForm.money <= 0) {
-          this.$message({ message: '请输入正确的充值金额', type: 'error', duration: 1500 });
+          ErrorHandler.showError('请输入正确的充值金额');
           return;
         }
         if (this.chongzhiForm.radio == '') {
-          this.$message({ message: '请选择充值方式', type: 'error', duration: 1500 });
+          ErrorHandler.showError('请选择充值方式');
           return;
         }
         if(!this.sessionForm.money) {
@@ -437,17 +442,24 @@
         this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
           if (res.data.code == 0) {
             this.setSession()
-            this.$message({ message: '充值成功', type: 'success', duration: 1500, onClose: () => { this.dialogFormVisibleMoney = false; }});
+            ErrorHandler.showSuccess('充值成功');
+            setTimeout(() => {
+              this.dialogFormVisibleMoney = false;
+            }, 1500);
+          } else {
+            ErrorHandler.showError(res.data.msg);
           }
+        }).catch((err) => {
+          ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
         });
-      },
-      chongzhivip() {
+      }),
+      chongzhivip: ErrorHandler.wrapAsync(async function() {
         if (this.chongzhiForm.radio == '') {
-          this.$message({ message: '请选择支付方式', type: 'error', duration: 1500 });
+          ErrorHandler.showError('请选择支付方式');
           return;
         }
         if(this.sessionForm.vip == '是') {
-          this.$message({ message: '您已是我们的尊贵会员。', type: 'success', duration: 1500 });
+          ErrorHandler.showSuccess('您已是我们的尊贵会员。');
           return;
         }
         
@@ -455,13 +467,18 @@
         this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
           if (res.data.code == 0) {
             this.setSession()
-            this.$message({ message: '会员购买成功', type: 'success', duration: 1500, onClose: () => {
+            ErrorHandler.showSuccess('会员购买成功');
+            setTimeout(() => {
               localStorage.setItem('vip', this.sessionForm.vip);
               this.dialogFormVisibleVip = false;
-            }});
+            }, 1500);
+          } else {
+            ErrorHandler.showError(res.data.msg);
           }
+        }).catch((err) => {
+          ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
         });
-      },
+      }),
       handleClick(tab, event) {
         switch(event.target.outerText) {
           case '个人中心':

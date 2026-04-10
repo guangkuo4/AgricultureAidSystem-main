@@ -1,83 +1,66 @@
 <template>
-<div>
+<div class="news-page-align">
   <!-- 面包屑导航 -->
-  <div :style='{"width":"100%","padding":"30px 10%","margin":"0 auto","borderRadius":"8px","background":"linear-gradient(180deg, rgba(80, 160, 80, 0.9), rgba(60, 140, 60, 1))","boxShadow":"0 4px 12px rgba(0, 0, 0, 0.15)","border":"1px solid rgba(255, 255, 255, 0.2)"}' class="breadcrumb-preview">
-    <el-breadcrumb :separator="'>'" :style='{"fontSize":"16px","lineHeight":"1","color":"#fff"}'>
+  <div class="breadcrumb-preview">
+    <el-breadcrumb :separator="'>'">
       <el-breadcrumb-item class="item1" to="/"><a style="color: #fff;">首页</a></el-breadcrumb-item>
       <el-breadcrumb-item class="item2" v-for="(item, index) in breadcrumbItem" :key="index"><span style="color: #fff;">{{item.name}}</span></el-breadcrumb-item>
     </el-breadcrumb>
   </div>
   
-  <div class="news-preview-pv" :style='{"width":"80%","margin":"40px auto","position":"relative","background":"transparent"}'>
+  <div class="news-preview-pv">
     
     <!-- 搜索区域 -->
-    <div class="search-section" :style='{"padding":"0 0 30px 0"}'>
-      <el-form :inline="true" :model="formSearch" class="list-form-pv" :style='{"display":"flex","alignItems":"center","justifyContent":"center","flexWrap":"wrap","background":"#fff","padding":"25px 40px","borderRadius":"16px","border":"none","boxShadow":"0 4px 20px rgba(46, 125, 50, 0.08)"}'>
-        <el-form-item :style='{"margin":"0 15px 0 0"}'>
-          <el-input v-model="title" placeholder="搜索您感兴趣的资讯..." :style='{"width":"320px"}' prefix-icon="el-icon-search"></el-input>
+    <div class="search-section">
+      <el-form :inline="true" :model="formSearch" class="list-form-pv">
+        <el-form-item>
+          <el-input v-model="title" placeholder="搜索您感兴趣的资讯..." prefix-icon="el-icon-search"></el-input>
         </el-form-item>
-        <el-button type="primary" @click="getNewsList(1)" :style='{"border":"0","cursor":"pointer","padding":"0 35px","margin":"0","outline":"none","color":"#fff","borderRadius":"10px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","width":"auto","fontSize":"15px","fontWeight":"600","lineHeight":"46px","height":"46px","boxShadow":"0 6px 20px rgba(46, 125, 50, 0.35)"}'>
-          <i class="el-icon-search" style="margin-right: 8px;"></i>
+        <el-button type="primary" @click="getNewsList(1)">
+          <i class="el-icon-search"></i>
           搜索
         </el-button>
       </el-form>
     </div>
     
     <!-- 分类标签 -->
-    <div class="category" :style='{"width":"100%","padding":"0 0 35px 0","background":"none","display":"flex","justifyContent":"center","flexWrap":"wrap","height":"auto","gap":"10px"}'>
-      <div class="item" @click="categoryClick(0)" :class="categoryIndex == 0 ? 'active' : ''" :style='{"cursor":"pointer","borderRadius":"24px","padding":"10px 28px","margin":"0","color":"#555","background":"#fff","border":"1px solid #e8e8e8","fontSize":"14px","fontWeight":"500","transition":"all 0.3s ease"}'>全部资讯</div>
-      <div v-for="(item,index) in categoryList" @click="categoryClick(index+1)" :key="index" class="item" :class="categoryIndex == index+1 ? 'active' : ''" :style='{"cursor":"pointer","borderRadius":"24px","padding":"10px 28px","margin":"0","color":"#555","background":"#fff","border":"1px solid #e8e8e8","fontSize":"14px","fontWeight":"500","transition":"all 0.3s ease"}'>{{item.typename}}</div>
+    <div class="category">
+      <div class="item" @click="categoryClick(0)" :class="categoryIndex == 0 ? 'active' : ''">全部资讯</div>
+      <div v-for="(item,index) in categoryList" @click="categoryClick(index+1)" :key="index" class="item" :class="categoryIndex == index+1 ? 'active' : ''">{{item.typename}}</div>
     </div>
     
     <!-- 主要新闻列表 -->
-    <div v-if="newsList.length" :style='{"width":"100%","padding":"0","background":"none","height":"auto"}' class="list8 index-pv1">
+    <div v-if="newsList.length" class="list8 index-pv1">
       <!-- 头条新闻 -->
-      <div v-if="newsList[0]" :style='{"width":"100%","marginBottom":"35px"}'>
-        <div :style='{"width":"100%","display":"flex","height":"auto","background":"#fff","borderRadius":"20px","overflow":"hidden","boxShadow":"0 8px 30px rgba(46, 125, 50, 0.1)","border":"none"}' @click="toNewsDetail(newsList[0])">
-          <div :style='{"width":"52%","position":"relative","height":"460px","overflow":"hidden"}'>
-            <img :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%","transition":"transform 0.6s ease"}' :src="baseUrl + newsList[0].picture" @mouseover="e => e.target.style.transform='scale(1.08)'" @mouseout="e => e.target.style.transform='scale(1)'">
-            <div :style='{"position":"absolute","top":"25px","left":"25px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":"#fff","padding":"10px 24px","borderRadius":"24px","fontSize":"14px","fontWeight":"600","boxShadow":"0 6px 20px rgba(46, 125, 50, 0.35)"}'>
-              <i class="el-icon-star-on" style="margin-right: 6px;"></i>头条推荐
-            </div>
-            <div :style='{"position":"absolute","bottom":"0","left":"0","right":"0","height":"50%","background":"linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%)"}'></div>
+      <div v-if="newsList[0]">
+        <div @click="toNewsDetail(newsList[0])">
+          <div>
+            <img :src="baseUrl + newsList[0].picture" alt="">
+            <div>头条推荐</div>
           </div>
-          <div :style='{"width":"48%","padding":"50px 45px","display":"flex","flexDirection":"column","justifyContent":"center","background":"linear-gradient(180deg, rgba(46, 125, 50, 0.02) 0%, rgba(46, 125, 50, 0.06) 100%)"}'>
-            <div :style='{"color":"#2E7D32","fontSize":"14px","fontWeight":"600","marginBottom":"20px","display":"flex","alignItems":"center"}'>
-              <i class="el-icon-date" style="margin-right: 10px;"></i>
-              {{newsList[0].addtime}}
-            </div>
-            <div :style='{"color":"#1a1a1a","fontSize":"30px","fontWeight":"bold","marginBottom":"24px","lineHeight":"1.35"}'>{{newsList[0].title}}</div>
-            <div :style='{"color":"#666","fontSize":"15px","lineHeight":"1.8","marginBottom":"30px","display":"-webkit-box","-webkit-box-orient":"vertical","-webkit-line-clamp":"3","overflow":"hidden"}'>{{newsList[0].introduction}}</div>
-            <div :style='{"marginTop":"auto"}'>
-              <div :style='{"display":"inline-flex","alignItems":"center","color":"#2E7D32","fontSize":"16px","fontWeight":"600","padding":"12px 28px","background":"rgba(46, 125, 50, 0.08)","borderRadius":"30px","transition":"all 0.3s ease"}' @mouseover="e => {e.currentTarget.style.background='rgba(46, 125, 50, 0.15)';e.currentTarget.style.transform='translateX(5px)'}" @mouseout="e => {e.currentTarget.style.background='rgba(46, 125, 50, 0.08)';e.currentTarget.style.transform='translateX(0)'}">
-                阅读全文
-                <i class="el-icon-arrow-right" style="margin-left: 10px;"></i>
-              </div>
-            </div>
+          <div>
+            <div>{{newsList[0].addtime}}</div>
+            <div>{{newsList[0].title}}</div>
+            <div>{{newsList[0].introduction}}</div>
+            <div>阅读全文</div>
           </div>
         </div>
       </div>
       
       <!-- 新闻卡片列表 -->
-      <div v-if="newsList.length > 1" :style='{"display":"grid","gridTemplateColumns":"repeat(3, 1fr)","gap":"25px","marginBottom":"40px"}'>
+      <div v-if="newsList.length > 1">
         <template v-for="(item,index) in newsList">
-          <div v-if="index > 0 && index < 7" :style='{"background":"#fff","borderRadius":"16px","overflow":"hidden","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","border":"none","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","cursor":"pointer"}' @click="toNewsDetail(item)" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
-            <div :style='{"width":"100%","height":"200px","overflow":"hidden","position":"relative"}'>
-              <img :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%","transition":"transform 0.6s ease"}' :src="baseUrl + item.picture" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'">
-              <div :style='{"position":"absolute","top":"15px","left":"15px","background":"linear-gradient(135deg, rgba(46, 125, 50, 0.9) 0%, rgba(27, 94, 32, 0.9) 100%)","color":"#fff","padding":"6px 16px","borderRadius":"20px","fontSize":"12px","fontWeight":"600","backdropFilter":"blur(10px)"}'>{{item.typename || '最新资讯'}}</div>
+          <div v-if="index > 0 && index < 7" @click="toNewsDetail(item)">
+            <div>
+              <img :src="baseUrl + item.picture" alt="">
+              <div>{{item.typename || '最新资讯'}}</div>
             </div>
-            <div :style='{"padding":"24px"}'>
-              <div :style='{"fontSize":"17px","fontWeight":"600","color":"#1a1a1a","lineHeight":"1.45","marginBottom":"12px","display":"-webkit-box","-webkit-box-orient":"vertical","-webkit-line-clamp":"2","overflow":"hidden"}'>{{item.title}}</div>
-              <div :style='{"color":"#999","fontSize":"14px","lineHeight":"1.7","display":"-webkit-box","-webkit-box-orient":"vertical","-webkit-line-clamp":"2","overflow":"hidden","marginBottom":"18px"}'>{{item.introduction}}</div>
-              <div :style='{"display":"flex","alignItems":"center","justifyContent":"space-between","paddingTop":"18px","borderTop":"1px solid #f0f0f0"}'>
-                <span :style='{"color":"#bbb","fontSize":"13px","display":"flex","alignItems":"center"}'>
-                  <i class="el-icon-time" style="margin-right: 5px;"></i>
-                  {{item.addtime.split(" ")[0]}}
-                </span>
-                <span :style='{"color":"#2E7D32","fontSize":"14px","fontWeight":"500","display":"flex","alignItems":"center"}'>
-                  查看详情
-                  <i class="el-icon-arrow-right" style="margin-left: 5px;"></i>
-                </span>
+            <div>
+              <div>{{item.title}}</div>
+              <div>{{item.introduction}}</div>
+              <div>
+                <span>{{item.addtime.split(" ")[0]}}</span>
+                <span>查看详情</span>
               </div>
             </div>
           </div>
@@ -85,25 +68,20 @@
       </div>
       
       <!-- 更多新闻列表 -->
-      <div v-if="newsList.length > 6" :style='{"width":"100%","marginTop":"20px","background":"#fff","borderRadius":"20px","padding":"30px","boxShadow":"0 4px 20px rgba(46, 125, 50, 0.06)"}'>
-        <div :style='{"fontSize":"22px","fontWeight":"bold","color":"#1a1a1a","marginBottom":"25px","display":"flex","alignItems":"center"}'>
-          <span :style='{"width":"5px","height":"24px","background":"linear-gradient(180deg, #2E7D32 0%, #1B5E20 100%)","borderRadius":"3px","marginRight":"15px"}'></span>
-          更多资讯
-        </div>
+      <div v-if="newsList.length > 6">
+        <div>更多资讯</div>
         <template v-for="(item,index) in newsList">
-          <div v-if="index > 5" @click="toNewsDetail(item)" :style='{"padding":"22px 25px","background":"#f8faf8","borderRadius":"12px","marginBottom":"12px","display":"flex","alignItems":"center","justifyContent":"space-between","border":"none","transition":"all 0.3s ease","cursor":"pointer"}' @mouseover="e => {e.currentTarget.style.background='rgba(46, 125, 50, 0.06)';e.currentTarget.style.transform='translateX(8px)'}" @mouseout="e => {e.currentTarget.style.background='#f8faf8';e.currentTarget.style.transform='translateX(0)'}">
-            <div :style='{"display":"flex","alignItems":"center","flex":"1"}'>
-              <span :style='{"width":"46px","height":"46px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","borderRadius":"12px","display":"flex","alignItems":"center","justifyContent":"center","color":"#fff","fontWeight":"bold","fontSize":"18px","marginRight":"20px","boxShadow":"0 4px 12px rgba(46, 125, 50, 0.25)"}'>
-                {{index + 1}}
-              </span>
+          <div v-if="index > 5" @click="toNewsDetail(item)">
+            <div>
+              <span>{{index + 1}}</span>
               <div>
-                <div :style='{"fontSize":"16px","fontWeight":"600","color":"#1a1a1a","marginBottom":"6px"}'>{{item.title}}</div>
-                <div :style='{"fontSize":"13px","color":"#999"}'>{{item.typename || '资讯'}}</div>
+                <div>{{item.title}}</div>
+                <div>{{item.typename || '资讯'}}</div>
               </div>
             </div>
-            <div :style='{"display":"flex","alignItems":"center"}'>
-              <span :style='{"color":"#bbb","fontSize":"14px","marginRight":"20px"}'>{{item.addtime.split(" ")[0]}}</span>
-              <i class="el-icon-arrow-right" :style='{"color":"#2E7D32","fontSize":"18px"}'></i>
+            <div>
+              <span>{{item.addtime.split(" ")[0]}}</span>
+              <i class="el-icon-arrow-right"></i>
             </div>
           </div>
         </template>
@@ -111,11 +89,11 @@
     </div>
     
     <!-- 空状态 -->
-    <div v-else :style='{"textAlign":"center","padding":"100px 30px","background":"#fff","borderRadius":"20px","boxShadow":"0 4px 20px rgba(46, 125, 50, 0.06)"}'>
-      <i class="el-icon-document" :style='{"fontSize":"120px","color":"#e0e0e0","marginBottom":"25px"}'></i>
-      <div :style='{"fontSize":"18px","color":"#999","marginBottom":"25px"}'>暂无资讯内容</div>
-      <el-button @click="getNewsList(1)" :style='{"border":"0","padding":"0 35px","borderRadius":"10px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":"#fff","fontSize":"15px","fontWeight":"600","lineHeight":"46px","height":"46px","boxShadow":"0 6px 20px rgba(46, 125, 50, 0.35)"}'>
-        <i class="el-icon-refresh" style="margin-right: 8px;"></i>刷新
+    <div v-else>
+      <i class="el-icon-document"></i>
+      <div>暂无资讯内容</div>
+      <el-button @click="getNewsList(1)">
+        <i class="el-icon-refresh"></i>刷新
       </el-button>
     </div>
             
@@ -131,47 +109,34 @@
       :hide-on-single-page="false"
       :layout='["prev","pager","next"].join()'
       :total="total"
-      :style='{"padding":"0","margin":"50px auto 30px","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
       @current-change="curChange"
       @prev-click="prevClick"
       @next-click="nextClick"
     ></el-pagination>
 
     <!-- 热门信息 -->
-    <div class="hot" :style='{"width":"100%","boxShadow":"none","padding":"40px 0","background":"transparent","marginTop":"20px"}'>
-      <div :style='{"width":"100%","lineHeight":"44px","fontSize":"24px","fontWeight":"bold","color":"#1a1a1a","textAlign":"left","background":"none","marginBottom":"28px","display":"flex","alignItems":"center"}'>
-        <i class="el-icon-hot-water" :style='{"color":"#f56c6c","fontSize":"26px","marginRight":"12px"}'></i>
-        热门资讯
-      </div>
-      <div :style='{"padding":"0","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"space-between","height":"auto","gap":"25px"}'>
-        <div v-for="item in hotList" :key="item.id" :style='{"padding":"0","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","borderRadius":"16px","flexWrap":"nowrap","background":"#fff","flexDirection":"row","display":"flex","width":"calc(25% - 19px)","alignItems":"center","height":"120px","overflow":"hidden","cursor":"pointer","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","border":"none"}' @click="toNewsDetail(item)" @mouseover="e => {e.currentTarget.style.transform='translateY(-6px)';e.currentTarget.style.boxShadow='0 10px 25px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
-          <img :style='{"width":"130px","objectFit":"cover","display":"block","height":"100%"}' :src="baseUrl + item.picture" alt="">
-          <div :style='{"padding":"20px","display":"flex","flexDirection":"column","justifyContent":"center","flex":"1","height":"100%"}'>
-            <div :style='{"fontSize":"15px","fontWeight":"600","color":"#1a1a1a","lineHeight":"1.45","marginBottom":"10px","display":"-webkit-box","-webkit-box-orient":"vertical","-webkit-line-clamp":"2","overflow":"hidden"}'>{{ item.title }}</div>
-            <div :style='{"fontSize":"13px","color":"#bbb","display":"flex","alignItems":"center"}'>
-              <i class="el-icon-view" style="margin-right: 5px;"></i>
-              {{item.addtime.split(" ")[0]}}
-            </div>
+    <div class="hot">
+      <div>热门资讯</div>
+      <div>
+        <div v-for="item in hotList" :key="item.id" @click="toNewsDetail(item)">
+          <img :src="baseUrl + item.picture" alt="">
+          <div>
+            <div>{{ item.title }}</div>
+            <div>{{item.addtime.split(" ")[0]}}</div>
           </div>
         </div>
       </div>
     </div>
     
     <!-- 最新动态 -->
-    <div class="news" :style='{"width":"100%","padding":"40px 0","background":"transparent","height":"auto"}'>
-      <div :style='{"width":"100%","padding":"0 0 28px 0","lineHeight":"44px","fontSize":"24px","fontWeight":"bold","color":"#1a1a1a","background":"none","display":"flex","alignItems":"center"}'>
-        <i class="el-icon-lightbulb" :style='{"color":"#2E7D32","fontSize":"26px","marginRight":"12px"}'></i>
-        最新动态
-      </div>
-      <div :style='{"width":"100%","padding":"0","background":"none","justifyContent":"space-between","display":"flex","height":"auto","gap":"25px"}'>
-        <div v-for="item in recommendList" :key="item.id" :style='{"width":"25%","margin":"0","background":"#fff","flex":"1","height":"auto","borderRadius":"16px","overflow":"hidden","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","border":"none","cursor":"pointer","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)"}' @click="toNewsDetail(item)" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
-          <img :style='{"width":"100%","objectFit":"cover","display":"block","height":"180px","transition":"transform 0.6s ease"}' :src="baseUrl + item.picture" alt="" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'">
-          <div :style='{"padding":"22px"}'>
-            <div :style='{"lineHeight":"1.45","fontSize":"16px","fontWeight":"600","color":"#1a1a1a","textAlign":"left","marginBottom":"10px","display":"-webkit-box","-webkit-box-orient":"vertical","-webkit-line-clamp":"2","overflow":"hidden"}'>{{ item.title }}</div>
-            <div :style='{"padding":"0","lineHeight":"1.5","fontSize":"13px","color":"#bbb","textAlign":"left","display":"flex","alignItems":"center"}'>
-              <i class="el-icon-time" style="margin-right: 5px;"></i>
-              {{item.addtime.split(" ")[0]}}
-            </div>
+    <div class="news">
+      <div>最新动态</div>
+      <div>
+        <div v-for="item in recommendList" :key="item.id" @click="toNewsDetail(item)">
+          <img :src="baseUrl + item.picture" alt="">
+          <div>
+            <div>{{ item.title }}</div>
+            <div>{{item.addtime.split(" ")[0]}}</div>
           </div>
         </div>
       </div>
@@ -278,84 +243,509 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 /* ========== 新闻列表页样式 ========== */
+.news-page-align {
+	width: 100%;
+	box-sizing: border-box;
+	padding-left: 28px;
+	padding-right: 28px;
+}
+
+@media (max-width: 768px) {
+	.news-page-align {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+}
 
 /* 面包屑导航 */
 .breadcrumb-preview {
-  position: relative;
-  overflow: hidden;
+  width: 100%;
+  padding: 26px 28px;
+  margin: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(80, 160, 80, 0.9), rgba(60, 140, 60, 1));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
-    pointer-events: none;
-    border-radius: 50%;
-  }
-
-  .el-breadcrumb ::v-deep .el-breadcrumb__separator {
-    margin: 0 20px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 500;
-  }
-
-  .el-breadcrumb .item1 ::v-deep .el-breadcrumb__inner a,
-  .el-breadcrumb .item2 ::v-deep .el-breadcrumb__inner a {
+  .el-breadcrumb {
+    font-size: 16px;
+    line-height: 1;
     color: #fff;
-    display: inline-block;
+
+    .el-breadcrumb__separator {
+      margin: 0 20px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .item1 .el-breadcrumb__inner a,
+    .item2 .el-breadcrumb__inner a {
+      color: #fff;
+      display: inline-block;
+    }
   }
 }
 
-/* 分类标签激活状态 */
-.news-preview-pv .category .item.active {
-  color: #fff !important;
-  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
-  border-color: transparent !important;
-  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
-  transform: translateY(-3px);
+/* 主要内容区域 */
+.news-preview-pv {
+  width: 100%;
+  margin: 60px 0 0;
+  position: relative;
+  background: transparent;
 }
 
-.news-preview-pv .category .item:hover {
-  color: #388e3c !important;
-  border-color: #4caf50 !important;
-  background: rgba(76, 175, 80, 0.06) !important;
-  transform: translateY(-2px);
-}
+/* 搜索区域 */
+.search-section {
+  padding: 0 0 40px 0;
 
-/* 搜索框样式优化 */
-.news-preview-pv .list-form-pv ::v-deep .el-input__inner {
-  border: 1px solid rgba(46, 125, 50, 0.15) !important;
-  border-radius: 12px;
-  padding: 0 16px 0 48px !important;
-  height: 48px;
-  line-height: 48px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background: rgba(76, 175, 80, 0.04);
-
-  &:focus {
-    border-color: #4caf50 !important;
+  .list-form-pv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12) !important;
-  }
+    padding: 30px 40px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 6px 24px rgba(46, 125, 50, 0.08);
 
-  &::placeholder {
-    color: #aaa;
+    .el-form-item {
+      margin: 0 20px 0 0;
+    }
+
+    .el-input {
+      width: 360px;
+    }
+
+    .el-button {
+      border: 0;
+      cursor: pointer;
+      padding: 0 40px;
+      margin: 0;
+      outline: none;
+      color: #fff;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+      width: auto;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 48px;
+      height: 48px;
+      box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+    }
   }
 }
 
-.news-preview-pv .list-form-pv ::v-deep .el-input__prefix {
-  left: 16px;
-  color: #4caf50;
-  font-size: 18px;
+/* 分类标签 */
+.category {
+  width: 100%;
+  padding: 0 0 45px 0;
+  background: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: auto;
+  gap: 15px;
+
+  .item {
+    cursor: pointer;
+    border-radius: 28px;
+    padding: 12px 32px;
+    margin: 0;
+    color: #555;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #388e3c !important;
+      border-color: #4caf50 !important;
+      background: rgba(76, 175, 80, 0.06) !important;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      color: #fff !important;
+      background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+      border-color: transparent !important;
+      box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+      transform: translateY(-3px);
+    }
+  }
 }
 
-/* 分页样式优化 */
-#pagination.el-pagination ::v-deep {
+/* 新闻列表 */
+.list8 {
+  width: 100%;
+  padding: 0;
+  background: none;
+  height: auto;
+
+  /* 头条新闻 */
+  > div:first-child {
+    width: 100%;
+    margin-bottom: 35px;
+
+    > div {
+      width: 100%;
+      display: flex;
+      height: auto;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(46, 125, 50, 0.1);
+      border: none;
+      cursor: pointer;
+
+      > div:first-child {
+        width: 52%;
+        position: relative;
+        height: 460px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          object-fit: cover;
+          display: block;
+          height: 100%;
+          transition: transform 0.6s ease;
+
+          &:hover {
+            transform: scale(1.08);
+          }
+        }
+
+        > div:first-child {
+          position: absolute;
+          top: 25px;
+          left: 25px;
+          background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+          color: #fff;
+          padding: 10px 24px;
+          border-radius: 24px;
+          font-size: 14px;
+          font-weight: 600;
+          box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+        }
+
+        > div:last-child {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 50%;
+          background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+        }
+      }
+
+      > div:last-child {
+        width: 48%;
+        padding: 50px 45px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: linear-gradient(180deg, rgba(46, 125, 50, 0.02) 0%, rgba(46, 125, 50, 0.06) 100%);
+
+        > div:first-child {
+          color: #2E7D32;
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+        }
+
+        > div:nth-child(2) {
+          color: #1a1a1a;
+          font-size: 30px;
+          font-weight: bold;
+          margin-bottom: 24px;
+          line-height: 1.35;
+        }
+
+        > div:nth-child(3) {
+          color: #666;
+          font-size: 15px;
+          line-height: 1.8;
+          margin-bottom: 30px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
+        }
+
+        > div:last-child {
+          margin-top: auto;
+
+          > div {
+            display: inline-flex;
+            align-items: center;
+            color: #2E7D32;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 28px;
+            background: rgba(46, 125, 50, 0.08);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: rgba(46, 125, 50, 0.15);
+              transform: translateX(5px);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* 新闻卡片列表 */
+  > div:nth-child(2) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 50px;
+
+    > div {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      border: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(46, 125, 50, 0.2);
+      }
+
+      > div:first-child {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          width: 100%;
+          object-fit: cover;
+          display: block;
+          height: 100%;
+          transition: transform 0.6s ease;
+
+          &:hover {
+            transform: scale(1.12);
+          }
+        }
+
+        > div {
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          background: linear-gradient(135deg, rgba(46, 125, 50, 0.9) 0%, rgba(27, 94, 32, 0.9) 100%);
+          color: #fff;
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          backdrop-filter: blur(10px);
+        }
+      }
+
+      > div:last-child {
+        padding: 30px;
+
+        > div:first-child {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1a1a1a;
+          line-height: 1.5;
+          margin-bottom: 15px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+
+        > div:nth-child(2) {
+          color: #999;
+          font-size: 15px;
+          line-height: 1.8;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin-bottom: 22px;
+        }
+
+        > div:last-child {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 20px;
+          border-top: 1px solid #f0f0f0;
+
+          > span:first-child {
+            color: #bbb;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+          }
+
+          > span:last-child {
+            color: #2E7D32;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+
+  /* 更多新闻列表 */
+  > div:last-child {
+    width: 100%;
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 6px 24px rgba(46, 125, 50, 0.08);
+
+    > div:first-child {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+
+      > span:first-child {
+        width: 6px;
+        height: 28px;
+        background: linear-gradient(180deg, #2E7D32 0%, #1B5E20 100%);
+        border-radius: 4px;
+        margin-right: 18px;
+      }
+    }
+
+    > div:not(:first-child) {
+      padding: 25px 30px;
+      background: #f8faf8;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(46, 125, 50, 0.06);
+        transform: translateX(10px);
+      }
+
+      > div:first-child {
+        display: flex;
+        align-items: center;
+        flex: 1;
+
+        > span:first-child {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-weight: bold;
+          font-size: 20px;
+          margin-right: 24px;
+          box-shadow: 0 6px 16px rgba(46, 125, 50, 0.3);
+        }
+
+        > div {
+          > div:first-child {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+          }
+
+          > div:last-child {
+            font-size: 14px;
+            color: #999;
+          }
+        }
+      }
+
+      > div:last-child {
+        display: flex;
+        align-items: center;
+
+        > span {
+          color: #bbb;
+          font-size: 15px;
+          margin-right: 24px;
+        }
+
+        > i {
+          color: #2E7D32;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+/* 空状态 */
+.news-preview-pv > div:nth-child(4) {
+  text-align: center;
+  padding: 100px 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(46, 125, 50, 0.06);
+
+  > i {
+    font-size: 120px;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+  }
+
+  > div {
+    font-size: 18px;
+    color: #999;
+    margin-bottom: 25px;
+  }
+
+  > button {
+    border: 0;
+    padding: 0 35px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 46px;
+    height: 46px;
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+  }
+}
+
+/* 分页 */
+#pagination.el-pagination {
+  padding: 0;
+  margin: 50px auto 30px;
+  white-space: nowrap;
+  color: #333;
+  text-align: center;
+  width: 100%;
+  font-weight: 500;
+
   .btn-prev,
   .btn-next {
     border: 1px solid rgba(46, 125, 50, 0.12);
@@ -413,11 +803,194 @@
   }
 }
 
-/* 热门资讯样式 */
-.hot .hot-item {
-  &:hover {
-    transform: translateY(-6px) !important;
-    box-shadow: 0 12px 30px rgba(46, 125, 50, 0.18) !important;
+/* 热门资讯 */
+.hot {
+  width: 100%;
+  box-shadow: none;
+  padding: 60px 0;
+  background: transparent;
+  margin-top: 40px;
+
+  > div:first-child {
+    width: 100%;
+    line-height: 48px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a1a1a;
+    text-align: left;
+    background: none;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+
+    > i {
+      color: #f56c6c;
+      font-size: 30px;
+      margin-right: 18px;
+    }
+  }
+
+  > div:last-child {
+    padding: 0;
+    flex-wrap: wrap;
+    background: none;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    height: auto;
+    gap: 24px;
+
+    > div {
+      padding: 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      flex-wrap: nowrap;
+      background: #fff;
+      flex-direction: column;
+      display: flex;
+      width: calc(25% - 18px);
+      align-items: center;
+      height: auto;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: none;
+
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 16px 32px rgba(46, 125, 50, 0.2);
+      }
+
+      > img {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+        height: 160px;
+      }
+
+      > div {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        width: 100%;
+
+        > div:first-child {
+          font-size: 15px;
+          font-weight: 600;
+          color: #1a1a1a;
+          line-height: 1.5;
+          margin-bottom: 10px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+
+        > div:last-child {
+          font-size: 13px;
+          color: #bbb;
+          display: flex;
+          align-items: center;
+          margin-top: auto;
+        }
+      }
+    }
+  }
+}
+
+/* 最新动态 */
+.news {
+  width: 100%;
+  padding: 50px 0;
+  background: transparent;
+  height: auto;
+
+  > div:first-child {
+    width: 100%;
+    padding: 0 0 32px 0;
+    line-height: 48px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #1a1a1a;
+    background: none;
+    display: flex;
+    align-items: center;
+
+    > i {
+      color: #2E7D32;
+      font-size: 28px;
+      margin-right: 15px;
+    }
+  }
+
+  > div:last-child {
+    width: 100%;
+    padding: 0;
+    background: none;
+    justify-content: space-between;
+    display: flex;
+    height: auto;
+    gap: 30px;
+
+    > div {
+      width: 25%;
+      margin: 0;
+      background: #fff;
+      flex: 1;
+      height: auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(46, 125, 50, 0.2);
+      }
+
+      > img {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+        height: 200px;
+        transition: transform 0.6s ease;
+
+        &:hover {
+          transform: scale(1.15);
+        }
+      }
+
+      > div {
+        padding: 26px;
+
+        > div:first-child {
+          line-height: 1.5;
+          font-size: 17px;
+          font-weight: 600;
+          color: #1a1a1a;
+          text-align: left;
+          margin-bottom: 12px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+
+        > div:last-child {
+          padding: 0;
+          line-height: 1.5;
+          font-size: 14px;
+          color: #bbb;
+          text-align: left;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
   }
 }
 </style>

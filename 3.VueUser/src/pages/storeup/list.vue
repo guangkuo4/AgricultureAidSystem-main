@@ -1,8 +1,10 @@
 <template>
-<div :style='{"width":"80%","padding":"20px 0","margin":"0 auto","position":"relative","background":"#FCFAFF"}'>
-    <el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 auto 10px","color":"#fff","outline":"none","borderRadius":"5px","background":"#C61C14","width":"32%","lineHeight":"40px","fontSize":"16px","height":"40px","order":"3"}' type="warning" size="mini" @click="backClick" class="el-icon-back">返回</el-button>
-    <div v-if="storeupType==1" class="section-title" :style='{"margin":"10px 0","color":"#000","textAlign":"center","background":"linear-gradient(180deg, #A293B6 0%, rgba(241,231,255,0) 100%)","clipPath":"polygon(30px 00%, 0% 100%, 100% 100%, calc(100% - 30px) 0%)","width":"100%","fontSize":"20px","lineHeight":"54px","fontWeight":"bold"}'>我的收藏</div>
-    <el-form :inline="true" :model="formSearch" class="formSearch">
+<div class="center-sub-page">
+    <div class="center-sub-page__toolbar">
+      <el-button type="default" size="small" icon="el-icon-back" class="center-sub-page__back" @click="backClick">返回</el-button>
+    </div>
+    <h2 v-if="storeupType==1" class="section-title">我的收藏</h2>
+    <el-form :inline="true" :model="formSearch" class="formSearch center-sub-page__search">
       <el-form-item>
         <el-input v-model="formSearch.name" placeholder="名称"></el-input>
       </el-form-item>
@@ -34,7 +36,6 @@
       :hide-on-single-page="false"
       :layout='["prev","pager","next"].join()'
       :total="total"
-      :style='{"padding":"0","margin":"20px auto","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
       @current-change="curChange"
       @prev-click="prevClick"
       @next-click="nextClick"
@@ -100,6 +101,46 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  /* ========== 个人中心子页：与全站农业绿统一 ========== */
+  .center-sub-page {
+    width: 100%;
+    margin: 0 auto;
+    padding: 4px 20px 28px;
+    box-sizing: border-box;
+    position: relative;
+    background: transparent;
+  }
+
+  .center-sub-page__toolbar {
+    margin-bottom: 8px;
+  }
+
+  .center-sub-page__back {
+    border: none !important;
+    background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 10px 18px !important;
+    font-weight: 600 !important;
+    width: auto !important;
+    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      color: #fff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(46, 125, 50, 0.38);
+    }
+  }
+
+  .center-sub-page__search {
+    margin: 8px 0 20px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   /* ========== 收藏列表页样式 ========== */
   .list-preview {
     padding: 30px 0;
@@ -121,7 +162,19 @@
 
   /* 搜索表单 */
   .formSearch {
-    text-align: right;
+    margin: 8px 0 20px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    ::v-deep .el-form-item {
+      margin-bottom: 0;
+    }
+
+    ::v-deep .el-input {
+      width: 220px;
+    }
 
     ::v-deep .el-input__inner {
       border: 1px solid rgba(46, 125, 50, 0.15) !important;
@@ -138,6 +191,17 @@
         box-shadow: 0 0 0 4px rgba(102, 187, 106, 0.12) !important;
       }
     }
+  }
+
+  /* 卡片区域：弹性铺满 */
+  ::v-deep .el-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  ::v-deep .el-col {
+    max-width: 320px;
+    flex: 1 1 260px;
   }
 
   /* 图片 */
@@ -178,6 +242,13 @@
   }
 
   /* 分页样式 */
+  #pagination.pagination {
+    margin: 24px auto 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   #pagination.el-pagination ::v-deep {
     .btn-prev,
     .btn-next {

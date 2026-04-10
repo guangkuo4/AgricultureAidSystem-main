@@ -1,8 +1,10 @@
 <template>
-<div :style='{"width":"80%","padding":"20px 0","margin":"0 auto","position":"relative","background":"#FCFAFF"}'>
-    <el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 auto 10px","color":"#fff","outline":"none","borderRadius":"5px","background":"#C61C14","width":"32%","lineHeight":"40px","fontSize":"16px","height":"40px","order":"3"}' type="warning" size="mini" @click="backClick" class="el-icon-back">返回</el-button>
-    <div class="section-title" :style='{"margin":"10px 0","color":"#000","textAlign":"center","background":"linear-gradient(180deg, #A293B6 0%, rgba(241,231,255,0) 100%)","clipPath":"polygon(30px 00%, 0% 100%, 100% 100%, calc(100% - 30px) 0%)","width":"100%","fontSize":"20px","lineHeight":"54px","fontWeight":"bold"}'>我的订单</div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+<div class="center-sub-page">
+    <div class="center-sub-page__toolbar">
+      <el-button type="default" size="small" icon="el-icon-back" class="center-sub-page__back" @click="backClick">返回</el-button>
+    </div>
+    <h2 class="section-title">我的订单</h2>
+    <el-tabs v-model="activeName" class="center-sub-page__tabs" @tab-click="handleClick">
       <el-tab-pane label="未支付" name="未支付"></el-tab-pane>
       <el-tab-pane label="已支付" name="已支付"></el-tab-pane>
       <el-tab-pane label="已发货" name="已发货"></el-tab-pane>
@@ -10,7 +12,7 @@
       <el-tab-pane label="已退款" name="已退款"></el-tab-pane>
       <el-tab-pane label="已取消" name="已取消"></el-tab-pane>
     </el-tabs>
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%; margin: 0 auto;">
       <el-table-column label="订单编号" prop="orderid"></el-table-column>
       <el-table-column label="商品" align="center" width="200px">
         <template slot-scope="scope">
@@ -70,7 +72,6 @@
 	  :hide-on-single-page="false"
 	  :layout='["prev","pager","next"].join()'
 	  :total="total"
-	  :style='{"padding":"0","margin":"20px auto","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
 	  @current-change="curChange"
 	  @prev-click="prevClick"
 	  @next-click="nextClick"
@@ -363,6 +364,84 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  /* ========== 个人中心子页：与全站农业绿统一 ========== */
+  .center-sub-page {
+    width: 100%;
+    margin: 0 auto;
+    padding: 4px 20px 28px;
+    box-sizing: border-box;
+    position: relative;
+    background: transparent;
+  }
+
+  .center-sub-page__toolbar {
+    margin-bottom: 8px;
+  }
+
+  .center-sub-page__back {
+    border: none !important;
+    background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 10px 18px !important;
+    font-weight: 600 !important;
+    width: auto !important;
+    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      color: #fff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(46, 125, 50, 0.38);
+    }
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a2e1a;
+    margin: 12px 0 20px;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, rgba(241, 248, 233, 0.95), rgba(255, 255, 255, 0.98));
+    border-radius: 16px;
+    border: 1px solid rgba(46, 125, 50, 0.12);
+    box-shadow: 0 8px 28px rgba(46, 125, 50, 0.08);
+  }
+
+  .center-sub-page__tabs {
+    margin-bottom: 16px;
+
+    ::v-deep .el-tabs__header {
+      margin: 0;
+    }
+
+    ::v-deep .el-tabs__nav-wrap::after {
+      height: 1px;
+      background: rgba(46, 125, 50, 0.12);
+    }
+
+    ::v-deep .el-tabs__item {
+      color: #607060;
+      font-weight: 600;
+      font-size: 15px;
+
+      &:hover {
+        color: #388e3c;
+      }
+
+      &.is-active {
+        color: #2e7d32;
+        font-weight: 700;
+      }
+    }
+
+    ::v-deep .el-tabs__active-bar {
+      background-color: #4caf50;
+      height: 3px;
+    }
+  }
+
   /* ========== 订单列表页样式 ========== */
   .section {
     width: 1000px;
@@ -518,6 +597,13 @@
   }
 
   /* 分页样式 */
+  #pagination.pagination {
+    margin: 24px auto 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   #pagination.el-pagination ::v-deep {
     .btn-prev,
     .btn-next {

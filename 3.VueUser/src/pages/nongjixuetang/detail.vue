@@ -1,127 +1,165 @@
 <template>
-<div>
-	<div :style='{"width":"100%","padding":"30px 10%","margin":"0 auto","borderRadius":"0","background":"#A293B6"}' class="breadcrumb-preview">
-		<el-breadcrumb :separator="'>'" :style='{"fontSize":"16px","lineHeight":"1"}'>
-			<el-breadcrumb-item class="item1" to="/"><a>首页</a></el-breadcrumb-item>
-			<el-breadcrumb-item class="item2" v-for="(item, index) in breadcrumbItem" :key="index" to="/index/nongjixuetang"><a>{{item.name}}</a></el-breadcrumb-item>
-			<el-breadcrumb-item class="item3"><a href="javascript:void(0);">详情</a></el-breadcrumb-item>
-		</el-breadcrumb>
+<div class="nongji-detail-page">
+	<div class="nongji-detail__breadcrumb breadcrumb-preview">
+		<div class="nongji-detail__breadcrumb-inner">
+			<el-breadcrumb separator=">">
+				<el-breadcrumb-item class="item1" to="/"><a>首页</a></el-breadcrumb-item>
+				<el-breadcrumb-item class="item2" v-for="(item, index) in breadcrumbItem" :key="index" to="/index/nongjixuetang"><a>{{item.name}}</a></el-breadcrumb-item>
+				<el-breadcrumb-item class="item3"><a href="javascript:void(0);">详情</a></el-breadcrumb-item>
+			</el-breadcrumb>
+			<el-button type="text" class="nongji-detail__back" icon="el-icon-back" @click="backClick">返回</el-button>
+		</div>
 	</div>
-	<div :style='{"width":"100%","padding":"30px 10%","margin":"0 auto","borderRadius":"0","background":"#A293B6"}'>
-		<el-button size="mini" @click="backClick">返回</el-button>
-	</div>
-	<div class="detail-preview" :style='{"width":"70%","margin":"10px auto","position":"relative","alignItems":"flex-start","flexWrap":"wrap","display":"flex"}'>
-		<div class="attr" :style='{"padding":"0 10px","margin":"0 0 0 10px","background":"#f5f5f5","flex":"1","display":"flex","width":"calc(50% - 10px)","position":"relative","order":"2"}'>
 
-			<div class="info" :style='{"padding":"10px","margin":"0 0 0 10px","background":"none","flex":"1"}'>
-				<div class="item" :style='{"padding":"10px 0","margin":"0 0 10px 0","alignItems":"center","background":"none","justifyContent":"space-between","display":"flex"}'>
-					<div :style='{"width":"calc(100% - 130px)","margin":"0 10px 0 0","fontSize":"18px","color":"#000","flex":"1","fontWeight":"bold"}'>
-                    {{detail.kechengbiaoti}}
-                    </div>
-					<div @click="storeup(1)" v-show="!isStoreup" :style='{"width":"120px","padding":"10px","borderRadius":"4px","textAlign":"center","background":"#A293B6"}'><i v-if="true" :style='{"color":"#fff","fontSize":"14px"}' class="el-icon-star-off"></i><span :style='{"color":"#fff","fontSize":"14px"}'>点我收藏({{detail.storeupnum}})</span></div>
-					<div @click="storeup(-1)" v-show="isStoreup" :style='{"width":"120px","padding":"10px","borderRadius":"4px","textAlign":"center","background":"#A293B6"}'><i v-if="true" :style='{"color":"#fff","fontSize":"14px"}' class="el-icon-star-on"></i><span :style='{"color":"#fff","fontSize":"14px"}'>取消收藏({{detail.storeupnum}})</span></div>
+	<div class="detail-preview nongji-detail__wrap">
+		<div class="nongji-detail__card">
+			<div class="nongji-detail__grid">
+				<div class="nongji-detail__media" v-if="detailBanner.length">
+					<div class="nongji-detail__media-main">
+						<img id="big" class="nongji-detail__media-img" :src="swiperBigUrl" alt="课程图片">
+					</div>
+					<div class="nongji-detail__thumbs">
+						<button
+							type="button"
+							class="nongji-detail__thumb"
+							v-for="(item, idx) in detailBanner"
+							:key="idx"
+							@click="item.substr(0,4)=='http' ? swiperClick3(item) : swiperClick3(baseUrl + item)"
+						>
+							<img
+								class="nongji-detail__thumb-img"
+								:src="item.substr(0,4)=='http' ? item : (baseUrl + item)"
+								alt=""
+							>
+						</button>
+					</div>
 				</div>
-				<div class="item" :style='{"padding":"10px 0","margin":"0 0 10px 0","background":"#f5f5f5","justifyContent":"spaceBetween","display":"flex"}'>
-					<div class="lable" :style='{"padding":"0 10px","color":"#818181","textAlign":"left","width":"100px","fontSize":"14px","lineHeight":"40px","height":"40px"}'>课程分类</div>
-					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#818181","flex":"1","height":"auto"}'>{{detail.kechengfenlei}}</div>
+				<div class="nongji-detail__media nongji-detail__media--empty" v-else>
+					<div class="nongji-detail__media-placeholder">
+						<i class="el-icon-picture-outline"></i>
+						<span>暂无课程配图</span>
+					</div>
 				</div>
-				<div class="item" :style='{"padding":"10px 0","margin":"0 0 10px 0","background":"#f5f5f5","justifyContent":"spaceBetween","display":"flex"}'>
-					<div class="lable" :style='{"padding":"0 10px","color":"#818181","textAlign":"left","width":"100px","fontSize":"14px","lineHeight":"40px","height":"40px"}'>课程简介</div>
-					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#818181","flex":"1","height":"auto"}'>{{detail.kechengjianjie}}</div>
+
+				<div class="nongji-detail__meta attr">
+					<div class="nongji-detail__title-row">
+						<h1 class="nongji-detail__title">{{ detail.kechengbiaoti }}</h1>
+						<div
+							class="nongji-detail__fav"
+							v-show="!isStoreup"
+							@click="storeup(1)"
+						>
+							<i class="el-icon-star-off"></i>
+							<span>收藏 ({{ detail.storeupnum }})</span>
+						</div>
+						<div
+							class="nongji-detail__fav nongji-detail__fav--on"
+							v-show="isStoreup"
+							@click="storeup(-1)"
+						>
+							<i class="el-icon-star-on"></i>
+							<span>已收藏 ({{ detail.storeupnum }})</span>
+						</div>
+					</div>
+
+					<dl class="nongji-detail__dl">
+						<div class="nongji-detail__row">
+							<dt>课程分类</dt>
+							<dd>{{ detail.kechengfenlei }}</dd>
+						</div>
+						<div class="nongji-detail__row">
+							<dt>课程简介</dt>
+							<dd>{{ detail.kechengjianjie }}</dd>
+						</div>
+						<div class="nongji-detail__row nongji-detail__row--actions">
+							<dt>文档资料</dt>
+							<dd>
+								<el-button type="primary" size="small" class="nongji-detail__download" @click="download(detail.wendangziliao)">下载资料</el-button>
+							</dd>
+						</div>
+					</dl>
+
+					<div class="nongji-detail__admin" v-if="btnAuth('nongjixuetang','修改') || btnAuth('nongjixuetang','删除')">
+						<el-button type="primary" size="small" v-if="btnAuth('nongjixuetang','修改')" @click="editClick">修改</el-button>
+						<el-button type="danger" plain size="small" v-if="btnAuth('nongjixuetang','删除')" @click="delClick">删除</el-button>
+					</div>
 				</div>
-				<div class="item" :style='{"padding":"10px 0","margin":"0 0 10px 0","background":"#f5f5f5","justifyContent":"spaceBetween","display":"flex"}'>
-					<div class="lable" :style='{"padding":"0 10px","color":"#818181","textAlign":"left","width":"100px","fontSize":"14px","lineHeight":"40px","height":"40px"}'>文档资料</div>
-					<el-button :style='{"padding":"0px 10px","margin":"5px 0","color":"#fff","textAlign":"center","background":"#000000","width":"100px","lineHeight":"30px","fontSize":"14px","textDecoration":"none","height":"30px"}' @click="download(detail.wendangziliao)">点击下载</el-button>
-				</div>
-				<div class="btn" :style='{"padding":"10px 0","flexWrap":"wrap","display":"flex"}'>
-					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 auto 10px","color":"#fff","outline":"none","borderRadius":"5px","background":"#A293B6","width":"32%","lineHeight":"40px","fontSize":"16px","height":"40px","order":"2"}' v-if="btnAuth('nongjixuetang','修改')" @click="editClick">修改</el-button>
-					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 0","margin":"0 20px 0 0","color":"#000","textDecoration":"underline","outline":"none","borderRadius":"4px","background":"none","width":"auto","lineHeight":"40px","fontSize":"16px","height":"40px","order":"6"}' v-if="btnAuth('nongjixuetang','删除')" @click="delClick">删除</el-button>
-					<!-- hasChat 无 -->
+			</div>
+
+			<div class="nongji-detail__video" v-if="detail.kechengshipin">
+				<div class="nongji-detail__video-label"><i class="el-icon-video-camera"></i> 课程视频</div>
+				<div class="nongji-detail__video-box">
+					<video class="nongji-detail__video-el" :src="baseUrl + detail.kechengshipin" controls playsinline>
+						您的浏览器不支持视频播放
+					</video>
 				</div>
 			</div>
 		</div>
-		
-			<div class="swiper3" v-if="detailBanner.length" :style='{"padding":"20px 20px 60px","boxShadow":"0 1px 8px rgba(0,0,0,.2)","margin":"0 0 0","background":"#fff","width":"50%","height":"auto","order":"1"}'>
-			  <div class="big" :style='{"border":"0","width":"100%","margin":"0 0 20px","position":"relative","background":"#fff","height":"500px"}'>
-				<img id="big" :style='{"border":"1px solid #eee","boxShadow":"none","objectFit":"contain","display":"block","width":"100%","height":"100%","zIndex":"1"}' :src="swiperBigUrl" class="image">
-			  </div>
-			  <div class="samll" :style='{"width":"100%","padding":"0 0","background":"#fff","display":"flex","height":"100px"}'>
-			    <div :style='{"border":"0","width":"25%","margin":"0 5px","position":"relative","background":"#fff","height":"100%"}' v-for="item in detailBanner" :key="item.id">
-				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-if="item.substr(0,4)=='http'" :src="item" @click="swiperClick3(item)" class="image">
-				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-else :src="baseUrl + item" @click="swiperClick3(baseUrl + item)" class="image">
-			    </div>
-			  </div>
-			</div>
 
-
-		
-		<video :style='{"border":"0","margin":"20px 0 0 10px","outline":"none","borderRadius":"4px","flex":"1","display":"block","width":"50%","order":"4"}' :src="baseUrl +  detail.kechengshipin" controls="controls">
-			您的浏览器不支持视频播放
-		</video>
-
-		
-		<el-tabs class="detail" :style='{"border":"none","width":"100%","boxShadow":"none","margin":"20px 0 0","background":"#FFF","order":"5"}' v-model="activeName" type="border-card">
-															<el-tab-pane label="课程详情" name="first">
-				<div v-html="detail.kechengxiangqing"></div>
+		<el-tabs class="detail nongji-detail__tabs" v-model="activeName">
+			<el-tab-pane label="课程详情" name="first">
+				<div class="nongji-detail__rich" v-html="detail.kechengxiangqing"></div>
 			</el-tab-pane>
-											<el-tab-pane label="评论" name="second">
-				<el-form class="add comment" :style='{"boxShadow":"none","padding":"15px","margin":"0 0 20px"}' :model="form" :rules="rules" ref="form">
-					<el-form-item class="item" :style='{"width":"100%","display":"flex","height":"auto"}' label="评论" prop="content">
+			<el-tab-pane label="评论" name="second">
+				<el-form class="add comment nongji-detail__comment-form" :model="form" :rules="rules" ref="form">
+					<el-form-item class="item" label="评论" prop="content">
 						<editor
-						    :style='{"border":"0","boxShadow":"none","outline":"none","color":"#333","borderRadius":"4px","background":"#F7F9FA","width":"100%","lineHeight":"32px","fontSize":"14px"}'
-						    v-model="form.content" 
-						    class="editor" 
-						    action="file/upload">
+							v-model="form.content"
+							class="editor"
+							action="file/upload">
 						</editor>
 					</el-form-item>
-					<el-form-item class="btn" :style='{"width":"100%","padding":"0 0 0 80px","margin":"10px 0 0","height":"auto"}'>
-						<el-button :style='{"border":"0","cursor":"pointer","padding":"0","margin":"0 20px 0 0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"30px","background":"#A293B6","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' type="primary" @click="submitForm('form')">立即提交</el-button>
-						<el-button :style='{"border":"0","cursor":"pointer","padding":"0","margin":"0 20px 0 0","outline":"none","color":"#000","borderRadius":"30px","background":"#A293B680","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' @click="resetForm('form')">重置</el-button>
+					<el-form-item class="btn">
+						<el-button type="primary" @click="submitForm('form')">立即提交</el-button>
+						<el-button @click="resetForm('form')">重置</el-button>
 					</el-form-item>
 				</el-form>
-				
-				<div v-if="infoList.length" :style='{"boxShadow":"none","padding":"0"}' class="comment">
-					<div :style='{"padding":"20px","margin":"0 0 20px","borderColor":"#999","alignItems":"center","borderWidth":"0","background":"#F7F9FA","width":"100%","borderStyle":"solid","height":"auto"}' v-for="item in infoList" :key="item.id" @mouseenter="discussEnter(item.id)"
-						@mouseleave="discussLeave">
-						<div class="user" :style='{"width":"100%","alignItems":"center","display":"flex","height":"auto"}'>
-							<el-image v-if="item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="baseUrl + item.avatarurl"></el-image>
-							<el-image v-if="!item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="require('@/assets/touxiang.png')"></el-image>
-							<div :style='{"color":"#333","fontSize":"16px"}' class="name">{{item.nickname}}</div>
+
+				<div v-if="infoList.length" class="comment">
+					<div
+						class="nongji-detail__comment-card"
+						v-for="item in infoList"
+						:key="item.id"
+						@mouseenter="discussEnter(item.id)"
+						@mouseleave="discussLeave"
+					>
+						<div class="user">
+							<el-image v-if="item.avatarurl" :size="50" :src="baseUrl + item.avatarurl"></el-image>
+							<el-image v-if="!item.avatarurl" :size="50" :src="require('@/assets/touxiang.png')"></el-image>
+							<div class="name">{{ item.nickname }}</div>
 						</div>
-						<div :style='{"padding":"8px","boxShadow":"none","margin":"10px 0px 0px","color":"#9E9E9E","borderRadius":"0","background":"none","wordWrap":"break-word","lineHeight":"30px","fontSize":"14px"}' class="content-block-ask">
+						<div class="content-block-ask">
 							<div v-html="item.content"></div>
-							<div class="btn" :style='{"width":"100%","margin":"8px 0 0 0","alignItems":"center","justifyContent":"flex-start","display":"flex","height":"40px"}'>
-							  <!-- <el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 10px","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"5px","background":"#3B2E7E","width":"auto","lineHeight":"30px","fontSize":"14px","height":"30px"}'>回复</el-button> -->
-							  <el-button v-if="showIndex==item.id&&userid==item.userid" @click="discussDel(item.id)" :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 10px","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"5px","background":"#9F9F9F","width":"auto","lineHeight":"30px","fontSize":"14px","height":"30px"}'>删除</el-button>
+							<div class="btn">
+								<el-button size="small" v-if="showIndex==item.id&&userid==item.userid" @click="discussDel(item.id)">删除</el-button>
 							</div>
 						</div>
-						<div :style='{"padding":"8px","boxShadow":"none","margin":"10px 0px 0px","color":"#9E9E9E","borderRadius":"0","background":"none","wordWrap":"break-word","lineHeight":"30px","fontSize":"14px"}' class="content-block-reply" v-if="item.reply">
+						<div class="content-block-reply" v-if="item.reply">
 							回复：<span v-html="item.reply"></span>
 						</div>
 					</div>
 				</div>
-				
+
 				<el-pagination
-				  background
-				  id="pagination" class="pagination"
-				  :pager-count="7"
-				  :page-size="pageSize"
-				  :page-sizes="pageSizes"
-				  prev-text="上一页"
-				  next-text="下一页"
-				  :hide-on-single-page="false"
-				  :layout='["prev","pager","next"].join()'
-				  :total="total"
-				  :style='{"padding":"0","margin":"20px auto","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
-				  @current-change="curChange"
-				  @prev-click="prevClick"
-				  @next-click="nextClick"
+					background
+					id="pagination"
+					class="pagination"
+					:pager-count="7"
+					:page-size="pageSize"
+					:page-sizes="pageSizes"
+					prev-text="上一页"
+					next-text="下一页"
+					:hide-on-single-page="false"
+					:layout='["prev","pager","next"].join()'
+					:total="total"
+					@current-change="curChange"
+					@prev-click="prevClick"
+					@next-click="nextClick"
 				></el-pagination>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
-	<div class="share_view" :style='{"boxShadow":"0 1px 6px rgba(0,0,0,.3)","position":"fixed","right":"0","bottom":"20%","background":"#fff","zIndex":"11"}'>
-	</div>
+	<div class="share_view"></div>
 </div>
 </template>
 
@@ -145,7 +183,7 @@
         detailBanner: [],
 		id: 0,
         detail: {},
-        activeName: 'second',
+        activeName: 'first',
 		userid: localStorage.getItem('frontUserid'),
         form: {
           content: '',
@@ -473,482 +511,615 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-	.editor ::v-deep .avatar-uploader {
-		height: 0;
-		line-height: 0;
-	}
-	
-	.detail-preview {
-	
-	  .attr {
-	    .el-carousel ::v-deep .el-carousel__indicator button {
-	      width: 0;
-	      height: 0;
-	      display: none;
-	    }
-	
-	    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled) {
-	      border-color: none;
-	    }
-	  }
-	
-	  .detail {
-	    & ::v-deep .el-tabs__header .el-tabs__nav-wrap {
-	      margin-bottom: 0;
-	    }
-	
-	    & .add .el-textarea {
-	      width: auto;
-	    }
-	  }
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__container .el-carousel__arrow--left {
-		width: 36px;
-		font-size: 12px;
-		height: 36px;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__container .el-carousel__arrow--left:hover {
-		background: red;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__container .el-carousel__arrow--right {
-		width: 36px;
-		font-size: 12px;
-		height: 36px;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__container .el-carousel__arrow--right:hover {
-		background: red;
-	}
+$ag-green-800: #2e7d32;
+$ag-green-700: #388e3c;
+$ag-green-500: #4caf50;
+$ag-green-100: #e8f5e9;
+$ag-green-050: #f1f8e9;
+$ag-border: rgba(46, 125, 50, 0.14);
+$ag-text: #1a2e1a;
+$ag-muted: #607060;
 
-	.attr .el-carousel ::v-deep .el-carousel__indicators {
-		padding: 0;
-		margin: 0;
-		z-index: 2;
-		position: absolute;
-		list-style: none;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__indicators li {
-		padding: 0;
-		margin: 0 4px;
-		background: #fff;
-		display: inline-block;
-		width: 12px;
-		opacity: 0.4;
-		transition: 0.3s;
-		height: 12px;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__indicators li:hover {
-		padding: 0;
-		margin: 0 4px;
-		background: #fff;
-		display: inline-block;
-		width: 24px;
-		opacity: 0.7;
-		height: 12px;
-	}
-	
-	.attr .el-carousel ::v-deep .el-carousel__indicators li.is-active {
-		padding: 0;
-		margin: 0 4px;
-		background: #fff;
-		display: inline-block;
-		width: 24px;
-		opacity: 1;
-		height: 12px;
-	}
-	
-	.attr .el-input-number ::v-deep .el-input-number__decrease {
-		cursor: pointer;
-		z-index: 1;
-		display: flex;
-		border-color: #DCDFE6;
-		border-radius: 4px 0 0 4px;
-		top: 1px;
-		left: 1px;
-		background: #8A8A8A;
-		width: 40px;
-		justify-content: center;
-		border-width: 0 1px 0 0;
-		align-items: center;
-		position: absolute;
-		border-style: solid;
-		text-align: center;
-		height: 38px;
-	}
-	
-	.attr .el-input-number ::v-deep .el-input-number__decrease i {
-		color: #fff;
-		font-size: 14px;
-	}
-
-	.attr .el-input-number ::v-deep .el-input-number__increase {
-		cursor: pointer;
-		z-index: 1;
-		display: flex;
-		border-color: #DCDFE6;
-		right: 1px;
-		border-radius: 0 4px 4px 0;
-		top: 1px;
-		background: #8A8A8A;
-		width: 40px;
-		justify-content: center;
-		border-width: 0 0 0 1px;
-		align-items: center;
-		position: absolute;
-		border-style: solid;
-		text-align: center;
-		height: 38px;
-	}
-	
-	.attr .el-input-number ::v-deep .el-input-number__increase i {
-		color: #fff;
-		font-size: 14px;
-	}
-	
-	.attr .el-input-number ::v-deep .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		border-radius: 4px;
-		padding: 0 40px;
-		outline: none;
-		color: #666;
-		background: #FFF;
-		display: inline-block;
-		width: 100%;
-		font-size: 14px;
-		line-height: 40px;
-		text-align: center;
-		height: 40px;
-	}
-	
-	.detail-preview .detail.el-tabs ::v-deep .el-tabs__header {
-		margin: 0;
-		background: #F7F9FA;
-		border-color: #E4E7ED;
-		border-width: 0;
-		border-style: solid;
-	}
-	
-	.detail-preview .detail.el-tabs ::v-deep .el-tabs__header .el-tabs__item {
-		border: 0;
-		padding: 0 0;
-		margin: 0 40px;
-		color: #000;
-		background: transparent;
-		font-weight: bold;
-		display: inline-block;
-		font-size: 18px;
-		line-height: 60px;
-		position: relative;
-		list-style: none;
-		height: 60px;
-	}
-	
-	.detail-preview .detail.el-tabs ::v-deep .el-tabs__header .el-tabs__item:hover {
-		border: 1px solid #3B2E7E;
-		color: #3B2E7E;
-		background: none;
-		border-width: 0 0 2px;
-	}
-	
-	.detail-preview .detail.el-tabs ::v-deep .el-tabs__header .el-tabs__item.is-active {
-		border: 1px solid #3B2E7E;
-		padding: 0 0;
-		margin: 0 40px;
-		color: #3B2E7E;
-		background: none;
-		font-weight: bold;
-		font-size: 18px;
-		border-width: 0 0 2px;
-		line-height: 60px;
-		height: 60px;
-	}
-	
-	.detail-preview .detail.el-tabs ::v-deep .el-tabs__content {
-		padding: 15px;
-	}
-	
-	.detail-preview .detail.el-tabs .add ::v-deep .el-form-item__label {
-		padding: 0 10px 0 0;
-		color: #666;
-		width: 80px;
-		font-size: 14px;
-		line-height: 40px;
-		text-align: right;
-	}
-	
-	.detail-preview .detail.el-tabs .add ::v-deep .el-textarea__inner {
-	}
-	
-	.breadcrumb-preview .el-breadcrumb ::v-deep .el-breadcrumb__separator {
-		margin: 0 20px;
-		color: #000;
-		font-weight: 500;
-	}
-	
-	.breadcrumb-preview .el-breadcrumb .item1 ::v-deep .el-breadcrumb__inner a {
-		color: #000;
-		display: inline-block;
-	}
-	
-	.breadcrumb-preview .el-breadcrumb .item2 ::v-deep .el-breadcrumb__inner a {
-		color: #000;
-		display: inline-block;
-	}
-		
-	.breadcrumb-preview .el-breadcrumb .item3 ::v-deep .el-breadcrumb__inner a {
-		color: #000;
-		display: inline-block;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__total {
-		margin: 0 10px 0 0;
-		color: #666;
-		font-weight: 400;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	#pagination.el-pagination ::v-deep .btn-prev {
-		border: none;
-		border-radius: 2px;
-		padding: 0 10px;
-		margin: 0 5px;
-		color: #000;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		min-width: 35px;
-		height: 30px;
-	}
-	
-	#pagination.el-pagination ::v-deep .btn-next {
-		border: none;
-		border-radius: 2px;
-		padding: 0 10px;
-		margin: 0 5px;
-		color: #000;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		min-width: 35px;
-		height: 30px;
-	}
-	
-	#pagination.el-pagination ::v-deep .btn-prev:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		height: 30px;
-	}
-	
-	#pagination.el-pagination ::v-deep .btn-next:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		height: 30px;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pager {
-		padding: 0;
-		margin: 0;
-		display: inline-block;
-		vertical-align: top;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pager .number {
-		cursor: pointer;
-		padding: 0 4px;
-		margin: 0 5px;
-		color: #000;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		border-radius: 50%;
-		background: #9E9E9E;
-		text-align: center;
-		min-width: 30px;
-		height: 30px;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pager .number:hover {
-		cursor: pointer;
-		padding: 0 4px;
-		margin: 0 5px;
-		color: #000;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		border-radius: 50%;
-		background: #A293B6;
-		text-align: center;
-		min-width: 30px;
-		height: 30px;
+.nongji-detail-page {
+	min-height: 40vh;
+	padding-bottom: 24px;
 }
 
-#pagination.el-pagination ::v-deep .el-pager .number.active {
-		cursor: default;
-		padding: 0 4px;
-		margin: 0 5px;
-		color: #000;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 30px;
-		border-radius: 50%;
-		background: #A293B6;
-		text-align: center;
-		min-width: 30px;
-		height: 30px;
+.nongji-detail__breadcrumb {
+	width: 100%;
+	padding: 22px 10%;
+	margin: 0 auto;
+	background: linear-gradient(180deg, rgba(80, 160, 80, 0.92), rgba(46, 125, 46, 1));
+	box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nongji-detail__breadcrumb-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+.nongji-detail__back {
+	color: #fff !important;
+	font-weight: 600;
+	padding: 6px 12px !important;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.12) !important;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.22) !important;
+		color: #fff !important;
 	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes {
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input {
-		margin: 0 5px;
-		width: 100px;
-		position: relative;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 25px 0 8px;
-		color: #606266;
-		display: inline-block;
-		font-size: 13px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input span.el-input__suffix {
-		top: 0;
+}
+
+.breadcrumb-preview ::v-deep .el-breadcrumb__separator {
+	margin: 0 10px;
+	color: rgba(255, 255, 255, 0.85);
+	font-weight: 500;
+}
+
+.breadcrumb-preview ::v-deep .el-breadcrumb__inner a,
+.breadcrumb-preview ::v-deep .el-breadcrumb__inner.is-link {
+	color: #fff !important;
+	font-weight: 500;
+}
+
+.detail-preview.nongji-detail__wrap {
+	width: 100%;
+	max-width: 1600px;
+	margin: 32px auto 0;
+	padding: 0 32px;
+	box-sizing: border-box;
+}
+
+.nongji-detail__card {
+	background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+	border-radius: 20px;
+	border: 1px solid $ag-border;
+	box-shadow: 0 12px 40px rgba(46, 125, 50, 0.12);
+	padding: 40px;
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: '';
 		position: absolute;
+		top: 0;
+		left: 0;
 		right: 0;
-		height: 100%;
+		height: 4px;
+		background: linear-gradient(90deg, $ag-green-500, $ag-green-700);
+		border-radius: 20px 20px 0 0;
 	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input .el-input__suffix .el-select__caret {
-		cursor: pointer;
-		color: #C0C4CC;
-		width: 25px;
-		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
+}
+
+.nongji-detail__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+.nongji-detail__media {
+	min-width: 0;
+}
+
+.nongji-detail__media-main {
+	aspect-ratio: 16 / 9;
+	max-height: 500px;
+	border-radius: 16px;
+	overflow: hidden;
+	background: $ag-green-050;
+	border: 1px solid $ag-border;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
+	}
+}
+
+.nongji-detail__media-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.6s ease;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+
+.nongji-detail__thumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 16px;
+	padding: 16px;
+	background: rgba(241, 248, 233, 0.5);
+	border-radius: 12px;
+	border: 1px solid $ag-border;
+}
+
+.nongji-detail__thumb {
+	padding: 0;
+	border: 3px solid transparent;
+	border-radius: 10px;
+	overflow: hidden;
+	width: 80px;
+	height: 80px;
+	cursor: pointer;
+	background: #fff;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+	&:hover {
+		border-color: $ag-green-500;
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(46, 125, 50, 0.15);
+	}
+}
+
+.nongji-detail__thumb-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.3s ease;
+
+	&:hover {
+		transform: scale(1.1);
+	}
+}
+
+.nongji-detail__media--empty .nongji-detail__media-placeholder {
+	aspect-ratio: 16 / 9;
+	max-height: 500px;
+	border-radius: 12px;
+	border: 1px dashed $ag-border;
+	background: linear-gradient(145deg, $ag-green-050, #fff);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	color: $ag-muted;
+	font-size: 14px;
+
+	i {
+		font-size: 48px;
+		color: rgba($ag-green-500, 0.45);
+	}
+}
+
+.nongji-detail__meta {
+	background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+	border: 1px solid $ag-border;
+	border-radius: 16px;
+	padding: 32px 36px;
+	box-sizing: border-box;
+	min-height: 100%;
+	box-shadow: 0 6px 20px rgba(46, 125, 50, 0.06);
+	position: relative;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 24px;
+		left: 24px;
+		width: 4px;
+		height: 32px;
+		background: linear-gradient(180deg, $ag-green-500, $ag-green-700);
+		border-radius: 4px;
+	}
+}
+
+.nongji-detail__title-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 18px;
+}
+
+.nongji-detail__title {
+	margin: 0 0 0 20px;
+	font-size: 28px;
+	font-weight: 800;
+	color: $ag-text;
+	line-height: 1.35;
+	flex: 1;
+	min-width: 200px;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nongji-detail__fav {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	user-select: none;
+	background: linear-gradient(135deg, $ag-green-500, $ag-green-800);
+	color: #fff;
+	white-space: nowrap;
+	transition: all 0.3s ease;
+	box-shadow: 0 6px 16px rgba(46, 125, 50, 0.25);
+
+	&:hover {
+		filter: brightness(1.1);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px rgba(46, 125, 50, 0.35);
 	}
 
-	#pagination.el-pagination ::v-deep .el-pagination__jump {
-		margin: 0 0 0 24px;
-		color: #606266;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 13px;
-		line-height: 28px;
-		height: 28px;
+	&--on {
+		background: linear-gradient(135deg, $ag-green-700, #1b5e20);
+		box-shadow: 0 6px 16px rgba(27, 94, 32, 0.35);
 	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__jump .el-input {
-		border-radius: 3px;
-		padding: 0 2px;
-		margin: 0 2px;
-		display: inline-block;
-		width: 50px;
+}
+
+.nongji-detail__dl {
+	margin: 0;
+}
+
+.nongji-detail__row {
+	display: grid;
+	grid-template-columns: 100px 1fr;
+	gap: 16px 20px;
+	padding: 16px 0 16px 20px;
+	border-bottom: 1px solid rgba(46, 125, 50, 0.08);
+	font-size: 15px;
+	line-height: 1.6;
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	dt {
+		margin: 0;
+		color: $ag-muted;
+		font-weight: 700;
 		font-size: 14px;
-		line-height: 18px;
-		position: relative;
-		text-align: center;
-		height: 28px;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
 	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__jump .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 3px;
-		color: #606266;
-		display: inline-block;
-		font-size: 14px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
+
+	dd {
+		margin: 0;
+		color: #2f3a2f;
+		word-break: break-word;
+		font-size: 16px;
 	}
-	.share_view{
-		position: fixed;
-		right:0;
-		bottom: 20%;
-		background: #fff;
-		box-shadow: 0 4px 6px rgba(0,0,0,.1);
-		.share{
-			width: 40px;
-			height: 40px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			border-bottom: 1px solid #eee;
-			cursor: pointer;
+}
+
+.nongji-detail__row--actions dd {
+	display: flex;
+	align-items: center;
+
+	.el-button {
+		background: linear-gradient(135deg, $ag-green-500, $ag-green-700) !important;
+		border: none !important;
+		color: #fff !important;
+		font-weight: 600 !important;
+		border-radius: 8px !important;
+		padding: 8px 20px !important;
+		box-shadow: 0 6px 16px rgba(46, 125, 50, 0.25) !important;
+		transition: all 0.3s ease !important;
+
+		&:hover {
+			filter: brightness(1.1) !important;
+			transform: translateY(-2px) !important;
+			box-shadow: 0 8px 20px rgba(46, 125, 50, 0.35) !important;
 		}
-		.share:last-of-type{
-			border:none;
+	}
+}
+
+.nongji-detail__admin {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid rgba(46, 125, 50, 0.1);
+}
+
+.nongji-detail__video {
+	margin-top: 40px;
+	padding: 32px;
+	border: 1px solid $ag-border;
+	border-radius: 16px;
+	background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+	box-shadow: 0 8px 24px rgba(46, 125, 50, 0.08);
+}
+
+.nongji-detail__video-label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	color: $ag-green-800;
+	margin-bottom: 20px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid rgba(46, 125, 50, 0.1);
+
+	i {
+		font-size: 22px;
+		color: $ag-green-500;
+		padding: 8px;
+		background: rgba(76, 175, 80, 0.1);
+		border-radius: 8px;
+	}
+}
+
+.nongji-detail__video-box {
+	border-radius: 16px;
+	overflow: hidden;
+	border: 1px solid $ag-border;
+	background: #0d0d0d;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+	transition: all 0.3s ease;
+
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+	}
+}
+
+.nongji-detail__video-el {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	min-height: 450px;
+	background: #000;
+	border-radius: 16px;
+}
+
+.nongji-detail__tabs {
+	margin-top: 40px;
+	border: 1px solid $ag-border !important;
+	border-radius: 16px !important;
+	overflow: hidden;
+	box-shadow: 0 8px 24px rgba(46, 125, 50, 0.08);
+	background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+}
+
+.nongji-detail__tabs ::v-deep .el-tabs__header {
+	margin: 0;
+	background: linear-gradient(180deg, $ag-green-050, #fff);
+	border-bottom: 1px solid $ag-border;
+	padding: 0 24px;
+}
+
+.nongji-detail__tabs ::v-deep .el-tabs__item {
+	font-size: 16px;
+	font-weight: 700;
+	color: $ag-muted;
+	height: 60px;
+	line-height: 60px;
+	padding: 0 32px;
+	transition: all 0.3s ease;
+
+	&:hover {
+		color: $ag-green-700;
+		transform: translateY(-2px);
+	}
+
+	&.is-active {
+		color: $ag-green-800;
+		font-weight: 800;
+	}
+}
+
+.nongji-detail__tabs ::v-deep .el-tabs__active-bar {
+	background-color: $ag-green-500;
+	height: 4px;
+	border-radius: 4px;
+}
+
+.nongji-detail__tabs ::v-deep .el-tabs__content {
+	padding: 32px;
+	background: #fff;
+	border-radius: 0 0 16px 16px;
+}
+
+.nongji-detail__rich {
+	font-size: 16px;
+	line-height: 1.9;
+	color: #2f3a2f;
+	word-break: break-word;
+	padding: 24px;
+	background: #f8faf8;
+	border-radius: 12px;
+	border: 1px solid $ag-border;
+
+	p {
+		margin-bottom: 16px;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		color: $ag-green-800;
+		margin: 24px 0 16px;
+		font-weight: 700;
+	}
+
+	img {
+		max-width: 100%;
+		border-radius: 8px;
+		margin: 16px 0;
+	}
+}
+
+.nongji-detail__comment-form {
+	padding: 24px;
+	margin-bottom: 24px;
+	background: #f8faf8;
+	border-radius: 12px;
+	border: 1px solid $ag-border;
+}
+
+.nongji-detail__comment-card {
+	padding: 24px;
+	margin-bottom: 20px;
+	border-radius: 16px;
+	background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+	border: 1px solid $ag-border;
+	box-shadow: 0 4px 16px rgba(46, 125, 50, 0.06);
+	transition: all 0.3s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 24px rgba(46, 125, 50, 0.12);
+	}
+
+	.user {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 16px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid rgba(46, 125, 50, 0.08);
+
+		::v-deep .el-image {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			overflow: hidden;
+			flex-shrink: 0;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.name {
+			font-weight: 700;
+			color: $ag-text;
+			font-size: 16px;
 		}
 	}
 
+	.content-block-ask {
+		color: #555;
+		font-size: 15px;
+		line-height: 1.7;
+		padding: 16px;
+		background: rgba(241, 248, 233, 0.5);
+		border-radius: 8px;
+		border-left: 4px solid $ag-green-500;
+	}
 
-	.detail-preview .el-rate ::v-deep .el-rate__item {
-				cursor: pointer;
-				display: inline-block;
-				vertical-align: middle;
-				font-size: 0;
-				position: relative;
+	.content-block-reply {
+		margin-top: 16px;
+		padding: 12px 16px;
+		background: rgba(46, 125, 50, 0.05);
+		border-radius: 8px;
+		border-left: 4px solid $ag-green-700;
+		color: $ag-green-800;
+		font-size: 14px;
+		line-height: 1.6;
+	}
+}
+
+#pagination {
+	margin-top: 32px;
+	text-align: center;
+	padding: 24px;
+	background: #f8faf8;
+	border-radius: 12px;
+	border: 1px solid $ag-border;
+}
+
+#pagination.el-pagination.is-background {
+	::v-deep {
+		.btn-prev,
+		.btn-next {
+			border: 1px solid $ag-border;
+			border-radius: 8px;
+			padding: 6px 16px;
+			background: #fff;
+			color: $ag-muted;
+			transition: all 0.3s ease;
+
+			&:hover:not(:disabled) {
+				background: $ag-green-500;
+				color: #fff;
+				border-color: $ag-green-500;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+			}
+		}
+
+		.el-pager li {
+			margin: 0 4px;
+			border-radius: 8px;
+			transition: all 0.3s ease;
+
+			&:hover:not(.disabled) {
+				color: $ag-green-500;
+				transform: translateY(-2px);
 			}
 
-	.detail-preview .el-rate ::v-deep .el-rate__item .el-rate__icon {
-				margin: 0 3px;
-				display: block;
-				font-size: 18px;
-				position: relative;
-				transition: .3s;
+			&.active {
+				background-color: $ag-green-500;
+				color: #fff;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
 			}
+		}
+	}
+}
+
+.editor ::v-deep .avatar-uploader {
+	height: 0;
+	line-height: 0;
+}
+
+.detail-preview .detail ::v-deep .el-tabs__header .el-tabs__nav-wrap {
+	margin-bottom: 0;
+}
+
+.share_view {
+	position: fixed;
+	right: 0;
+	bottom: 20%;
+	z-index: 11;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+	background: #fff;
+}
+
+@media (max-width: 900px) {
+	.nongji-detail__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.nongji-detail__breadcrumb {
+		padding: 16px 5%;
+	}
+
+	.detail-preview.nongji-detail__wrap {
+		padding: 0 16px;
+	}
+
+	.nongji-detail__card {
+		padding: 16px;
+	}
+
+	.nongji-detail__row {
+		grid-template-columns: 1fr;
+		gap: 4px;
+
+		dt {
+			font-size: 13px;
+		}
+	}
+}
 </style>

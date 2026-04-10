@@ -8,8 +8,12 @@
     </el-breadcrumb>
   </div>
 
-  <!-- 主容器 -->
-  <div :style='{"width":"80%","padding":"30px 0","margin":"30px auto","position":"relative","background":"#f8faf8","borderRadius":"16px","boxShadow":"0 8px 32px rgba(46, 125, 50, 0.1)"}'>
+  <!-- 主容器（空车时拉高白框，内容区更易读） -->
+  <div
+    class="cart-page-main"
+    :class="{ 'cart-page-main--empty': tableData.length === 0 }"
+    :style='{"width":"80%","padding":"30px 0","margin":"30px auto","position":"relative","background":"#f8faf8","borderRadius":"16px","boxShadow":"0 8px 32px rgba(46, 125, 50, 0.1)"}'
+  >
     
     <!-- 标题区域 -->
     <div :style='{"padding":"0 30px 20px","marginBottom":"20px","borderBottom":"2px solid rgba(46, 125, 50, 0.1)"}'>
@@ -28,10 +32,10 @@
     </div>
 
     <!-- 空购物车提示 -->
-    <div v-if="tableData.length == 0" :style='{"textAlign":"center","padding":"80px 30px"}'>
+    <div v-if="tableData.length == 0" class="cart-empty-block">
       <i class="el-icon-shopping-cart-empty" :style='{"fontSize":"120px","color":"#d0d0d0","marginBottom":"20px"}'></i>
       <div :style='{"fontSize":"18px","color":"#999","marginBottom":"30px"}'>购物车空空如也~</div>
-      <el-button @click="$router.push('/index/zhunongshangpin')" :style='{"border":"0","padding":"12px 40px","borderRadius":"8px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":"#fff","fontSize":"16px","boxShadow":"0 4px 12px rgba(46, 125, 50, 0.3)"}'>
+      <el-button type="primary" class="btn-cart-empty-go" @click="$router.push('/index/zhunongshangpin')">
         去逛逛
       </el-button>
     </div>
@@ -352,6 +356,21 @@
     position: relative;
     z-index: 1;
   }
+}
+
+.cart-page-main--empty {
+  min-height: min(68vh, 700px);
+}
+
+.cart-empty-block {
+  text-align: center;
+  padding: 120px 32px 140px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 /* 主容器 */
@@ -775,6 +794,28 @@
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+  }
+}
+
+/* 空购物车「去逛逛」：避免与全局 default 的 !important 冲突导致浅底浅字 */
+::v-deep .btn-cart-empty-go.el-button--primary {
+  padding: 12px 40px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
+  box-shadow: 0 4px 14px rgba(27, 94, 32, 0.45) !important;
+
+  span {
+    color: #fff !important;
+  }
+
+  &:hover,
+  &:focus {
+    color: #fff !important;
+    background: linear-gradient(135deg, #388e3c, #2e7d32) !important;
+    filter: brightness(1.02);
   }
 }
 

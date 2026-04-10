@@ -1,11 +1,15 @@
 <template>
-<div :style='{"width":"80%","padding":"20px 0","margin":"0 auto","position":"relative","background":"#FCFAFF"}'>
-    <el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 auto 10px","color":"#fff","outline":"none","borderRadius":"5px","background":"#C61C14","width":"32%","lineHeight":"40px","fontSize":"16px","height":"40px","order":"3"}' type="warning" size="mini" @click="backClick" class="el-icon-back">返回</el-button>
-    <div class="section-title" :style='{"margin":"10px 0","color":"#000","textAlign":"center","background":"linear-gradient(180deg, #A293B6 0%, rgba(241,231,255,0) 100%)","clipPath":"polygon(30px 00%, 0% 100%, 100% 100%, calc(100% - 30px) 0%)","width":"100%","fontSize":"20px","lineHeight":"54px","fontWeight":"bold"}'>我的地址</div>
-    <el-button type="primary" icon="el-icon-plus" @click="toAddAddr">添加新地址</el-button>
+<div class="center-sub-page">
+    <div class="center-sub-page__toolbar">
+      <el-button type="default" size="small" icon="el-icon-back" class="center-sub-page__back" @click="backClick">返回</el-button>
+    </div>
+    <h2 class="section-title">我的地址</h2>
+    <div class="center-sub-page__actions">
+      <el-button type="primary" icon="el-icon-plus" @click="toAddAddr">添加新地址</el-button>
+    </div>
     <el-table
       :data="tableData"
-      style="width: 100%">
+      style="width: 100%; margin: 0 auto;">
       <el-table-column
         label="联系人"
         prop="name"
@@ -52,7 +56,6 @@
       :hide-on-single-page="false"
       :layout='["prev","pager","next"].join()'
       :total="total"
-      :style='{"padding":"0","margin":"20px auto","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
       @current-change="curChange"
       @prev-click="prevClick"
       @next-click="nextClick"
@@ -132,6 +135,44 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+/* ========== 个人中心子页：与全站农业绿统一 ========== */
+  .center-sub-page {
+    width: 100%;
+    margin: 0 auto;
+    padding: 4px 20px 28px;
+    box-sizing: border-box;
+    position: relative;
+    background: transparent;
+  }
+
+.center-sub-page__toolbar {
+  margin-bottom: 8px;
+}
+
+.center-sub-page__actions {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 16px;
+}
+
+.center-sub-page__back {
+  border: none !important;
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 10px 18px !important;
+  font-weight: 600 !important;
+  width: auto !important;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(46, 125, 50, 0.38);
+  }
+}
+
 /* ========== 收货地址列表页样式 ========== */
 .address-container {
   width: 90%;
@@ -170,27 +211,11 @@
   border: 1px solid rgba(46, 125, 50, 0.08);
 }
 
-/* 返回按钮 */
-.el-icon-back {
-  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
-  border: none !important;
-  border-radius: 12px !important;
-  color: #fff !important;
-  font-weight: 600;
-  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
-  transition: all 0.25s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 28px rgba(46, 125, 50, 0.4);
-  }
-}
-
 /* 添加地址按钮 */
-.el-button--primary {
-  display: block;
+.center-sub-page .el-button--primary {
+  display: inline-flex;
   width: fit-content;
-  margin: 20px auto;
+  margin: 0;
   background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
   border: none !important;
   border-radius: 12px !important;
@@ -280,6 +305,13 @@
 }
 
 /* 分页样式 */
+#pagination.pagination {
+  margin: 24px auto 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 #pagination.el-pagination ::v-deep {
   .btn-prev,
   .btn-next {
