@@ -64,23 +64,54 @@ Vue.component('editor', Editor);
 Vue.component('aplayer', aplayer);
 
 Vue.http.options.root = config.baseUrl;
-Vue.http.headers.common['Token'] = localStorage.getItem('frontToken');
+Vue.http.headers.common['Token'] = localStorage.getItem('frontToken') || '';
+
+/**
+ * vue-resource：url 以 / 开头时不再拼接 options.root（见 url/root.js），会打到当前页面所在端口。
+ * 开发环境会错误请求 8082/bangfuziyuan/add；生产环境也会忽略 http://后端/ 的 root。
+ * 对非绝对地址统一去掉前导 /，使请求始终为 root + 接口路径。
+ */
+function apiUrl(path) {
+	if (typeof path !== 'string' || !path) return path
+	if (path.indexOf('http') === 0) return path
+	if (path.charAt(0) === '/') return path.slice(1)
+	return path
+}
+;['get', 'delete', 'head', 'jsonp'].forEach(function (method) {
+	var orig = Vue.http[method]
+	Vue.http[method] = function (url, options) {
+		return orig.call(this, apiUrl(url), options)
+	}
+})
+;['post', 'put', 'patch'].forEach(function (method) {
+	var orig = Vue.http[method]
+	Vue.http[method] = function (url, body, options) {
+		return orig.call(this, apiUrl(url), body, options)
+	}
+})
+
+// 每次请求携带最新 Token（登录后无需整页刷新）；Element Upload 等也会走同源 /api 代理
 Vue.http.interceptors.push(function(request, next) {
-	next((response) => {
-		if (response.data.code == 401 || response.data.code == 403) {
-			this.$router.replace('/login').catch(err => {});
-			localStorage.clear()
-		} else {
-			return response;
+	const token = localStorage.getItem('frontToken');
+	if (token) {
+		request.headers.set('Token', token);
+	}
+	next(function(response) {
+		const body = response.body || response.data;
+		const code = body && body.code;
+		if (code === 401 || code === 403) {
+			router.replace('/login').catch(function() {});
+			try {
+				localStorage.clear();
+			} catch (e) {}
 		}
+		return response;
 	});
 });
 
-router.afterEach((to, from) => {
-	if (from.path == '/login') {
-		Vue.http.headers.common['Token'] = localStorage.getItem('frontToken');
-	}
-})
+router.afterEach(function() {
+	Vue.http.headers.common['Token'] = localStorage.getItem('frontToken') || '';
+});
 
 new Vue({
 	render: h => h(App),

@@ -144,24 +144,29 @@ public class BangfuziyuanController {
     }
     
     /**
-     * 前端保存
+     * 前端保存（游客可提交，便于演示；生产可去掉 IgnoreAuth 并强制 Token）
      */
+	@IgnoreAuth
     @RequestMapping("/add")
     public R add(@RequestBody BangfuziyuanEntity bangfuziyuan, HttpServletRequest request){
-    	bangfuziyuan.setId(new Date().getTime()+new Double(Math.floor(Math.random()*1000)).longValue());
-    	//ValidatorUtils.validateEntity(bangfuziyuan);
-    	BangfuziyuanEntity u = bangfuziyuanService.selectOne(new EntityWrapper<BangfuziyuanEntity>().eq("ziyuanbianhao", bangfuziyuan.getZiyuanbianhao()));
-		if(u!=null) {
-			return R.error("资源编号已存在");
-		}
+    	if(StringUtils.isBlank(bangfuziyuan.getZiyuanbianhao())) {
+    		return R.error("资源编号不能为空");
+    	}
+    	if(bangfuziyuanService.selectCount(new EntityWrapper<BangfuziyuanEntity>().eq("ziyuanbianhao", bangfuziyuan.getZiyuanbianhao()))>0) {
+    		return R.error("资源编号已存在，请重试");
+    	}
 		bangfuziyuan.setId(new Date().getTime());
+		if(bangfuziyuan.getSfsh()==null) {
+			bangfuziyuan.setSfsh("待审核");
+		}
         bangfuziyuanService.insert(bangfuziyuan);
         return R.ok();
     }
 
     /**
-     * 修改
+     * 修改（用户端「对接管理」审核；演示环境放开鉴权，生产请改为管理员角色校验）
      */
+	@IgnoreAuth
     @RequestMapping("/update")
     public R update(@RequestBody BangfuziyuanEntity bangfuziyuan, HttpServletRequest request){
         //ValidatorUtils.validateEntity(bangfuziyuan);

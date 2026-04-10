@@ -171,114 +171,277 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-	.add-update-preview .el-form-item ::v-deep .el-form-item__label {
-	  	  padding: 0 10px 0 0;
-	  	  color: #000;
-	  	  font-weight: 500;
-	  	  width: 100px;
-	  	  font-size: 14px;
-	  	  line-height: 40px;
-	  	  text-align: center;
-	  	}
-	
-	.add-update-preview .el-form-item ::v-deep .el-form-item__content {
-	  margin-left: 100px;
-	}
-	
-	.add-update-preview .el-input ::v-deep .el-input__inner {
-	  	  border: 1px solid #E2E3E5;
-	  	  border-radius: 30px;
-	  	  padding: 0 12px;
-	  	  box-shadow: none;
-	  	  outline: none;
-	  	  color: #000;
-	  	  width: 500px;
-	  	  font-size: 14px;
-	  	  height: 40px;
-	  	}
-	
-	.add-update-preview .el-select ::v-deep .el-input__inner {
-	  	  border: 1px solid #E2E3E5;
-	  	  border-radius: 30px;
-	  	  padding: 0 10px;
-	  	  box-shadow: none;
-	  	  outline: none;
-	  	  color: #000;
-	  	  width: 500px;
-	  	  font-size: 14px;
-	  	  height: 40px;
-	  	}
-	
-	.add-update-preview .el-date-editor ::v-deep .el-input__inner {
-	  	  border: 1px solid #E2E3E5;
-	  	  border-radius: 30px;
-	  	  padding: 0 10px 0 30px;
-	  	  box-shadow: none;
-	  	  outline: none;
-	  	  color: #000;
-	  	  width: 500px;
-	  	  font-size: 14px;
-	  	  height: 40px;
-	  	}
-	
-	.add-update-preview ::v-deep .el-upload--picture-card {
-		background: transparent;
-		border: 0;
-		border-radius: 0;
-		width: auto;
-		height: auto;
-		line-height: initial;
-		vertical-align: middle;
-	}
-	
-	.add-update-preview ::v-deep .upload .upload-img {
-	  	  border: 1px solid #E2E3E5;
-	  	  cursor: pointer;
-	  	  border-radius: 6px;
-	  	  color: #000;
-	  	  width: 200px;
-	  	  font-size: 32px;
-	  	  line-height: 60px;
-	  	  text-align: center;
-	  	  height: 60px;
-	  	}
-	
-	.add-update-preview ::v-deep .el-upload-list .el-upload-list__item {
-	  	  border: 1px solid #E2E3E5;
-	  	  cursor: pointer;
-	  	  border-radius: 6px;
-	  	  color: #000;
-	  	  width: 200px;
-	  	  font-size: 32px;
-	  	  line-height: 60px;
-	  	  text-align: center;
-	  	  height: 60px;
-	  	}
-	
-	.add-update-preview ::v-deep .el-upload .el-icon-plus {
-	  	  border: 1px solid #E2E3E5;
-	  	  cursor: pointer;
-	  	  border-radius: 6px;
-	  	  color: #000;
-	  	  width: 200px;
-	  	  font-size: 32px;
-	  	  line-height: 60px;
-	  	  text-align: center;
-	  	  height: 60px;
-	  	}
-	
-	.add-update-preview .el-textarea ::v-deep .el-textarea__inner {
-	  	  border: 1px solid #E2E3E5;
-	  	  border-radius: 6px;
-	  	  padding: 12px;
-	  	  box-shadow: none;
-	  	  outline: none;
-	  	  color: #000;
-	  	  width: 400px;
-	  	  font-size: 14px;
-	  	  height: 120px;
-	  	}
-    .map{
-        height: 50vh;
+/* ========== 地址添加/编辑页样式 ========== */
+.add-update-preview {
+  width: 90%;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.5), rgba(255, 255, 255, 0.95));
+  border-radius: 20px;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  box-shadow: 0 10px 40px rgba(46, 125, 50, 0.08);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.06), transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+}
+
+/* 表单项 */
+.add-update-preview .el-form-item {
+  padding: 12px;
+  margin: 0 0 16px;
+  background: transparent;
+}
+
+.add-update-preview .el-form-item ::v-deep .el-form-item__label {
+  padding: 0 12px 0 0;
+  color: #1a2e1a;
+  font-weight: 700;
+  width: 100px;
+  font-size: 14px;
+  line-height: 40px;
+  text-align: right;
+}
+
+.add-update-preview .el-form-item ::v-deep .el-form-item__content {
+  margin-left: 100px;
+}
+
+/* 输入框样式 */
+.add-update-preview .el-input ::v-deep .el-input__inner,
+.add-update-preview .el-select ::v-deep .el-input__inner {
+  border: 1px solid rgba(46, 125, 50, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 0 16px !important;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.06) !important;
+  outline: none;
+  color: #333;
+  width: 100%;
+  font-size: 14px;
+  height: 44px;
+  line-height: 44px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15) !important;
+  }
+
+  &::placeholder {
+    color: #aaa;
+  }
+}
+
+/* 日期选择器 */
+.add-update-preview .el-date-editor ::v-deep .el-input__inner {
+  border: 1px solid rgba(46, 125, 50, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 0 16px 0 40px !important;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.06) !important;
+  outline: none;
+  color: #333;
+  width: 100%;
+  font-size: 14px;
+  height: 44px;
+  line-height: 44px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15) !important;
+  }
+}
+
+/* 单选按钮组 */
+.add-update-preview ::v-deep .el-radio {
+  margin-right: 20px;
+
+  .el-radio__inner {
+    border: 1px solid rgba(46, 125, 50, 0.2);
+    border-radius: 50%;
+    transition: all 0.25s ease;
+
+    &:after {
+      background: #4caf50;
     }
+  }
+
+  .el-radio__input.is-checked .el-radio__inner {
+    background-color: #4caf50;
+    border-color: #4caf50;
+  }
+
+  .el-radio__label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .el-radio__input.is-checked + .el-radio__label {
+    color: #388e3c;
+  }
+}
+
+/* 文本域 */
+.add-update-preview .el-textarea ::v-deep .el-textarea__inner {
+  border: 1px solid rgba(46, 125, 50, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.06) !important;
+  outline: none;
+  color: #333;
+  width: 100%;
+  font-size: 14px;
+  min-height: 120px !important;
+  resize: vertical;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15) !important;
+  }
+}
+
+/* 提交按钮 */
+.add-update-preview .el-button--primary {
+  border: none !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 12px 36px !important;
+  margin: 0 24px 0 0;
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(46, 125, 50, 0.45);
+  }
+}
+
+/* 取消按钮 */
+.add-update-preview .el-button:not(.el-button--primary) {
+  border: none !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #9e9e9e, #757575) !important;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 28px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* 地图弹窗 */
+#myMapDialog ::v-deep .el-dialog {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#myMapDialog ::v-deep .el-dialog__header {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  padding: 16px 20px;
+
+  .el-dialog__title {
+    color: #fff;
+    font-weight: 700;
+  }
+}
+
+#myMapDialog ::v-deep .el-dialog__body {
+  padding: 20px;
+}
+
+#myMapDialog ::v-deep .el-dialog__footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(46, 125, 50, 0.1);
+}
+
+.map {
+  height: 50vh;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+}
+
+/* 上传组件 */
+.add-update-preview ::v-deep .el-upload--picture-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  line-height: initial;
+  vertical-align: middle;
+}
+
+.add-update-preview ::v-deep .upload .upload-img {
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  cursor: pointer;
+  border-radius: 12px;
+  color: #4caf50;
+  width: 100px;
+  font-size: 28px;
+  line-height: 100px;
+  text-align: center;
+  height: 100px;
+  background: rgba(76, 175, 80, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+  }
+}
+
+.add-update-preview ::v-deep .el-upload-list .el-upload-list__item {
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  cursor: pointer;
+  border-radius: 12px;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #4caf50;
+  }
+}
+
+.add-update-preview ::v-deep .el-upload .el-icon-plus {
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  cursor: pointer;
+  border-radius: 12px;
+  color: #4caf50;
+  width: 100px;
+  font-size: 28px;
+  line-height: 100px;
+  text-align: center;
+  height: 100px;
+  background: rgba(76, 175, 80, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+  }
+}
 </style>

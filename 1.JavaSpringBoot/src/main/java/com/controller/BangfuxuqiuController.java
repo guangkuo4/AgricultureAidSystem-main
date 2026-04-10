@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,18 +93,29 @@ public class BangfuxuqiuController {
     }
     
     /**
-     * 前端保存
+     * 前端保存（游客可提交；生产可去掉 IgnoreAuth）
      */
+    @IgnoreAuth
     @RequestMapping("/add")
     public R add(@RequestBody BangfuxuqiuEntity bangfuxuqiu, HttpServletRequest request) {
+        if (StringUtils.isBlank(bangfuxuqiu.getXuqiubianhao())) {
+            return R.error("需求编号不能为空");
+        }
+        if (bangfuxuqiuService.selectCount(new EntityWrapper<BangfuxuqiuEntity>().eq("xuqiubianhao", bangfuxuqiu.getXuqiubianhao())) > 0) {
+            return R.error("需求编号已存在，请重试");
+        }
         bangfuxuqiu.setId(new Date().getTime());
+        if (bangfuxuqiu.getSfsh() == null) {
+            bangfuxuqiu.setSfsh("待审核");
+        }
         bangfuxuqiuService.insert(bangfuxuqiu);
         return R.ok();
     }
 
     /**
-     * 修改
+     * 修改（用户端审核需求；演示环境放开鉴权）
      */
+    @IgnoreAuth
     @RequestMapping("/update")
     public R update(@RequestBody BangfuxuqiuEntity bangfuxuqiu, HttpServletRequest request) {
         bangfuxuqiuService.updateById(bangfuxuqiu);

@@ -53,7 +53,7 @@
             @click="goToDetail(project.id)"
           >
             <div class="project-image">
-              <img :src="project.tupian || defaultImage" alt="项目图片" />
+              <img :src="imgUrl(project.tupian)" alt="项目图片" />
             </div>
             <div class="project-info">
               <h3 class="project-title">{{ project.xiangmumingcheng }}</h3>
@@ -184,7 +184,9 @@
             </el-form-item>
             <el-form-item label="资质照片">
               <el-upload
-                action="/file/upload"
+                :action="uploadUrl"
+                :headers="uploadHeaders"
+                name="file"
                 list-type="picture-card"
                 :on-success="handleResourceImageSuccess"
                 :file-list="resourceImageList"
@@ -253,7 +255,9 @@
             </el-form-item>
             <el-form-item label="需求图片">
               <el-upload
-                action="/file/upload"
+                :action="uploadUrl"
+                :headers="uploadHeaders"
+                name="file"
                 list-type="picture-card"
                 :on-success="handleNeedImageSuccess"
                 :file-list="needImageList"
@@ -456,6 +460,15 @@ export default {
   computed: {
     totalPages() {
       return Math.ceil(this.total / this.limit)
+    },
+    /** 与 vue.config 代理一致：开发环境为 /api/file/upload */
+    uploadUrl() {
+      const b = (this.$config && this.$config.baseUrl) || '/api/'
+      return String(b).replace(/\/?$/, '/') + 'file/upload'
+    },
+    uploadHeaders() {
+      const t = typeof localStorage !== 'undefined' ? localStorage.getItem('frontToken') : ''
+      return t ? { Token: t } : {}
     }
   },
   created() {
@@ -464,6 +477,15 @@ export default {
     this.loadMyNeeds()
     this.loadReviews()
     this.loadManagementData()
+  },
+  watch: {
+    activeTab(val) {
+      if (val === 'projects') this.loadProjects()
+      if (val === 'resources') this.loadResources()
+      if (val === 'myNeeds') this.loadMyNeeds()
+      if (val === 'myReviews') this.loadReviews()
+      if (val === 'management') this.loadManagementData()
+    }
   },
   methods: {
     // 项目列表方法
@@ -496,10 +518,8 @@ export default {
         this.loading = false
       }).catch(err => {
         console.error('加载项目失败:', err)
-        console.error('错误详情:', err.message)
-        console.error('后端地址:', this.$config.baseUrl)
         this.loading = false
-        this.$message.error('加载项目失败: ' + (err.message || '网络错误'))
+        // 进入页面时的列表请求失败不打断用户；空列表 + 控制台日志即可排查
       })
     },
     searchProjects() {
@@ -525,12 +545,17 @@ export default {
     // 资源池方法
     loadResources() {
       console.log('正在加载资源...')
-      const params = {}
+      const params = {
+        page: 1,
+        limit: 100,
+        sfsh: '已通过'
+      }
       if (this.resourceType) params.bangfuleixing = this.resourceType
       if (this.resourceArea) params.suozaidiqu = this.resourceArea
-      
+      if (this.resourceSearch) params.bangfufangming = this.resourceSearch
+
       console.log('请求参数:', params)
-      
+
       this.$http.get('/bangfuziyuan/list', {
         params: params
       }).then(res => {
@@ -547,21 +572,29 @@ export default {
         }
       }).catch(err => {
         console.error('加载资源失败:', err)
-        console.error('错误详情:', err.message)
-        console.error('后端地址:', this.$config.baseUrl)
-        this.$message.error('加载资源失败: ' + (err.message || '网络错误'))
+        // 不弹 Message：避免与「提交成功」同时出现误导性网络报错；切换 Tab 时会再拉取
       })
     },
     searchResources() {
       this.loadResources()
     },
     contactResource(resource) {
-      this.$message.success(`已发送联系请求给 ${resource.bangfufangming}`)
+      const phone = (resource.lianxidianhua || '').replace(/\s/g, '')
+      if (phone) {
+        window.location.href = 'tel:' + phone
+      }
+      this.$message.success(`请联系：${resource.lianxiren || ''} ${phone || '（未留电话）'}`)
     },
 
     // 发布资源方法
+    parseUploadPayload(res) {
+      if (!res) return null
+      const body = typeof res === 'string' ? (function() { try { return JSON.parse(res) } catch (e) { return {} } })() : res
+      return (body && body.file) ? body.file : null
+    },
     handleResourceImageSuccess(response) {
-      this.resourceForm.zizhengzhaopian = response.file
+      const name = this.parseUploadPayload(response)
+      if (name) this.resourceForm.zizhengzhaopian = name
     },
     submitResource() {
       this.$refs.resourceForm.validate(valid => {
@@ -575,13 +608,14 @@ export default {
               this.$message.success('资源提交成功，等待审核')
               this.resetResourceForm()
               this.activeTab = 'resources'
-              this.loadResources()
+              // 由 watch(activeTab) 触发 loadResources，避免与手动调用重复请求、重复报错
             } else {
               this.$message.error(res.data.msg || '提交失败')
             }
           }).catch(err => {
             console.error('提交资源失败:', err)
-            this.$message.error('提交失败，请稍后重试')
+            const msg = (err.body && err.body.msg) || err.message || '网络异常'
+            this.$message.error('提交失败：' + msg)
           })
         }
       })
@@ -592,9 +626,24 @@ export default {
     },
 
     // 我的需求方法
+    sessionAccount() {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
+        return userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || ''
+      } catch (e) {
+        return localStorage.getItem('username') || ''
+      }
+    },
+    sessionUserId() {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
+        return userInfo.id
+      } catch (e) {
+        return null
+      }
+    },
     loadMyNeeds() {
-      const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
-      const account = userInfo.yonghuzhanghao || userInfo.nonghuzhanghao
+      const account = this.sessionAccount()
       if (!account) {
         console.log('用户未登录，跳过加载需求')
         return
@@ -605,7 +654,7 @@ export default {
         }
       }).then(res => {
         if (res.data.code === 0) {
-          this.myNeeds = res.data.data.list
+          this.myNeeds = (res.data.data && res.data.data.list) || []
         }
       }).catch(err => {
         console.error('加载需求失败:', err)
@@ -622,21 +671,17 @@ export default {
 
     // 发布需求方法
     handleNeedImageSuccess(response) {
-      this.needForm.xuqiutupian = response.file
+      const name = this.parseUploadPayload(response)
+      if (name) this.needForm.xuqiutupian = name
     },
     submitNeed() {
       this.$refs.needForm.validate(valid => {
         if (valid) {
           const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
-          if (!userInfo.yonghuzhanghao && !userInfo.nonghuzhanghao) {
-            this.$message.warning('请先登录')
-            return
-          }
-          
           const submitData = { ...this.needForm }
           submitData.xuqiubianhao = 'XQ' + Date.now()
-          submitData.shenqingrenzhanghao = userInfo.yonghuzhanghao || userInfo.nonghuzhanghao
-          submitData.shenqingrenxingming = userInfo.yonghuxingming || userInfo.nonghuxingming
+          submitData.shenqingrenzhanghao = userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || '游客'
+          submitData.shenqingrenxingming = userInfo.yonghuxingming || userInfo.nonghuxingming || '游客'
           submitData.shenqingridi = new Date().toISOString().split('T')[0]
           submitData.sfsh = '待审核'
           submitData.userid = userInfo.id
@@ -657,7 +702,8 @@ export default {
             }
           }).catch(err => {
             console.error('提交需求失败:', err)
-            this.$message.error('提交失败，请稍后重试')
+            const msg = (err.body && err.body.msg) || err.message || '网络异常'
+            this.$message.error('提交失败：' + msg)
           })
         }
       })
@@ -670,25 +716,25 @@ export default {
     // 对接管理方法
     loadManagementData() {
       // 加载待审核资源
-      this.$http.get('/bangfuziyuan/list', { params: { sfsh: '待审核' } }).then(res => {
+      this.$http.get('/bangfuziyuan/list', { params: { sfsh: '待审核', page: 1, limit: 200 } }).then(res => {
         if (res.data.code === 0) {
-          this.pendingResources = res.data.data.list
+          this.pendingResources = (res.data.data && res.data.data.list) || []
         }
       }).catch(err => {
         console.error('加载待审核资源失败:', err)
       })
       // 加载待审核需求
-      this.$http.get('/bangfuxuqiu/list', { params: { sfsh: '待审核' } }).then(res => {
+      this.$http.get('/bangfuxuqiu/list', { params: { sfsh: '待审核', page: 1, limit: 200 } }).then(res => {
         if (res.data.code === 0) {
-          this.pendingNeeds = res.data.data.list
+          this.pendingNeeds = (res.data.data && res.data.data.list) || []
         }
       }).catch(err => {
         console.error('加载待审核需求失败:', err)
       })
       // 加载对接实施
-      this.$http.get('/bangfushishi/list').then(res => {
+      this.$http.get('/bangfushishi/list', { params: { page: 1, limit: 200 } }).then(res => {
         if (res.data.code === 0) {
-          this.implementations = res.data.data.list
+          this.implementations = (res.data.data && res.data.data.list) || []
         }
       }).catch(err => {
         console.error('加载对接实施失败:', err)
@@ -760,21 +806,36 @@ export default {
       this.$message.info('查看实施详情：' + row.shishibianhao)
     },
     updateProgress(row) {
-      this.$message.info('更新进度：' + row.shishibianhao)
+      this.$prompt('请输入最新帮扶进度说明', '更新进度', {
+        confirmButtonText: '保存',
+        cancelButtonText: '取消',
+        inputValue: row.bangfujindu || '',
+        inputType: 'textarea'
+      }).then(({ value }) => {
+        const payload = { ...row, bangfujindu: value, bangfuzhuangtai: row.bangfuzhuangtai || '进行中' }
+        this.$http.post('/bangfushishi/update', payload).then(res => {
+          if (res.data.code === 0) {
+            this.$message.success('进度已更新')
+            this.loadManagementData()
+          } else {
+            this.$message.error(res.data.msg || '保存失败')
+          }
+        }).catch(() => {})
+      }).catch(() => {})
     },
 
     // 我的评价方法
     loadReviews() {
-      const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
-      if (!userInfo.id) {
+      const uid = this.sessionUserId()
+      if (!uid) {
         console.log('用户未登录，跳过加载评价')
         return
       }
       this.$http.get('/bangfupingjia/list', {
-        params: { userid: userInfo.id }
+        params: { userid: uid, page: 1, limit: 100 }
       }).then(res => {
         if (res.data.code === 0) {
-          this.myReviews = res.data.data.list
+          this.myReviews = (res.data.data && res.data.data.list) || []
         }
       }).catch(err => {
         console.error('加载评价失败:', err)
@@ -789,6 +850,13 @@ export default {
     truncate(text, length) {
       if (!text) return ''
       return text.length > length ? text.substring(0, length) + '...' : text
+    },
+    imgUrl(path) {
+      if (!path) return this.defaultImage
+      const p = String(path).split(',')[0].trim()
+      if (p.indexOf('http') === 0) return p
+      const base = (this.$config && this.$config.baseUrl) ? String(this.$config.baseUrl).replace(/\/?$/, '/') : '/api/'
+      return base + p.replace(/^\//, '')
     }
   }
 }

@@ -17,10 +17,7 @@
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"border":"0","margin":"0 auto","top":"38px","textAlign":"center","background":"none","display":"block","width":"auto","lineHeight":"32px","position":"absolute","right":"30px","order":"4"}' @click="toDetail('aboutusDetail',aboutUsDetail)">
-		    <span :style='{"color":"#fff","fontSize":"15px"}'>查看更多</span>
-		    <span class="icon iconfont icon-gengduo1" :style='{"color":"#fff","fontSize":"15px"}'></span>
-		  </div>
+		  <button type="button" class="home-more-btn home-more-btn--corner" @click="toDetail('aboutusDetail',aboutUsDetail)">查看更多</button>
 		</div>
 		<!-- 关于我们 -->
 
@@ -38,10 +35,7 @@
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
 		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"border":"0","margin":"0 auto","top":"38px","textAlign":"center","background":"none","display":"block","width":"auto","lineHeight":"32px","position":"absolute","right":"20%","order":"4"}' @click="toDetail('systemintroDetail',systemIntroductionDetail)">
-		    <span :style='{"color":"#fff","fontSize":"15px"}'>查看更多</span>
-		    <span class="icon iconfont icon-gengduo1" :style='{"color":"#fff","fontSize":"15px"}'></span>
-		  </div>
+		  <button type="button" class="home-more-btn home-more-btn--corner home-more-btn--system-corner" @click="toDetail('systemintroDetail',systemIntroductionDetail)">查看更多</button>
 		</div>
 		<!-- 系统简介 -->
 		
@@ -62,7 +56,7 @@
 		
 		<div class="title news-hd" :style='{"width":"auto","margin":"100px 0 24px","lineHeight":"1","textAlign":"left","background":"none"}'>
 			<span class="news-title">公告资讯</span>
-			<button class="news-more-btn" type="button" @click="moreBtn('news')">更多</button>
+			<button class="home-more-btn" type="button" @click="moreBtn('news')">查看更多</button>
 		</div>
 		
 			
@@ -138,8 +132,9 @@
 		<div class="box10" :style='{"width":"20%","background":"#fff","display":"none","height":"80px"}'></div>
 	</div>
 	
-    <div class="title" :style='{"width":"auto","margin":"100px 0 24px","lineHeight":"1","textAlign":"left","background":"none"}'>
+    <div class="title recommend-hd" :style='{"width":"100%","margin":"100px 0 24px","lineHeight":"1","textAlign":"left","background":"none","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}'>
 		<span class="recommend-title">助农商品推荐</span>
+		<button type="button" class="home-more-btn" @click="moreBtn('zhunongshangpin')">查看更多</button>
 	</div>
 	
 	
@@ -176,11 +171,6 @@
 
 
 	
-	<div @click="moreBtn('zhunongshangpin')" :style='{"border":"0","margin":"10px auto","top":"100px","textAlign":"center","background":"none","display":"block","width":"80px","lineHeight":"32px","position":"absolute","right":"10%"}'>
-		<span :style='{"color":"#858585","fontSize":"14px"}'>MORE</span>
-		<i :style='{"color":"#858585","fontSize":"14px"}' class="icon iconfont icon-gengduo1"></i>
-	</div>
-	
 </div>
 <!-- 商品推荐 -->
 
@@ -200,8 +190,9 @@
 		<div class="box10" :style='{"width":"20%","background":"#fff","display":"none","height":"80px"}'></div>
 	</div>
 	
-	<div class="title" :style='{"width":"200px","margin":"10px 0","lineHeight":"54px","textAlign":"center","background":"none"}'>
-	  <span :style='{"color":"#71509E","fontSize":"32px"}'>助农案例展示</span>
+	<div class="title lists-hd" :style='{"width":"100%","margin":"10px 0 24px","lineHeight":"1.2","textAlign":"left","background":"none","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}'>
+	  <span class="lists-section-title">助农案例展示</span>
+	  <button type="button" class="home-more-btn" @click="moreBtn('zhunongtuopin')">查看更多</button>
 	</div>
 	
 	
@@ -224,10 +215,6 @@
 		  <span :style='{"color":"#fff","lineHeight":"44px","fontSize":"18px"}'>{{item[listColumn11zhunongtuopin]}}</span>
 	    </div>
 		</template>
-		<div :style='{"cursor":"pointer","padding":"0 20px","margin":"0","borderColor":"#efefef","textAlign":"center","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}' class="more" @click="moreBtn('zhunongtuopin')">
-		  <span class="icon iconfont icon-jiantou34" :style='{"margin":"0 5px 0 0","lineHeight":"44px","fontSize":"16px","color":"#333","display":"none"}'></span>
-		  <div :style='{"color":"#fff","lineHeight":"44px","fontSize":"18px"}'>更多</div>
-		</div>
 	  </div>
 	  <div class="list" :style='{"flexWrap":"wrap","flex":"1","background":"#F1F2F3","display":"flex","width":"calc(100% - 300px)","justifyContent":"space-between","height":"auto"}'>
 	    <div :style='{"border":"1px solid #D8D8D8","width":"calc(100% / 3)","padding":"40px","position":"relative","height":"auto"}' class="item list-item animation-box" v-for="item,index in zhunongtuopinList" :key="index" @click="toDetail('zhunongtuopinDetail', item)">
@@ -244,12 +231,6 @@
 
 	
 	
-	<div @click="moreBtn('zhunongtuopin')" :style='{"border":"0","margin":"10px auto","top":"30px","textAlign":"center","background":"none","display":"block","width":"80px","lineHeight":"32px","position":"absolute","right":"0"}'>
-		<span :style='{"color":"#858585","fontSize":"16px"}'>更多</span>
-		<i :style='{"color":"#858585","fontSize":"16px"}' class="icon iconfont icon-gengduo1"></i>
-	</div>
-	
-
 </div>
 <!-- 特价商品 -->
 	
@@ -475,6 +456,45 @@ import Swiper from "swiper";
 		--ag-shadow: 0 16px 44px rgba(16, 24, 16, 0.12);
 		--ag-transition: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 
+		/* 首页各板块统一的「查看更多」胶囊按钮 */
+		.home-more-btn {
+			appearance: none;
+			-webkit-appearance: none;
+			margin: 0;
+			border: 1px solid rgba(46, 125, 50, 0.16);
+			background: rgba(46, 125, 50, 0.10);
+			color: var(--ag-green-800);
+			font-weight: 800;
+			border-radius: 999px;
+			padding: 8px 18px;
+			font-size: 14px;
+			line-height: 1.2;
+			cursor: pointer;
+			font-family: inherit;
+			transition: transform var(--ag-transition), background var(--ag-transition), box-shadow var(--ag-transition), border-color var(--ag-transition);
+			white-space: nowrap;
+		}
+		.home-more-btn:hover {
+			transform: translateY(-1px);
+			background: rgba(102, 187, 106, 0.14);
+			box-shadow: 0 10px 24px rgba(56, 142, 60, 0.12);
+		}
+		.home-more-btn:focus-visible {
+			outline: 2px solid rgba(46, 125, 50, 0.45);
+			outline-offset: 2px;
+		}
+		.home-more-btn--corner {
+			position: absolute !important;
+			top: 38px;
+			z-index: 2;
+		}
+		#about .home-more-btn--corner {
+			right: 30px;
+		}
+		.home-more-btn--system-corner {
+			right: 20%;
+		}
+
 		/* 关于我们 / 系统简介：改成统一的“高级农业卡片” */
 		#about,
 		#system {
@@ -514,28 +534,6 @@ import Swiper from "swiper";
 			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 10px 22px rgba(16, 24, 16, 0.08);
 		}
 
-		/* “查看更多”按钮更统一 */
-		#about > div:last-child,
-		#system > div:last-child {
-			cursor: pointer;
-			padding: 6px 10px !important;
-			border-radius: 999px;
-			background: rgba(46, 125, 50, 0.10) !important;
-			border: 1px solid rgba(46, 125, 50, 0.16);
-			transition: transform var(--ag-transition), background var(--ag-transition), box-shadow var(--ag-transition);
-		}
-		#about > div:last-child:hover,
-		#system > div:last-child:hover {
-			transform: translateY(-1px);
-			background: rgba(102, 187, 106, 0.14) !important;
-			box-shadow: 0 12px 26px rgba(56, 142, 60, 0.14);
-		}
-		#about > div:last-child span,
-		#system > div:last-child span {
-			color: var(--ag-green-800) !important;
-			font-weight: 800;
-		}
-
 		/* 助农案例展示：统一风格（左侧分类栏 + 右侧卡片） */
 		#animate_listzhunongtuopin {
 			background: linear-gradient(180deg, rgba(241, 248, 233, 0.86), rgba(255, 255, 255, 0.92)) !important;
@@ -544,9 +542,10 @@ import Swiper from "swiper";
 			box-shadow: var(--ag-shadow);
 			padding: 28px 18px !important;
 		}
-		#animate_listzhunongtuopin .title span {
+		#animate_listzhunongtuopin .lists-section-title {
 			color: var(--ag-green-900) !important;
 			font-weight: 950 !important;
+			font-size: 32px;
 			letter-spacing: 0.6px;
 			text-shadow: 0 10px 26px rgba(27, 94, 32, 0.10);
 		}
@@ -646,23 +645,6 @@ import Swiper from "swiper";
 			align-items: center;
 			justify-content: space-between;
 			gap: 12px;
-		}
-		#animate_newsnews .news-more-btn {
-			border: 1px solid rgba(46, 125, 50, 0.16);
-			background: rgba(46, 125, 50, 0.10);
-			color: var(--ag-green-800);
-			font-weight: 900;
-			border-radius: 999px;
-			height: 36px;
-			padding: 0 12px;
-			cursor: pointer;
-			transition: transform var(--ag-transition), background var(--ag-transition), box-shadow var(--ag-transition);
-			white-space: nowrap;
-		}
-		#animate_newsnews .news-more-btn:hover {
-			transform: translateY(-1px);
-			background: rgba(102, 187, 106, 0.14);
-			box-shadow: 0 10px 24px rgba(56, 142, 60, 0.12);
 		}
 		.news-title {
 			display: inline-flex;

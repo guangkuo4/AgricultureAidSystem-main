@@ -277,115 +277,147 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .breadcrumb-preview .el-breadcrumb ::v-deep .el-breadcrumb__separator {
+/* ========== 新闻列表页样式 ========== */
+
+/* 面包屑导航 */
+.breadcrumb-preview {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .el-breadcrumb ::v-deep .el-breadcrumb__separator {
     margin: 0 20px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
   }
-  
-  .breadcrumb-preview .el-breadcrumb .item1 ::v-deep .el-breadcrumb__inner a {
+
+  .el-breadcrumb .item1 ::v-deep .el-breadcrumb__inner a,
+  .el-breadcrumb .item2 ::v-deep .el-breadcrumb__inner a {
     color: #fff;
     display: inline-block;
   }
-  
-  .breadcrumb-preview .el-breadcrumb .item2 ::v-deep .el-breadcrumb__inner a {
-    color: #fff;
-    display: inline-block;
+}
+
+/* 分类标签激活状态 */
+.news-preview-pv .category .item.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+  transform: translateY(-3px);
+}
+
+.news-preview-pv .category .item:hover {
+  color: #388e3c !important;
+  border-color: #4caf50 !important;
+  background: rgba(76, 175, 80, 0.06) !important;
+  transform: translateY(-2px);
+}
+
+/* 搜索框样式优化 */
+.news-preview-pv .list-form-pv ::v-deep .el-input__inner {
+  border: 1px solid rgba(46, 125, 50, 0.15) !important;
+  border-radius: 12px;
+  padding: 0 16px 0 48px !important;
+  height: 48px;
+  line-height: 48px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: rgba(76, 175, 80, 0.04);
+
+  &:focus {
+    border-color: #4caf50 !important;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12) !important;
   }
-  
-  // 分类标签激活状态
-  .news-preview-pv .category .item.active {
-    color: #fff !important;
-    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%) !important;
-    border-color: transparent !important;
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
-    transform: translateY(-2px);
+
+  &::placeholder {
+    color: #aaa;
   }
-  
-  .news-preview-pv .category .item:hover {
-    color: #2E7D32 !important;
-    border-color: #2E7D32 !important;
-    background: rgba(46, 125, 50, 0.06) !important;
-    transform: translateY(-2px);
-  }
-  
-  // 搜索框样式优化
-  .news-preview-pv .list-form-pv ::v-deep .el-input__inner {
-    border: 1px solid #e8e8e8 !important;
-    border-radius: 10px;
-    padding: 0 15px 0 45px !important;
-    height: 46px;
-    line-height: 46px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    background: #f8faf8;
-    
-    &:focus {
-      border-color: #2E7D32 !important;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1) !important;
-    }
-  }
-  
-  .news-preview-pv .list-form-pv ::v-deep .el-input__prefix {
-    left: 15px;
-    color: #2E7D32;
-  }
-  
-  // 分页样式优化
-  #pagination.el-pagination ::v-deep .btn-prev,
-  #pagination.el-pagination ::v-deep .btn-next {
-    border: 1px solid #e8e8e8;
-    border-radius: 10px;
-    padding: 0 24px;
+}
+
+.news-preview-pv .list-form-pv ::v-deep .el-input__prefix {
+  left: 16px;
+  color: #4caf50;
+  font-size: 18px;
+}
+
+/* 分页样式优化 */
+#pagination.el-pagination ::v-deep {
+  .btn-prev,
+  .btn-next {
+    border: 1px solid rgba(46, 125, 50, 0.12);
+    border-radius: 12px;
+    padding: 0 20px;
     margin: 0 8px;
-    color: #666;
+    color: #607060;
     background: #fff;
     font-size: 14px;
-    line-height: 40px;
+    line-height: 42px;
     min-width: auto;
-    height: 40px;
+    height: 42px;
     transition: all 0.3s ease;
-    font-weight: 500;
-    
+    font-weight: 600;
+
     &:hover:not(:disabled) {
-      color: #2E7D32;
-      border-color: #2E7D32;
-      background: rgba(46, 125, 50, 0.06);
+      color: #388e3c;
+      border-color: #4caf50;
+      background: rgba(76, 175, 80, 0.06);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+      box-shadow: 0 6px 20px rgba(46, 125, 50, 0.15);
     }
   }
-  
-  #pagination.el-pagination ::v-deep .el-pager .number {
+
+  .el-pager .number {
     cursor: pointer;
     padding: 0 16px;
     margin: 0 6px;
-    color: #666;
+    color: #607060;
     font-size: 14px;
-    line-height: 40px;
-    border-radius: 10px;
+    line-height: 42px;
+    border-radius: 12px;
     background: #fff;
-    border: 1px solid #e8e8e8;
+    border: 1px solid rgba(46, 125, 50, 0.12);
     text-align: center;
     min-width: auto;
-    height: 40px;
+    height: 42px;
     transition: all 0.3s ease;
-    font-weight: 500;
-    
+    font-weight: 600;
+
     &:hover {
-      color: #2E7D32;
-      border-color: #2E7D32;
-      background: rgba(46, 125, 50, 0.06);
+      color: #388e3c;
+      border-color: #4caf50;
+      background: rgba(76, 175, 80, 0.06);
       transform: translateY(-2px);
     }
-    
+
     &.active {
       color: #fff;
-      background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+      background: linear-gradient(135deg, #4caf50, #2e7d32);
       border-color: transparent;
       box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
       transform: translateY(-2px);
     }
   }
+}
+
+/* 热门资讯样式 */
+.hot .hot-item {
+  &:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 12px 30px rgba(46, 125, 50, 0.18) !important;
+  }
+}
 </style>

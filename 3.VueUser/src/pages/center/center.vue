@@ -537,16 +537,19 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+/* ========== 个人中心页面样式 ========== */
 .center-preview {
+  overflow: hidden;
+
   .el-tabs {
     ::v-deep .el-tabs__header {
       margin-right: 30px;
-      
+
       .el-tabs__nav {
         border-radius: 12px;
         overflow: hidden;
       }
-      
+
       .el-tabs__item {
         padding: 0 25px;
         height: 50px;
@@ -555,134 +558,204 @@
         color: #666;
         transition: all 0.3s ease;
         border-left: 3px solid transparent;
-        
+
         &:hover {
-          color: #2E7D32;
+          color: #388e3c;
           background: rgba(46, 125, 50, 0.05);
         }
-        
+
         &.is-active {
-          color: #2E7D32;
+          color: #388e3c;
           background: rgba(46, 125, 50, 0.1);
-          border-left-color: #2E7D32;
-          font-weight: 600;
+          border-left-color: #4caf50;
+          font-weight: 700;
         }
       }
     }
-    
+
     ::v-deep .el-tabs__content {
       padding: 0;
     }
   }
-  
+
   .center-preview-pv {
     max-width: 500px;
-    
+
     .el-form-item {
       ::v-deep .el-form-item__label {
-        color: #555;
-        font-weight: 500;
+        color: #1a2e1a;
+        font-weight: 700;
         font-size: 14px;
       }
-      
+
       .el-input {
         ::v-deep .el-input__inner {
-          border: 1px solid #e0e0e0;
-          border-radius: 8px;
-          padding: 0 15px;
+          border: 1px solid rgba(46, 125, 50, 0.15);
+          border-radius: 12px;
+          padding: 0 16px;
           height: 44px;
           font-size: 14px;
           transition: all 0.3s ease;
-          
+
           &:focus {
-            border-color: #2E7D32;
-            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
           }
-          
+
           &[readonly] {
-            background: #f5f5f5;
-            color: #999;
+            background: rgba(46, 125, 50, 0.04);
+            color: #888;
           }
         }
       }
-      
+
       .el-select {
         width: 100%;
-        
+
         ::v-deep .el-input__inner {
-          border: 1px solid #e0e0e0;
-          border-radius: 8px;
+          border: 1px solid rgba(46, 125, 50, 0.15);
+          border-radius: 12px;
           height: 44px;
+
+          &:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+          }
         }
       }
     }
   }
 }
 
-// 按钮悬停效果
+/* 按钮悬停效果 */
 .el-button {
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4) !important;
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35) !important;
   }
-  
+
   &:active {
     transform: translateY(0);
   }
 }
 
-// 弹窗样式优化
+/* 弹窗样式优化 */
 ::v-deep .el-dialog {
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+
   .el-dialog__header {
-    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-    padding: 20px;
-    
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    padding: 20px 24px;
+
     .el-dialog__title {
       color: #fff;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 18px;
     }
-    
+
     .el-dialog__headerbtn .el-dialog__close {
-      color: #fff;
+      color: rgba(255, 255, 255, 0.8);
+
+      &:hover {
+        color: #fff;
+      }
     }
   }
-  
+
   .el-dialog__body {
-    padding: 30px 20px;
+    padding: 30px 24px;
   }
 }
 
-// 单选框样式
+/* 单选框样式 */
 ::v-deep .el-radio {
   &.is-checked {
     .el-radio__label {
-      color: #2E7D32;
+      color: #388e3c;
+      font-weight: 600;
     }
     .el-radio__inner {
-      border-color: #2E7D32;
-      background: #2E7D32;
+      border-color: #4caf50;
+      background: #4caf50;
+    }
+  }
+
+  .el-radio__inner {
+    border: 2px solid rgba(46, 125, 50, 0.2);
+    transition: all 0.25s ease;
+
+    &:hover {
+      border-color: #4caf50;
     }
   }
 }
 
-// 文件上传组件样式优化
+/* 文件上传组件样式优化 */
 ::v-deep .upload-container {
   .el-upload--picture-card {
-    border: 2px dashed #d0d0d0;
-    border-radius: 12px;
+    border: 2px dashed rgba(46, 125, 50, 0.2);
+    border-radius: 14px;
     width: 120px;
     height: 120px;
     line-height: 120px;
     transition: all 0.3s ease;
-    
+    background: rgba(76, 175, 80, 0.04);
+
     &:hover {
-      border-color: #2E7D32;
-      color: #2E7D32;
+      border-color: #4caf50;
+      background: rgba(76, 175, 80, 0.08);
+    }
+  }
+}
+
+/* 表单验证错误提示 */
+::v-deep .el-form-item__error {
+  font-weight: 500;
+}
+
+/* 密码表单样式 */
+.password-form ::v-deep {
+  .el-form-item__label {
+    color: #1a2e1a;
+    font-weight: 700;
+  }
+
+  .el-input__inner {
+    border: 1px solid rgba(46, 125, 50, 0.15);
+    border-radius: 12px;
+
+    &:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+  }
+}
+
+/* 充值弹窗样式 */
+.recharge-dialog ::v-deep {
+  .el-input__inner {
+    border: 1px solid rgba(46, 125, 50, 0.15);
+    border-radius: 12px;
+
+    &:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+  }
+
+  .el-button--primary {
+    background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 700;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
     }
   }
 }

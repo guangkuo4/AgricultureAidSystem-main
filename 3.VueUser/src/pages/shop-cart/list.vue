@@ -331,101 +331,461 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.shangpin {
-  display: flex;
+/* ========== 购物车页面样式 ========== */
+
+/* 面包屑导航 */
+.breadcrumb-preview {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .el-breadcrumb {
+    position: relative;
+    z-index: 1;
+  }
 }
 
-.buy {
-  text-align: right;
-  padding-right: 82px;
+/* 主容器 */
+.cart-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.5), rgba(255, 255, 255, 0.95));
+  border-radius: 20px;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  box-shadow: 0 10px 40px rgba(46, 125, 50, 0.08);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.08), transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
 }
 
-// 按钮悬停效果
-.el-button {
+/* 标题区域 */
+.cart-header {
+  padding: 0 30px 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid rgba(46, 125, 50, 0.1);
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title-area {
+      display: flex;
+      align-items: center;
+
+      .cart-icon {
+        font-size: 32px;
+        color: #388e3c;
+        margin-right: 16px;
+      }
+
+      .title-text {
+        .main-title {
+          font-size: 26px;
+          font-weight: 800;
+          color: #1a2e1a;
+          margin: 0;
+        }
+
+        .sub-title {
+          font-size: 14px;
+          color: #888;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}
+
+/* 清除购物车按钮 */
+.btn-clear {
+  border: 2px solid #e53935 !important;
+  color: #e53935 !important;
+  background: transparent !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  font-size: 14px;
+  font-weight: 600;
   transition: all 0.3s ease;
-  
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4) !important;
-  }
-  
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-}
 
-// 数字输入框样式优化
-::v-deep .el-input-number {
-  .el-input__inner {
-    border-radius: 8px;
-    border-color: #e0e0e0;
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
-    font-weight: 600;
-    color: #333;
-    
-    &:focus {
-      border-color: #2E7D32;
-      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
-    }
+  i {
+    margin-right: 6px;
   }
-  
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    border-color: #e0e0e0;
-    background: #f5f5f5;
-    color: #666;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: #2E7D32;
-      color: #fff;
-      border-color: #2E7D32;
-    }
-  }
-}
 
-// 复选框样式优化
-::v-deep .el-checkbox {
-  .el-checkbox__input.is-checked .el-checkbox__inner {
-    background-color: #2E7D32;
-    border-color: #2E7D32;
-  }
-  
-  .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: #2E7D32;
-  }
-  
-  .el-checkbox__inner {
-    border-radius: 4px;
-    border-color: #d0d0d0;
-    
-    &:hover {
-      border-color: #2E7D32;
-    }
-  }
-}
-
-// 商品卡片悬停效果
-div[style*="border"] {
   &:hover {
-    box-shadow: 0 4px 16px rgba(46, 125, 50, 0.15) !important;
-    transform: translateY(-2px) !important;
+    background: #e53935 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.35);
   }
 }
 
-// 空状态优化
-.el-icon-shopping-cart-empty {
-  animation: float 3s ease-in-out infinite;
+/* 空购物车提示 */
+.empty-cart {
+  text-align: center;
+  padding: 100px 30px;
+
+  .empty-icon {
+    font-size: 120px;
+    color: #d0d0d0;
+    margin-bottom: 24px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .empty-text {
+    font-size: 20px;
+    color: #999;
+    margin-bottom: 32px;
+  }
+
+  .btn-go-shopping {
+    border: none;
+    padding: 14px 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 6px 24px rgba(46, 125, 50, 0.35);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(46, 125, 50, 0.45);
+    }
+  }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* 表头 */
+.table-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.8), rgba(255, 255, 255, 0.95));
+  border-radius: 14px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(46, 125, 50, 0.08);
+
+  .col-check { width: 60px; }
+  .col-info { flex: 1; }
+  .col-price { width: 120px; text-align: center; }
+  .col-num { width: 140px; text-align: center; }
+  .col-subtotal { width: 120px; text-align: center; }
+  .col-action { width: 80px; text-align: center; }
+
+  .header-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a2e1a;
   }
-  50% {
-    transform: translateY(-10px);
+}
+
+/* 商品卡片 */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(46, 125, 50, 0.08);
+  box-shadow: 0 4px 16px rgba(46, 125, 50, 0.04);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.12);
+    transform: translateY(-3px);
+    border-color: rgba(46, 125, 50, 0.2);
+  }
+
+  .item-check { width: 60px; }
+  .item-info { flex: 1; display: flex; align-items: center; }
+  .item-price { width: 120px; text-align: center; }
+  .item-num { width: 140px; text-align: center; }
+  .item-subtotal { width: 120px; text-align: center; }
+  .item-action { width: 80px; text-align: center; }
+}
+
+/* 商品图片 */
+.goods-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-right: 20px;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  flex-shrink: 0;
+
+  .el-image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* 商品名称 */
+.goods-info {
+  .goods-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2e1a;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .goods-type {
+    font-size: 13px;
+    color: #888;
+  }
+}
+
+/* 价格显示 */
+.price-tag {
+  font-size: 18px;
+  font-weight: 800;
+  color: #388e3c;
+
+  .currency {
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+/* 小计显示 */
+.subtotal-tag {
+  font-size: 20px;
+  font-weight: 800;
+  color: #388e3c;
+
+  .currency {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* 删除按钮 */
+.btn-delete {
+  color: #e53935 !important;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease;
+
+  i { margin-right: 4px; }
+
+  &:hover {
+    background: rgba(229, 57, 53, 0.1) !important;
+  }
+}
+
+/* 底部结算区域 */
+.cart-footer {
+  margin-top: 30px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.7), rgba(255, 255, 255, 0.95));
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.08);
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+
+    .delete-selected {
+      color: #666;
+      font-size: 14px;
+      margin-left: 30px;
+    }
+  }
+
+  .footer-right {
+    display: flex;
+    align-items: center;
+
+    .stat-item {
+      margin-right: 32px;
+
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #388e3c;
+        margin: 0 6px;
+      }
+    }
+
+    .total-price {
+      margin-right: 32px;
+
+      .total-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .total-value {
+        display: flex;
+        align-items: baseline;
+
+        .price-num {
+          font-size: 36px;
+          font-weight: 800;
+          color: #388e3c;
+        }
+
+        .price-currency {
+          font-size: 16px;
+          color: #388e3c;
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+}
+
+/* 去结算按钮 */
+.btn-checkout {
+  border: none;
+  padding: 16px 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(46, 125, 50, 0.4);
+  transition: all 0.3s ease;
+
+  i { margin-right: 8px; }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(46, 125, 50, 0.5);
+  }
+
+  &:disabled {
+    background: #ccc !important;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+/* 数字输入框样式 */
+::v-deep .el-input-number {
+  .el-input__inner {
+    border-radius: 10px;
+    border: 1px solid rgba(46, 125, 50, 0.15);
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-weight: 700;
+    color: #333;
+
+    &:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+  }
+
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    border: 1px solid rgba(46, 125, 50, 0.15);
+    background: linear-gradient(135deg, #f5f9f5, #fff);
+    color: #388e3c;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #4caf50, #2e7d32);
+      color: #fff;
+      border-color: #4caf50;
+    }
+  }
+}
+
+/* 复选框样式 */
+::v-deep .el-checkbox {
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    border-radius: 6px;
+  }
+
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #388e3c;
+  }
+
+  .el-checkbox__inner {
+    border-radius: 6px;
+    border-color: #ccc;
+
+    &:hover {
+      border-color: #4caf50;
+    }
+  }
+
+  .el-checkbox__label {
+    font-weight: 600;
+  }
+}
+
+/* 确认对话框样式 */
+::v-deep .el-message-box__wrapper .el-message-box {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+::v-deep .el-button--primary {
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  border: none !important;
+  border-radius: 10px !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+  }
+}
+
+::v-deep .el-button--danger {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  border: none !important;
+  border-radius: 10px !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.35);
   }
 }
 </style>

@@ -28,7 +28,8 @@ import center from '@/views/center'
     import zhunongtuopin from '@/views/modules/zhunongtuopin/list'
     import newstype from '@/views/modules/newstype/list'
     import qiyeruzhu from '@/views/modules/qiyeruzhu/list'
-
+    import bangfuxiangmu from '@/views/modules/bangfuxiangmu/list'
+    import duijieshenqing from '@/views/modules/duijieshenqing/list'
 
 //2.配置路由   注意：名字
 export const routes = [{
@@ -141,6 +142,16 @@ export const routes = [{
 	path: '/qiyeruzhu',
         name: '企业入驻申请',
         component: qiyeruzhu
+      }
+      ,{
+	path: '/bangfuxiangmu',
+        name: '帮扶项目管理',
+        component: bangfuxiangmu
+      }
+      ,{
+	path: '/duijieshenqing',
+        name: '对接申请管理',
+        component: duijieshenqing
       }
     ]
   },

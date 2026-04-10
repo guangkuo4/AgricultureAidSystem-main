@@ -372,16 +372,236 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .section {
-    width: 900px;
-    margin: 0 auto;
+/* ========== 订单确认页样式 ========== */
+.order-confirm-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.06), transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+}
+
+/* 页面标题 */
+.section-title {
+  margin: 16px 0;
+  color: #1a2e1a;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.8), rgba(255, 255, 255, 0.95));
+  clip-path: polygon(30px 0%, 0% 100%, 100% 100%, calc(100% - 30px) 0%);
+  width: 100%;
+  font-size: 24px;
+  line-height: 60px;
+  font-weight: 800;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.1);
+  border: 1px solid rgba(46, 125, 50, 0.08);
+}
+
+/* 表格容器 */
+.el-table {
+  border-radius: 16px !important;
+  overflow: hidden;
+  border: 1px solid rgba(46, 125, 50, 0.08);
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.06);
+}
+
+::v-deep .el-table th {
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.9), rgba(255, 255, 255, 0.95)) !important;
+  color: #1a2e1a !important;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 16px 12px;
+  border-bottom: 1px solid rgba(46, 125, 50, 0.1) !important;
+}
+
+::v-deep .el-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(46, 125, 50, 0.06) !important;
+  font-size: 14px;
+}
+
+::v-deep .el-table tr:hover > td {
+  background: rgba(241, 248, 233, 0.5) !important;
+}
+
+/* 商品信息 */
+.shangpin {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .el-image {
+    border-radius: 12px;
+    border: 1px solid rgba(46, 125, 50, 0.1);
+    flex-shrink: 0;
   }
 
-  .shangpin {
-    display: flex;
+  span {
+    font-weight: 600;
+    color: #333;
   }
-  .buy {
-    text-align: right;
-    padding-right: 82px;
+}
+
+/* 单选按钮 */
+::v-deep .el-radio__input.is-checked .el-radio__inner {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  border-radius: 50%;
+}
+
+::v-deep .el-radio__input.is-checked + .el-radio__label {
+  color: #388e3c;
+}
+
+/* 备注区域 */
+.remark-area {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  margin: 16px 0;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.5), rgba(255, 255, 255, 0.95));
+  border-radius: 14px;
+  border: 1px solid rgba(46, 125, 50, 0.08);
+
+  .remark-label {
+    width: 80px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a2e1a;
+    padding-top: 6px;
   }
+
+  .el-textarea ::v-deep .el-textarea__inner {
+    border: 1px solid rgba(46, 125, 50, 0.15);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    resize: none;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+  }
+}
+
+/* 结算区域 */
+.buy {
+  text-align: right;
+  padding: 24px 32px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(241, 248, 233, 0.6), rgba(255, 255, 255, 0.95));
+  border-radius: 16px;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+
+  .total-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e53935;
+
+    .currency {
+      font-size: 14px;
+    }
+  }
+}
+
+/* 按钮样式 */
+::v-deep .el-button--success {
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 32px !important;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(46, 125, 50, 0.45);
+  }
+}
+
+::v-deep .el-button--warning {
+  background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 32px !important;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.35);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(255, 152, 0, 0.45);
+  }
+}
+
+/* 添加地址按钮 */
+.add-address-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+
+  ::v-deep .el-button {
+    background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 28px !important;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(46, 125, 50, 0.4);
+    }
+  }
+}
+
+/* 描述列表标题 */
+::v-deep .el-descriptions {
+  margin: 20px 0 16px;
+
+  .el-descriptions__header {
+    .el-descriptions__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a2e1a;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, rgba(241, 248, 233, 0.7), rgba(255, 255, 255, 0.9));
+      border-radius: 12px;
+      border: 1px solid rgba(46, 125, 50, 0.1);
+    }
+  }
+}
+
+/* 积分价格 */
+.jifen-price {
+  color: #ff9800;
+  font-weight: 700;
+}
 </style>

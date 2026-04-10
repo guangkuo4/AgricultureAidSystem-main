@@ -1,3 +1,9 @@
+-- 帮扶项目示例（首页「帮扶对接」列表）
+INSERT INTO `bangfuxiangmu` (`xiangmubianhao`, `xiangmumingcheng`, `xiangmuleixing`, `tupian`, `faburiqi`, `xiangmuxiangqing`, `lianxiren`, `lianxidianhua`, `clicknum`) VALUES
+('XM2026001', '豫北优质小麦产业帮扶', '技术', 'upload/zhunongshangpin_tupian1.jpg', CURDATE(), '面向豫北种植户提供良种、水肥与病虫害绿色防控培训与现场指导。', '项目组', '400-000-0001', 5),
+('XM2026002', '果蔬冷链与产销对接', '采购', 'upload/zhunongshangpin_tupian2.jpg', CURDATE(), '对接商超与合作社，帮助农户签订保底收购与冷链运输支持。', '对接办', '400-000-0002', 8),
+('XM2026003', '农机共享与机手培训', '其他', 'upload/zhunongshangpin_tupian3.jpg', CURDATE(), '组织农机合作社为中小农户提供机耕机收服务与机手安全培训。', '农机中心', '400-000-0003', 3);
+
 -- 帮扶资源池测试数据
 INSERT INTO `bangfuziyuan` (`ziyuanbianhao`, `bangfuleixing`, `bangfufangming`, `bangfufangleixing`, `shanchanglingyu`, `suozaidiqu`, `xiangyingshixiao`, `bangfuneirong`, `lianxiren`, `lianxidianhua`, `sfsh`) VALUES
 (CONCAT('ZY', UNIX_TIMESTAMP(NOW())), '技术帮扶', '河南省农业科学院', '帮扶单位', '小麦种植技术、病虫害防治', '河南郑州', '48小时内', '提供小麦种植全程技术指导，包括播种、施肥、病虫害防治等环节的专业技术支持。拥有20名高级农艺师，可实地指导或远程咨询。', '张教授', '13800138001', '已通过'),

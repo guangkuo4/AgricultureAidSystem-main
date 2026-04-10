@@ -100,228 +100,135 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-	.section {
-	  width: 900px;
-	  margin: 0 auto;
-	}
+  /* ========== 收藏列表页样式 ========== */
+  .list-preview {
+    padding: 30px 0;
+  }
 
-	.formSearch {
-	  text-align: right;
-	}
-	.image {
-	  height: 233px;
-	  width: 100%;
-	  display: block;
-	}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__total {
-				margin: 0 10px 0 0;
-				color: #666;
-				font-weight: 400;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 28px;
-				height: 28px;
-			}
-	
-	#pagination.el-pagination ::v-deep .btn-prev {
-				border: none;
-				border-radius: 2px;
-				padding: 0 10px;
-				margin: 0 5px;
-				color: #000;
-				background: none;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				min-width: 35px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .btn-next {
-				border: none;
-				border-radius: 2px;
-				padding: 0 10px;
-				margin: 0 5px;
-				color: #000;
-				background: none;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				min-width: 35px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .btn-prev:disabled {
-				border: none;
-				cursor: not-allowed;
-				border-radius: 2px;
-				padding: 0 0;
-				margin: 0 5px;
-				color: #666;
-				background: none;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .btn-next:disabled {
-				border: none;
-				cursor: not-allowed;
-				border-radius: 2px;
-				padding: 0 0;
-				margin: 0 5px;
-				color: #666;
-				background: none;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pager {
-				padding: 0;
-				margin: 0;
-				display: inline-block;
-				vertical-align: top;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pager .number {
-				cursor: pointer;
-				padding: 0 4px;
-				margin: 0 5px;
-				color: #000;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				border-radius: 50%;
-				background: #9E9E9E;
-				text-align: center;
-				min-width: 30px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pager .number:hover {
-				cursor: pointer;
-				padding: 0 4px;
-				margin: 0 5px;
-				color: #000;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				border-radius: 50%;
-				background: #A293B6;
-				text-align: center;
-				min-width: 30px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pager .number.active {
-				cursor: default;
-				padding: 0 4px;
-				margin: 0 5px;
-				color: #000;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 30px;
-				border-radius: 50%;
-				background: #A293B6;
-				text-align: center;
-				min-width: 30px;
-				height: 30px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes {
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 28px;
-				height: 28px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input {
-				margin: 0 5px;
-				width: 100px;
-				position: relative;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input .el-input__inner {
-				border: 1px solid #DCDFE6;
-				cursor: pointer;
-				padding: 0 25px 0 8px;
-				color: #606266;
-				display: inline-block;
-				font-size: 13px;
-				line-height: 28px;
-				border-radius: 3px;
-				outline: 0;
-				background: #FFF;
-				width: 100%;
-				text-align: center;
-				height: 28px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input span.el-input__suffix {
-				top: 0;
-				position: absolute;
-				right: 0;
-				height: 100%;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__sizes .el-input .el-input__suffix .el-select__caret {
-				cursor: pointer;
-				color: #C0C4CC;
-				width: 25px;
-				font-size: 14px;
-				line-height: 28px;
-				text-align: center;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__jump {
-				margin: 0 0 0 24px;
-				color: #606266;
-				display: inline-block;
-				vertical-align: top;
-				font-size: 13px;
-				line-height: 28px;
-				height: 28px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__jump .el-input {
-				border-radius: 3px;
-				padding: 0 2px;
-				margin: 0 2px;
-				display: inline-block;
-				width: 50px;
-				font-size: 14px;
-				line-height: 18px;
-				position: relative;
-				text-align: center;
-				height: 28px;
-			}
-	
-	#pagination.el-pagination ::v-deep .el-pagination__jump .el-input .el-input__inner {
-				border: 1px solid #DCDFE6;
-				cursor: pointer;
-				padding: 0 3px;
-				color: #606266;
-				display: inline-block;
-				font-size: 14px;
-				line-height: 28px;
-				border-radius: 3px;
-				outline: 0;
-				background: #FFF;
-				width: 100%;
-				text-align: center;
-				height: 28px;
-			}
+  /* 页面标题 */
+  .section-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #1a2e1a;
+    margin: 20px 0 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(241, 248, 233, 0.8), rgba(255, 255, 255, 0.9));
+    border-radius: 20px;
+    border: 1px solid rgba(46, 125, 50, 0.1);
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.08);
+  }
+
+  /* 搜索表单 */
+  .formSearch {
+    text-align: right;
+
+    ::v-deep .el-input__inner {
+      border: 1px solid rgba(46, 125, 50, 0.15) !important;
+      border-radius: 12px !important;
+      padding: 0 16px;
+      height: 40px;
+      line-height: 40px;
+      background: #fafcf9;
+      transition: all 0.25s ease;
+
+      &:focus {
+        border-color: #4caf50 !important;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(102, 187, 106, 0.12) !important;
+      }
+    }
+  }
+
+  /* 图片 */
+  .image {
+    height: 180px;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  /* 卡片 */
+  ::v-deep .el-card {
+    border-radius: 20px !important;
+    border: 1px solid rgba(46, 125, 50, 0.08) !important;
+    background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0.95)) !important;
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.08) !important;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+
+    &:hover {
+      transform: translateY(-10px) !important;
+      box-shadow: 0 16px 48px rgba(46, 125, 50, 0.16) !important;
+      border-color: rgba(46, 125, 50, 0.2) !important;
+    }
+
+    .el-card__body > div:not(.image) {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a2e1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      padding: 8px 0;
+    }
+  }
+
+  /* 分页样式 */
+  #pagination.el-pagination ::v-deep {
+    .btn-prev,
+    .btn-next {
+      border: 1px solid rgba(46, 125, 50, 0.12) !important;
+      border-radius: 12px !important;
+      padding: 0 18px !important;
+      margin: 0 6px;
+      color: #607060;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      height: 40px;
+      line-height: 40px;
+      transition: all 0.25s ease;
+
+      &:hover:not(:disabled) {
+        color: #388e3c !important;
+        border-color: #4caf50 !important;
+        background: rgba(46, 125, 50, 0.06) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(46, 125, 50, 0.15);
+      }
+    }
+
+    .el-pager .number {
+      border: 1px solid rgba(46, 125, 50, 0.12) !important;
+      border-radius: 12px !important;
+      padding: 0 14px !important;
+      margin: 0 4px;
+      color: #607060;
+      font-size: 14px;
+      font-weight: 600;
+      background: #fff;
+      height: 40px;
+      line-height: 40px;
+      transition: all 0.25s ease;
+
+      &:hover {
+        color: #388e3c !important;
+        border-color: #4caf50 !important;
+        background: rgba(46, 125, 50, 0.06) !important;
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        color: #fff !important;
+        background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+        border-color: transparent !important;
+        box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+        transform: translateY(-2px);
+      }
+    }
+  }
 </style>

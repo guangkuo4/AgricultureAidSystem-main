@@ -59,7 +59,6 @@
           <div class="btn-box">
             <button class="btn" @click="login()">
               <span class="btn-text">立即登录</span>
-              <span class="btn-arrow">→</span>
             </button>
           </div>
 
@@ -497,17 +496,6 @@ export default {
 .btn-text {
   position: relative;
   z-index: 1;
-}
-
-.btn-arrow {
-  position: relative;
-  z-index: 1;
-  font-size: 18px;
-  transition: transform 0.3s ease;
-}
-
-.btn:hover .btn-arrow {
-  transform: translateX(5px);
 }
 
 .links {

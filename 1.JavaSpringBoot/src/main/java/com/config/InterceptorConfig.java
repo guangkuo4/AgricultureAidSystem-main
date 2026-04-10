@@ -36,7 +36,10 @@ public class InterceptorConfig extends WebMvcConfigurationSupport{
 		if (!uploadLocation.endsWith("/")) {
 			uploadLocation += "/";
 		}
-		registry.addResourceHandler("/upload/**").addResourceLocations(uploadLocation);
+		// 先 user.dir/upload（实际上传优先生效），再 classpath:/static/upload/ 作为演示缺省，避免仓库未带运行目录时数据库路径 404
+		registry.addResourceHandler("/upload/**")
+				.addResourceLocations(uploadLocation)
+				.addResourceLocations("classpath:/static/upload/");
 
 		registry.addResourceHandler("/**")
         .addResourceLocations("classpath:/resources/")

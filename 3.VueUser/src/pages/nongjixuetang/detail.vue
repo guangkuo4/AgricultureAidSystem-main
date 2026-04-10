@@ -943,7 +943,7 @@
 				font-size: 0;
 				position: relative;
 			}
-	
+
 	.detail-preview .el-rate ::v-deep .el-rate__item .el-rate__icon {
 				margin: 0 3px;
 				display: block;

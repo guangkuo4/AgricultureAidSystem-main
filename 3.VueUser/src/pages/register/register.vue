@@ -242,7 +242,7 @@ export default {
 				this.requiredRules.yonghuxingming = [{ required: true, message: '请输入用户姓名', trigger: 'blur' }]
 			}
 		}
-	},
+    },
     created() {
 		this.pageFlag = this.$route.query.pageFlag;
 		if(this.$route.query.pageFlag=='register'){

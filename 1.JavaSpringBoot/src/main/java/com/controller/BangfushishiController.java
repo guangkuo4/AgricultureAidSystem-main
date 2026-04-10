@@ -94,8 +94,9 @@ public class BangfushishiController {
     }
 
     /**
-     * 修改
+     * 修改（用户端更新对接进度；演示环境放开鉴权）
      */
+    @IgnoreAuth
     @RequestMapping("/update")
     public R update(@RequestBody BangfushishiEntity bangfushishi, HttpServletRequest request) {
         bangfushishiService.updateById(bangfushishi);
