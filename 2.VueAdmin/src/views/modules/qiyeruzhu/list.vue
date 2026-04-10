@@ -16,6 +16,7 @@
           </el-select>
         </div>
         <el-button class="search" type="success" @click="search()">查询</el-button>
+        <el-button style="margin-left: 10px; font-weight: bold; color: #409EFF;" type="info" plain icon="el-icon-refresh" @click="resetSearch()">刷新</el-button>
       </el-row>
     </el-form>
 
@@ -34,6 +35,7 @@
         <el-table-column prop="lianxidianhua" label="联系电话" width="130" />
         <el-table-column prop="shenqingzhanghao" label="申请账号" width="140" />
         <el-table-column prop="sfsh" label="审核状态" width="100" />
+        <el-table-column prop="ruzhuliyou" label="入驻理由" min-width="200" show-overflow-tooltip />
         <el-table-column prop="shenhetime" label="审核时间" width="170" />
         <el-table-column label="操作" width="260">
           <template slot-scope="scope">
@@ -66,20 +68,39 @@
         <el-descriptions-item label="联系人">{{currentRow.lianxiren}}</el-descriptions-item>
         <el-descriptions-item label="联系电话">{{currentRow.lianxidianhua}}</el-descriptions-item>
         <el-descriptions-item label="申请账号">{{currentRow.shenqingzhanghao}}</el-descriptions-item>
+        <el-descriptions-item label="入驻理由" :span="2">{{currentRow.ruzhuliyou || '无'}}</el-descriptions-item>
         <el-descriptions-item label="审核状态">{{currentRow.sfsh}}</el-descriptions-item>
         <el-descriptions-item label="审核时间">{{currentRow.shenhetime}}</el-descriptions-item>
         <el-descriptions-item label="审核回复" :span="2">{{currentRow.shhf}}</el-descriptions-item>
         <el-descriptions-item label="营业执照" :span="2">
           <div v-if="currentRow.yingyezhizhao">
-            <a v-if="currentRow.yingyezhizhao.substring(0,4)==='http'" :href="currentRow.yingyezhizhao" target="_blank">查看文件</a>
-            <a v-else :href="$base.url+currentRow.yingyezhizhao" target="_blank">查看文件</a>
+            <el-image
+              v-if="currentRow.yingyezhizhao && !currentRow.yingyezhizhao.startsWith('http')"
+              :src="$base.url + 'upload/' + currentRow.yingyezhizhao"
+              fit="contain"
+              style="max-width: 300px; max-height: 200px; border-radius: 6px; cursor: pointer;"
+              @click="previewImage($base.url + 'upload/' + currentRow.yingyezhizhao)"
+            ></el-image>
+            <el-image
+              v-else-if="currentRow.yingyezhizhao"
+              :src="currentRow.yingyezhizhao"
+              fit="contain"
+              style="max-width: 300px; max-height: 200px; border-radius: 6px; cursor: pointer;"
+              @click="previewImage(currentRow.yingyezhizhao)"
+            ></el-image>
+            <div v-else style="color: #999;">无</div>
           </div>
-          <div v-else>无</div>
+          <div v-else style="color: #999;">无</div>
         </el-descriptions-item>
       </el-descriptions>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="viewVisible=false">关闭</el-button>
       </span>
+    </el-dialog>
+
+    <!-- 营业执照大图预览弹窗 -->
+    <el-dialog :visible.sync="previewVisible" width="800px" append-to-body title="营业执照">
+      <img :src="previewUrl" style="width: 100%;" />
     </el-dialog>
 
     <el-dialog title="审核入驻申请" :visible.sync="auditVisible" width="560px">
@@ -121,7 +142,9 @@ export default {
       viewVisible: false,
       auditVisible: false,
       currentRow: {},
-      auditForm: { id: null, sfsh: '通过', shhf: '' }
+      auditForm: { id: null, sfsh: '通过', shhf: '' },
+      previewVisible: false,
+      previewUrl: ''
     }
   },
   created() {
@@ -129,6 +152,11 @@ export default {
   },
   methods: {
     search() {
+      this.pageIndex = 1
+      this.getDataList()
+    },
+    resetSearch() {
+      this.searchForm = { qiyemingcheng: '', sfsh: '' }
       this.pageIndex = 1
       this.getDataList()
     },
@@ -169,13 +197,19 @@ export default {
       this.currentRow = row || {}
       this.viewVisible = true
     },
+    previewImage(url) {
+      this.previewUrl = url
+      this.previewVisible = true
+    },
     auditHandler(row) {
       this.currentRow = row || {}
       this.auditForm = { id: row.id, sfsh: '通过', shhf: '' }
       this.auditVisible = true
     },
     submitAudit() {
+      console.log('提交审核:', this.auditForm)
       this.$http({ url: 'qiyeruzhu/audit', method: 'post', data: this.auditForm }).then(({ data }) => {
+        console.log('审核响应:', data)
         if (data && data.code === 0) {
           this.$message.success('操作成功')
           this.auditVisible = false
@@ -183,6 +217,9 @@ export default {
         } else {
           this.$message.error((data && data.msg) || '操作失败')
         }
+      }).catch((error) => {
+        console.error('审核请求失败:', error)
+        this.$message.error('请求失败，请检查网络连接')
       })
     },
     deleteHandler(id) {

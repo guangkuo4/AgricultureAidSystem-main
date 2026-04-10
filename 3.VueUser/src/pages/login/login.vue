@@ -182,9 +182,13 @@ export default {
 		  this.role = e
 	  },
       submitForm: function(formName) {
+        if (this.flag) return
+        this.flag = true
+
         if (this.roles.length!=1) {
             if (!this.role) {
                 ErrorHandler.showError("请选择登录用户类型");
+                this.flag = false
                 return false;
             }
         } else {
@@ -221,9 +225,9 @@ export default {
 		    console.log('API URL:', `${this.loginForm.tableName}/login`);
 		    
 		    try {
-		      this.$http.get(`${this.loginForm.tableName}/login`, {params: this.loginForm}).then(res => {
-		        console.log('Login response:', res);
-		        if (res.data && res.data.code === 0) {
+	      this.$http.get(`${this.loginForm.tableName}/login`, {params: this.loginForm}).then(async res => {
+	        console.log('Login response:', res);
+	        if (res.data && res.data.code === 0) {
 	          localStorage.setItem('frontToken', res.data.token);
 	          localStorage.setItem('UserTableName', this.loginForm.tableName);
 	          localStorage.setItem('username', this.loginForm.username);
@@ -231,19 +235,31 @@ export default {
 	          localStorage.setItem('frontSessionTable', this.loginForm.tableName);
 	          localStorage.setItem('frontRole', this.role);
 	          localStorage.setItem('keyPath', 0);
+	          // 登录成功后立即获取用户ID，确保提交申请时 frontUserid 可用
+	          await this.$http.get(`${this.loginForm.tableName}/session`, {emulateJSON: true}).then(sessionRes => {
+	            if (sessionRes.data && sessionRes.data.code === 0) {
+	              localStorage.setItem('frontUserid', sessionRes.data.data.id);
+	              localStorage.setItem('sessionForm', JSON.stringify(sessionRes.data.data));
+	            }
+	          });
 	          this.$router.push('/');
 	        } else {
 		          ErrorHandler.showError(res.data && res.data.msg || '登录失败，请检查账号和密码');
+		          this.flag = false
 		        }
+		        this.flag = false;
 		      }).catch((err) => {
 		        console.error('Login error:', err);
 		        ErrorHandler.showError("网络异常，请确认后端已启动在 http://localhost:8080");
+		        this.flag = false;
 		      });
 		    } catch (error) {
 		      console.error('Login exception:', error);
 		      ErrorHandler.showError('登录过程中发生错误，请稍后重试');
+		      this.flag = false;
 		    }
 		  } else {
+		    this.flag = false
 		    return false;
 		  }
 		});

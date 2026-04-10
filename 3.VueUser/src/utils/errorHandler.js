@@ -32,110 +32,96 @@ class ErrorHandler {
    */
   static handleError(error, customMessage = '') {
     console.error('Error occurred:', error);
-    
-    let errorType = ERROR_TYPES.UNKNOWN;
+    // vue-resource 错误在 body 中，axios 在 response.data 中
+    const errorData = error.body || (error.response && error.response.data);
     let errorMessage = customMessage || ERROR_MESSAGES[ERROR_TYPES.UNKNOWN];
-    
-    // 根据错误类型判断
-    if (error.message && error.message.includes('Network Error')) {
-      errorType = ERROR_TYPES.NETWORK;
+
+    if (errorData && errorData.msg) {
+      errorMessage = errorData.msg;
+    } else if (error.message && error.message.includes('Network Error')) {
       errorMessage = customMessage || ERROR_MESSAGES[ERROR_TYPES.NETWORK];
-    } else if (error.response && error.response.status === 401) {
-      errorType = ERROR_TYPES.AUTH;
+    } else if (error.status === 401) {
       errorMessage = customMessage || ERROR_MESSAGES[ERROR_TYPES.AUTH];
-      // 跳转到登录页面
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1000);
-    } else if (error.response && error.response.status === 400) {
-      errorType = ERROR_TYPES.VALIDATION;
-      errorMessage = customMessage || (error.response.data && error.response.data.message) || ERROR_MESSAGES[ERROR_TYPES.VALIDATION];
-    } else if (error.response && error.response.status >= 500) {
-      errorType = ERROR_TYPES.SERVER;
+      setTimeout(() => { window.location.href = '/login' }, 1500);
+    } else if (error.status === 400) {
+      errorMessage = customMessage || ERROR_MESSAGES[ERROR_TYPES.VALIDATION];
+    } else if (error.status >= 500) {
       errorMessage = customMessage || ERROR_MESSAGES[ERROR_TYPES.SERVER];
+    } else if (error.statusText) {
+      errorMessage = error.statusText;
     }
-    
-    // 显示错误提示
+
     this.showError(errorMessage);
-    
-    return {
-      type: errorType,
-      message: errorMessage
-    };
+    return { type: ERROR_TYPES.UNKNOWN, message: errorMessage };
   }
-  
+
   /**
    * 显示错误提示
    * @param {string} message - 错误消息
    */
   static showError(message) {
-    // 检查是否存在 Element UI 的 $message 方法
-    if (window.$message) {
-      window.$message.error({
-        message: message,
-        duration: 3000,
-        showClose: true
-      });
+    const $message = this._getMessage()
+    if ($message) {
+      $message.error(message)
     } else {
-      // 否则使用浏览器默认的 alert
-      alert(message);
+      console.error('Error:', message)
+      alert(message)
     }
   }
-  
+
   /**
    * 显示成功提示
    * @param {string} message - 成功消息
    */
   static showSuccess(message) {
-    // 检查是否存在 Element UI 的 $message 方法
-    if (window.$message) {
-      window.$message.success({
-        message: message,
-        duration: 2000,
-        showClose: true
-      });
+    const $message = this._getMessage()
+    if ($message) {
+      $message.success(message)
     } else {
-      // 否则使用浏览器默认的 alert
-      alert(message);
+      alert(message)
     }
   }
-  
+
   /**
    * 显示警告提示
    * @param {string} message - 警告消息
    */
   static showWarning(message) {
-    // 检查是否存在 Element UI 的 $message 方法
-    if (window.$message) {
-      window.$message.warning({
-        message: message,
-        duration: 3000,
-        showClose: true
-      });
+    const $message = this._getMessage()
+    if ($message) {
+      $message.warning(message)
     } else {
-      // 否则使用浏览器默认的 alert
-      alert(message);
+      alert(message)
     }
   }
-  
+
   /**
    * 显示信息提示
    * @param {string} message - 信息消息
    */
   static showInfo(message) {
-    // 检查是否存在 Element UI 的 $message 方法
-    if (window.$message) {
-      window.$message.info({
-        message: message,
-        duration: 2000,
-        showClose: true
-      });
+    const $message = this._getMessage()
+    if ($message) {
+      $message.info(message)
     } else {
-      // 否则使用浏览器默认的 alert
-      alert(message);
+      alert(message)
     }
   }
-  
+
+  /**
+   * 获取 Vue 实例的 $message
+   * @returns {Function|null}
+   */
+  static _getMessage() {
+    if (window.__vueApp__ && window.__vueApp__.$message) {
+      return window.__vueApp__.$message
+    }
+    if (Vue && Vue.prototype && Vue.prototype.$message) {
+      return Vue.prototype.$message
+    }
+    return null
+  }
+
   /**
    * 包装异步函数，添加错误处理
    * @param {Function} asyncFn - 异步函数
@@ -147,11 +133,13 @@ class ErrorHandler {
       try {
         return await asyncFn(...args);
       } catch (error) {
-        this.handleError(error, customMessage);
-        throw error;
+        // 不再调用 handleError，避免显示通用兜底消息
+        // 错误已在上层 catch 中处理，这里只做静默日志
+        console.error('Async function error (已在上层处理):', error);
       }
     };
   }
 }
 
 export default ErrorHandler;
+

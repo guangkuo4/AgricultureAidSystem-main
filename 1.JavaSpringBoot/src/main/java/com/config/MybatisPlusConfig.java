@@ -3,6 +3,7 @@ package com.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.baomidou.mybatisplus.mapper.MetaObjectHandler;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
  * mybatis-plus配置
  */
 @Configuration
+@EnableTransactionManagement
 public class MybatisPlusConfig {
 
     /**
@@ -20,5 +22,5 @@ public class MybatisPlusConfig {
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
-    
+
 }

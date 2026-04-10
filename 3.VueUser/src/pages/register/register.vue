@@ -301,67 +301,72 @@ export default {
 	  goBack() {
 		this.$router.push('/');
 	  },
-      submitForm: ErrorHandler.wrapAsync(async function(formName) {
+      submitForm(formName) {
         this.$refs[formName].validate((valid) => {
-          if (valid) {
-            var url=this.tableName+"/register";
-				if((!this.registerForm.nonghuzhanghao) && `nonghu` == this.tableName){
-					ErrorHandler.showError(`农户账号不能为空`);
-					return
-				}
-               if(`nonghu` == this.tableName && this.registerForm.mima!=this.registerForm.mima2) {
-                ErrorHandler.showError(`两次密码输入不一致`);
-                return
-               }
-				if((!this.registerForm.mima) && `nonghu` == this.tableName){
-					ErrorHandler.showError(`密码不能为空`);
-					return
-				}
-				if((!this.registerForm.nonghuxingming) && `nonghu` == this.tableName){
-					ErrorHandler.showError(`农户姓名不能为空`);
-					return
-				}
-					if(`nonghu` == this.tableName && this.registerForm.nonghudianhua &&(!this.$validate.isMobile2(this.registerForm.nonghudianhua))){ 
-						ErrorHandler.showError(`农户电话应输入手机格式`);
-						return
-					}
-				if((!this.registerForm.yonghuzhanghao) && `yonghu` == this.tableName){
-					ErrorHandler.showError(`用户账号不能为空`);
-					return
-				}
-               if(`yonghu` == this.tableName && this.registerForm.mima!=this.registerForm.mima2) {
-                ErrorHandler.showError(`两次密码输入不一致`);
-                return
-               }
-				if((!this.registerForm.mima) && `yonghu` == this.tableName){
-					ErrorHandler.showError(`密码不能为空`);
-					return
-				}
-				if((!this.registerForm.yonghuxingming) && `yonghu` == this.tableName){
-					ErrorHandler.showError(`用户姓名不能为空`);
-					return
-				}
-					if(`yonghu` == this.tableName && this.registerForm.yonghudianhua &&(!this.$validate.isMobile2(this.registerForm.yonghudianhua))){ 
-						ErrorHandler.showError(`用户电话应输入手机格式`);
-						return
-					}
-            this.$http.post(url, this.registerForm).then(res => {
-              if (res.data.code === 0) {
-                ErrorHandler.showSuccess('注册成功');
-                setTimeout(() => {
-                  this.$router.push('/login');
-                }, 1500);
-              } else {
-                ErrorHandler.showError(res.data.msg);
-              }
-            }).catch((err) => {
-              ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
-            });
-          } else {
-            return false;
+          if (!valid) return
+          var url = this.tableName + '/register'
+          if ((!this.registerForm.nonghuzhanghao) && `nonghu` == this.tableName) {
+            ErrorHandler.showError(`农户账号不能为空`)
+            return
           }
-        });
-      }),
+          if (`nonghu` == this.tableName && this.registerForm.mima != this.registerForm.mima2) {
+            ErrorHandler.showError(`两次密码输入不一致`)
+            return
+          }
+          if ((!this.registerForm.mima) && `nonghu` == this.tableName) {
+            ErrorHandler.showError(`密码不能为空`)
+            return
+          }
+          if ((!this.registerForm.nonghuxingming) && `nonghu` == this.tableName) {
+            ErrorHandler.showError(`农户姓名不能为空`)
+            return
+          }
+          if (`nonghu` == this.tableName && this.registerForm.nonghudianhua && (!this.$validate.isMobile2(this.registerForm.nonghudianhua))) {
+            ErrorHandler.showError(`农户电话应输入手机格式`)
+            return
+          }
+          if ((!this.registerForm.yonghuzhanghao) && `yonghu` == this.tableName) {
+            ErrorHandler.showError(`用户账号不能为空`)
+            return
+          }
+          if (`yonghu` == this.tableName && this.registerForm.mima != this.registerForm.mima2) {
+            ErrorHandler.showError(`两次密码输入不一致`)
+            return
+          }
+          if ((!this.registerForm.mima) && `yonghu` == this.tableName) {
+            ErrorHandler.showError(`密码不能为空`)
+            return
+          }
+          if ((!this.registerForm.yonghuxingming) && `yonghu` == this.tableName) {
+            ErrorHandler.showError(`用户姓名不能为空`)
+            return
+          }
+          if (`yonghu` == this.tableName && this.registerForm.yonghudianhua && (!this.$validate.isMobile2(this.registerForm.yonghudianhua))) {
+            ErrorHandler.showError(`用户电话应输入手机格式`)
+            return
+          }
+
+          this.$http.post(url, this.registerForm).then(res => {
+            console.log('注册响应:', res.data)
+            if (res.data.code === 0) {
+              ErrorHandler.showSuccess('注册成功')
+              setTimeout(() => { this.$router.push('/login') }, 1500)
+            } else {
+              ErrorHandler.showError(res.data.msg || '注册失败')
+            }
+          }).catch(err => {
+            console.error('注册请求失败 - 完整错误:', err)
+            console.error('err.status:', err.status)
+            console.error('err.body:', err.body)
+            console.error('err.body.msg:', err.body && err.body.msg)
+            console.error('err.data:', err.data)
+            const errMsg = err.body && err.body.msg
+              || err.data && err.data.msg
+              || (err.status === 0 ? '后端服务未启动，请确认后端在 http://localhost:8080 运行' : `请求失败(${err.status})，请稍后重试`)
+            ErrorHandler.showError(errMsg)
+          })
+        })
+      },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       }

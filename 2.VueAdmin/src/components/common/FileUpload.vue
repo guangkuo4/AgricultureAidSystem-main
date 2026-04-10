@@ -61,18 +61,21 @@ export default {
     }
   },
   methods: {
-    // 初始化
+    // 初始化：fileUrls 由父组件传入（来自数据库），可能为纯文件名（xxx.jpg）或带 upload/ 前缀（upload/xxx.jpg）
+    // 统一去掉已有的 upload/ 前缀，只保留纯文件名，避免 setFileList 重复添加
     init() {
-      //   console.log(this.fileUrls);
       if (this.fileUrls) {
         this.fileUrlList = this.fileUrls.split(",");
         let fileArray = [];
         this.fileUrlList.forEach(function(item, index) {
-          var url = item;
+          var url = item.trim();
+          if (url.startsWith("upload/")) {
+            url = url.substring(7); // 去掉 "upload/" 这7个字符
+          }
           var name = index;
           var file = {
             name: name,
-            url: url
+            url: url  // 存纯文件名，setFileList 再加完整前缀
           };
           fileArray.push(file);
         });
@@ -124,16 +127,17 @@ export default {
       this.$message.warning(`最多上传${this.limit}张图片`);
     },
     // 重新对fileList进行赋值
+    // fileList 中的 url 为纯文件名，拼接成完整访问路径用于显示
+    // fileUrlList 中存纯文件名，供父组件保存到数据库
     setFileList(fileList) {
       var fileArray = [];
       var fileUrlArray = [];
-      // 有些图片不是公开的，所以需要携带token信息做权限校验
       var token = storage.get("Token");
       let _this = this;
       fileList.forEach(function(item, index) {
         var url = item.url.split("?")[0];
 	if(!url.startsWith("http")) {
-	  url = _this.$base.url+url
+	  url = _this.$base.url + "upload/" + url
 	}
         var name = item.name;
         var file = {
@@ -141,7 +145,12 @@ export default {
           url: url + "?token=" + token
         };
         fileArray.push(file);
-        fileUrlArray.push(url);
+        // fileUrlList 存纯文件名，供数据库存储
+        var pureName = item.url.split("?")[0];
+        if(pureName.startsWith("upload/")) {
+          pureName = pureName.substring(7);
+        }
+        fileUrlArray.push(pureName);
       });
       this.fileList = fileArray;
       this.fileUrlList = fileUrlArray;

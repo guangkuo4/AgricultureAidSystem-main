@@ -17,7 +17,7 @@
       <!-- 头像区域 -->
       <div :style='{"width":"120px","height":"120px","margin":"0 auto 20px","position":"relative"}'>
         <div :style='{"width":"100%","height":"100%","borderRadius":"50%","overflow":"hidden","border":"4px solid #fff","boxShadow":"0 4px 16px rgba(46, 125, 50, 0.2)"}'>
-          <el-image :style='{"width":"100%","height":"100%","objectFit":"cover"}' :src="sessionForm.touxiang?baseUrl + sessionForm.touxiang:require('@/assets/avator.png')" fit="cover"></el-image>
+          <el-image :style='{"width":"100%","height":"100%","objectFit":"cover"}' :src="sessionForm.touxiang ? resourceUrl + sessionForm.touxiang : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" fit="cover"></el-image>
         </div>
         <div :style='{"position":"absolute","bottom":"5px","right":"5px","width":"24px","height":"24px","background":"#2E7D32","borderRadius":"50%","border":"3px solid #fff","display":"flex","alignItems":"center","justifyContent":"center"}'>
           <i class="el-icon-check" :style='{"color":"#fff","fontSize":"12px"}'></i>
@@ -312,6 +312,7 @@ import ErrorHandler from '@/utils/errorHandler'
       return {
         title: '个人中心',
         baseUrl: config.baseUrl,
+        resourceUrl: config.resourceUrl,
         sessionForm: {},
         passwordForm: {},
         passwordRules: {
@@ -390,37 +391,35 @@ import ErrorHandler from '@/utils/errorHandler'
       setSession(){
         localStorage.setItem('sessionForm',JSON.stringify(this.sessionForm))
       },
-      onSubmit: ErrorHandler.wrapAsync(async function(formName) {
-        if(`nonghu` == this.userTableName && this.sessionForm.touxiang!=null){
-          this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl,"g"),"");
+      onSubmit(formName) {
+        if (`nonghu` == this.userTableName && this.sessionForm.touxiang != null) {
+          this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl, "g"), "");
         }
-        if(`yonghu` == this.userTableName && this.sessionForm.touxiang!=null){
-          this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl,"g"),"");
+        if (`yonghu` == this.userTableName && this.sessionForm.touxiang != null) {
+          this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl, "g"), "");
         }
         this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
-              if (res.data.code == 0) {
-                this.setSession()
-                ErrorHandler.showSuccess('更新成功');
-              } else {
-                ErrorHandler.showError(res.data.msg);
-              }
-            }).catch((err) => {
-              ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
-            });
-          } else {
-            return false;
-          }
+          if (!valid) return
+          this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
+            if (res.data.code == 0) {
+              this.setSession()
+              ErrorHandler.showSuccess('更新成功');
+            } else {
+              ErrorHandler.showError(res.data.msg || '更新失败');
+            }
+          }).catch((err) => {
+            const msg = err.body && err.body.msg || err.data && err.data.msg || '网络异常，请确认后端已启动';
+            ErrorHandler.showError(msg);
+          });
         });
-      }),
+      },
       nonghutouxiangHandleAvatarSuccess(fileUrls) {
         this.sessionForm.touxiang = fileUrls;
       },
       yonghutouxiangHandleAvatarSuccess(fileUrls) {
         this.sessionForm.touxiang = fileUrls;
       },
-      chongzhi: ErrorHandler.wrapAsync(async function() {
+      chongzhi() {
         if (this.chongzhiForm.money == '') {
           ErrorHandler.showError('请输入充值金额');
           return;
@@ -433,12 +432,12 @@ import ErrorHandler from '@/utils/errorHandler'
           ErrorHandler.showError('请选择充值方式');
           return;
         }
-        if(!this.sessionForm.money) {
+        if (!this.sessionForm.money) {
           this.sessionForm.money = parseFloat(this.chongzhiForm.money)
-        }else{
+        } else {
           this.sessionForm.money = parseFloat(this.sessionForm.money) + parseFloat(this.chongzhiForm.money);
         }
-        
+
         this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
           if (res.data.code == 0) {
             this.setSession()
@@ -447,22 +446,23 @@ import ErrorHandler from '@/utils/errorHandler'
               this.dialogFormVisibleMoney = false;
             }, 1500);
           } else {
-            ErrorHandler.showError(res.data.msg);
+            ErrorHandler.showError(res.data.msg || '充值失败');
           }
         }).catch((err) => {
-          ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
+          const msg = err.body && err.body.msg || err.data && err.data.msg || '网络异常，请确认后端已启动';
+          ErrorHandler.showError(msg);
         });
-      }),
-      chongzhivip: ErrorHandler.wrapAsync(async function() {
+      },
+      chongzhivip() {
         if (this.chongzhiForm.radio == '') {
           ErrorHandler.showError('请选择支付方式');
           return;
         }
-        if(this.sessionForm.vip == '是') {
+        if (this.sessionForm.vip == '是') {
           ErrorHandler.showSuccess('您已是我们的尊贵会员。');
           return;
         }
-        
+
         this.sessionForm.vip = "是"
         this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
           if (res.data.code == 0) {
@@ -473,12 +473,13 @@ import ErrorHandler from '@/utils/errorHandler'
               this.dialogFormVisibleVip = false;
             }, 1500);
           } else {
-            ErrorHandler.showError(res.data.msg);
+            ErrorHandler.showError(res.data.msg || '会员购买失败');
           }
         }).catch((err) => {
-          ErrorHandler.handleError(err, "网络异常，请确认后端已启动在 http://localhost:8080");
+          const msg = err.body && err.body.msg || err.data && err.data.msg || '网络异常，请确认后端已启动';
+          ErrorHandler.showError(msg);
         });
-      }),
+      },
       handleClick(tab, event) {
         switch(event.target.outerText) {
           case '个人中心':

@@ -31,11 +31,15 @@
 				<span class="btn-shop__text">购物车</span>
 			</el-button>
 
+			<!-- 消息通知 -->
+			<MessageNotification v-if="Token" />
+
+
 			<!-- 用户信息 -->
 			<template v-if="Token">
 				<div class="user-info" @click="goMenu('/index/center')">
 					<div class="user-avatar">
-						<img v-if="headportrait" :src="baseUrl + headportrait" alt="头像">
+						<img v-if="headportrait" :src="getAvatarUrl(headportrait)" alt="头像">
 						<img v-else src="@/assets/avator.png" alt="默认头像">
 					</div>
 					<span class="user-name">{{username}}</span>
@@ -696,8 +700,12 @@
 import Vue from 'vue'
 import Swiper from "swiper";
 import axios from 'axios'
+import MessageNotification from '@/components/MessageNotification.vue'
 
 export default {
+    components: {
+        MessageNotification
+    },
     data() {
 		return {
             activeIndex: '0',
@@ -950,6 +958,16 @@ export default {
 			localStorage.setItem('headportrait', localStorage.getItem('frontHeadportrait'));
 			localStorage.setItem('userid', localStorage.getItem('frontUserid'));
 			window.open(`${this.$config.baseUrl}admin/dist/index.html`, "_blank");
+		},
+		getAvatarUrl(url) {
+			if (!url) return '';
+			if (url.startsWith('http://') || url.startsWith('https://')) {
+				return url;
+			}
+			if (url.startsWith('upload/')) {
+				return this.baseUrl + url;
+			}
+			return this.baseUrl + 'upload/' + url;
 		},
 		goMenu(path) {
             this.$router.push(path);

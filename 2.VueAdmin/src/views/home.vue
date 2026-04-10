@@ -24,7 +24,7 @@
 			</div>
 			<div :style='{"width":"auto","flexDirection":"column","justifyContent":"center","display":"flex"}'>
 				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"34px","color":"inherit","fontWeight":"bold","height":"24px"}'>{{zhunongtuopinCount}}</div>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农脱贫总数</div>
+				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农案例总数</div>
 			</div>
 		</div>
 		<div :style='{"boxShadow":"0 0px 0px rgba(0,0,0,.3)","padding":"12px 0","margin":"0 2% 20px 0","borderColor":"rgba(126, 96, 16, .1)","alignItems":"center","textAlign":"left","flexDirection":"row-reverse","display":"flex","borderRadius":"8px","background":"url(http://codegen.caihongy.cn/20231003/b8ae010ba2ff44268dee3545917b55dd.png) no-repeat right bottom / 80% 80%,#fff","borderWidth":"0 0 0px","width":"18%","borderStyle":"solid"}' v-if="isAuth('nongjixuetang','首页总数')">
@@ -33,7 +33,7 @@
 			</div>
 			<div :style='{"width":"auto","flexDirection":"column","justifyContent":"center","display":"flex"}'>
 				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"34px","color":"inherit","fontWeight":"bold","height":"24px"}'>{{nongjixuetangCount}}</div>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>农技学堂总数</div>
+				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农乐学总数</div>
 			</div>
 		</div>
 	</div>

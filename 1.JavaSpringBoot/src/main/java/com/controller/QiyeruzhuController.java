@@ -2,27 +2,21 @@ package com.controller;
 
 import com.annotation.IgnoreAuth;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.entity.NonghuEntity;
 import com.entity.QiyeruzhuEntity;
+import com.entity.YonghuEntity;
 import com.entity.view.QiyeruzhuView;
 import com.service.NonghuService;
 import com.service.QiyeruzhuService;
+import com.service.YonghuService;
 import com.utils.MPUtil;
 import com.utils.PageUtils;
 import com.utils.R;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -34,9 +28,10 @@ import java.util.Map;
 public class QiyeruzhuController {
     @Autowired
     private QiyeruzhuService qiyeruzhuService;
-
     @Autowired
     private NonghuService nonghuService;
+    @Autowired
+    private YonghuService yonghuService;
 
     /**
      * 后端列表
@@ -49,7 +44,7 @@ public class QiyeruzhuController {
     }
 
     /**
-     * 前端列表（用于“我的申请”）
+     * 前端列表（用于"我的申请"）
      */
     @IgnoreAuth
     @RequestMapping("/list")
@@ -98,16 +93,17 @@ public class QiyeruzhuController {
         if (qiyeruzhu == null) {
             return R.error("参数错误");
         }
-        if (StringUtils.isBlank(qiyeruzhu.getQiyemingcheng())
-                || StringUtils.isBlank(qiyeruzhu.getLianxiren())
-                || StringUtils.isBlank(qiyeruzhu.getLianxidianhua())
-                || StringUtils.isBlank(qiyeruzhu.getShenqingzhanghao())
-                || StringUtils.isBlank(qiyeruzhu.getShenqingmima())) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getQiyemingcheng())
+                || org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getLianxiren())
+                || org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getLianxidianhua())
+                || org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getShenqingzhanghao())
+                || org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getShenqingmima())) {
             return R.error("请填写完整信息");
         }
 
         // 账号不可与现有农商重复
-        if (nonghuService.selectCount(new EntityWrapper<NonghuEntity>().eq("nonghuzhanghao", qiyeruzhu.getShenqingzhanghao())) > 0) {
+        if (nonghuService.selectCount(new EntityWrapper<NonghuEntity>().eq("nonghuzhanghao", qiyeruzhu.getShenqingzhanghao())) > 0
+                || yonghuService.selectCount(new EntityWrapper<YonghuEntity>().eq("yonghuzhanghao", qiyeruzhu.getShenqingzhanghao())) > 0) {
             return R.error("该账号已存在，请更换");
         }
         // 同一账号不可重复提交
@@ -115,7 +111,11 @@ public class QiyeruzhuController {
             return R.error("该账号已提交过入驻申请");
         }
 
-        qiyeruzhu.setId(new Date().getTime());
+        if (qiyeruzhu.getUserid() == null) {
+            return R.error("无法获取当前用户信息，请重新登录后提交");
+        }
+
+        qiyeruzhu.setId(new java.util.Date().getTime());
         qiyeruzhu.setSfsh("待审核");
         qiyeruzhu.setShhf("");
         qiyeruzhuService.insert(qiyeruzhu);
@@ -130,8 +130,8 @@ public class QiyeruzhuController {
         if (qiyeruzhuService.selectCount(new EntityWrapper<QiyeruzhuEntity>().eq("shenqingzhanghao", qiyeruzhu.getShenqingzhanghao())) > 0) {
             return R.error("申请账号已存在");
         }
-        qiyeruzhu.setId(new Date().getTime());
-        if (StringUtils.isBlank(qiyeruzhu.getSfsh())) {
+        qiyeruzhu.setId(new java.util.Date().getTime());
+        if (org.apache.commons.lang3.StringUtils.isBlank(qiyeruzhu.getSfsh())) {
             qiyeruzhu.setSfsh("待审核");
         }
         qiyeruzhuService.insert(qiyeruzhu);
@@ -142,7 +142,6 @@ public class QiyeruzhuController {
      * 修改
      */
     @RequestMapping("/update")
-    @Transactional
     public R update(@RequestBody QiyeruzhuEntity qiyeruzhu, HttpServletRequest request) {
         qiyeruzhuService.updateById(qiyeruzhu);
         return R.ok();
@@ -158,54 +157,24 @@ public class QiyeruzhuController {
     }
 
     /**
-     * 审核：通过/驳回
-     * - 通过：创建农商(nonghu)账号，账号=shenqingzhanghao 密码=shenqingmima
-     * - 驳回：仅更新审核状态与回复
-     *
-     * 入参示例：{ "id": 1, "sfsh": "通过", "shhf": "审核意见" }
+     * 审核入驻申请（事务在 Service 层处理）
      */
     @RequestMapping("/audit")
-    @Transactional
-    public R audit(@RequestBody Map<String, Object> body) {
-        if (body == null || body.get("id") == null || body.get("sfsh") == null) {
-            return R.error("参数错误");
-        }
-        Long id = Long.valueOf(body.get("id").toString());
-        String sfsh = body.get("sfsh").toString();
-        String shhf = body.get("shhf") == null ? "" : body.get("shhf").toString();
-
-        QiyeruzhuEntity entity = qiyeruzhuService.selectById(id);
-        if (entity == null) {
-            return R.error("记录不存在");
-        }
-
-        // 统一状态值：待审核/通过/驳回
-        if (!"通过".equals(sfsh) && !"驳回".equals(sfsh) && !"待审核".equals(sfsh)) {
-            return R.error("审核状态不合法");
-        }
-
-        entity.setSfsh(sfsh);
-        entity.setShhf(shhf);
-        entity.setShenhetime(new Date());
-        qiyeruzhuService.updateById(entity);
-
-        if ("通过".equals(sfsh)) {
-            // 若已存在同名账号，避免重复创建
-            if (nonghuService.selectCount(new EntityWrapper<NonghuEntity>().eq("nonghuzhanghao", entity.getShenqingzhanghao())) > 0) {
-                return R.error("农商账号已存在，无法重复开通");
+    public R audit(@RequestBody Map<String, Object> params) {
+        R result = qiyeruzhuService.audit(params);
+        if (result.get("code") != null && result.get("code").equals(0)) {
+            // 审核成功，发送消息通知
+            @SuppressWarnings("unchecked")
+            Map<String, Object> data = (Map<String, Object>) result.get("data");
+            if (data != null) {
+                Long userId = (Long) data.get("userId");
+                String shenqingzhanghao = (String) data.get("shenqingzhanghao");
+                Long id = (Long) data.get("id");
+                String sfsh = (String) data.get("sfsh");
+                String shhf = (String) data.get("shhf");
+                qiyeruzhuService.sendAuditMessage(userId, shenqingzhanghao, id, sfsh, shhf);
             }
-            NonghuEntity nonghu = new NonghuEntity();
-            nonghu.setId(new Date().getTime());
-            nonghu.setNonghuzhanghao(entity.getShenqingzhanghao());
-            nonghu.setMima(entity.getShenqingmima());
-            // “农户姓名”这里用企业名更贴合展示
-            nonghu.setNonghuxingming(entity.getQiyemingcheng());
-            nonghu.setNonghudianhua(entity.getLianxidianhua());
-            nonghu.setMoney(0.0);
-            nonghuService.insert(nonghu);
         }
-
-        return R.ok();
+        return result;
     }
 }
-

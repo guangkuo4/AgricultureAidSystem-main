@@ -41,6 +41,12 @@ lintOnSave: false,
                 pathRewrite: {
                     '^/api': ''
                 }
+            },
+            // 静态资源（头像、上传文件）转发到后端 upload 目录
+            '/upload': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+                secure: false
             }
         }
     },

@@ -121,8 +121,12 @@ router.afterEach(function() {
 	Vue.http.headers.common['Token'] = localStorage.getItem('frontToken') || '';
 });
 
-new Vue({
+const vueInstance = new Vue({
 	render: h => h(App),
 	router,
 	store,
-}).$mount('#app')
+});
+vueInstance.$mount('#app');
+
+// 将 Vue 实例保存到全局变量，供 ErrorHandler 等工具类使用
+window.__vueApp__ = vueInstance;

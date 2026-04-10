@@ -60,6 +60,7 @@ import discusszhunongtuopinAdd from '../pages/discusszhunongtuopin/add'
 import discussnongjixuetangList from '../pages/discussnongjixuetang/list'
 import discussnongjixuetangDetail from '../pages/discussnongjixuetang/detail'
 import discussnongjixuetangAdd from '../pages/discussnongjixuetang/add'
+import MessageCenter from '../pages/message/index'
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -289,6 +290,10 @@ export default new VueRouter({
 				{
 					path: 'discussnongjixuetangAdd',
 					component: discussnongjixuetangAdd
+				},
+				{
+					path: 'message',
+					component: MessageCenter
 				},
 			]
 		},

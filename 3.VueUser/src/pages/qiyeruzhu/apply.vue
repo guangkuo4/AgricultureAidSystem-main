@@ -32,13 +32,13 @@
           <div :style='{"background":"#fff","padding":"30px","borderRadius":"12px","marginBottom":"25px","border":"1px solid rgba(46, 125, 50, 0.1)"}'>
             <div :style='{"display":"flex","alignItems":"center","marginBottom":"25px"}'>
               <i class="el-icon-office-building" :style='{"fontSize":"20px","color":"#2E7D32","marginRight":"10px"}'></i>
-              <div :style='{"fontSize":"18px","fontWeight":"600","color":"#1a1a1a"}'>企业基本信息</div>
+              <div :style='{"fontSize":"18px","fontWeight":"600","color":"#1a1a1a"}'>农商企业基本信息</div>
             </div>
 
-            <el-form-item :style='{"marginBottom":"20px"}' label="企业名称" prop="qiyemingcheng">
+            <el-form-item :style='{"marginBottom":"20px"}' label="农商/企业名称" prop="qiyemingcheng">
               <el-input 
                 v-model="ruleForm.qiyemingcheng" 
-                placeholder="请输入企业名称" 
+                placeholder="请输入农商/企业名称" 
                 clearable
                 prefix-icon="el-icon-s-shop"
               ></el-input>
@@ -59,6 +59,17 @@
                 placeholder="请输入联系电话" 
                 clearable
                 prefix-icon="el-icon-phone"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item :style='{"marginBottom":"20px"}' label="入驻理由" prop="ruzhuliyou">
+              <el-input 
+                v-model="ruleForm.ruzhuliyou" 
+                placeholder="请详细描述您的入驻理由" 
+                clearable
+                type="textarea"
+                :rows="4"
+                prefix-icon="el-icon-edit"
               ></el-input>
             </el-form-item>
           </div>
@@ -86,7 +97,7 @@
             </el-form-item>
             <div :style='{"marginLeft":"140px","fontSize":"13px","color":"#f56c6c","display":"flex","alignItems":"center"}'>
               <i class="el-icon-warning" :style='{"marginRight":"5px"}'></i>
-              企业申请必须上传营业执照
+              农商企业申请必须上传营业执照
             </div>
           </div>
 
@@ -148,17 +159,26 @@ export default {
         qiyemingcheng: '',
         lianxiren: '',
         lianxidianhua: '',
+        ruzhuliyou: '',
         yingyezhizhao: '',
         shenqingzhanghao: '',
         shenqingmima: ''
       },
       rules: {
-        qiyemingcheng: [{ required: true, message: '企业名称不能为空', trigger: 'blur' }],
+        qiyemingcheng: [{ required: true, message: '农商/企业名称不能为空', trigger: 'blur' }],
         lianxiren: [{ required: true, message: '联系人不能为空', trigger: 'blur' }],
         lianxidianhua: [{ required: true, message: '联系电话不能为空', trigger: 'blur' }, { validator: this.$validate.isMobile, trigger: 'blur' }],
+        ruzhuliyou: [{ required: true, message: '入驻理由不能为空', trigger: 'blur' }, { min: 10, message: '入驻理由至少10个字符', trigger: 'blur' }],
         shenqingzhanghao: [{ required: true, message: '申请账号不能为空', trigger: 'blur' }],
         shenqingmima: [{ required: true, message: '申请密码不能为空', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }]
       }
+    }
+  },
+  created() {
+    // 检查用户是否已登录
+    if (!localStorage.getItem('frontToken')) {
+      this.$message.error('请先登录');
+      this.$router.push('/login');
     }
   },
   methods: {
@@ -166,8 +186,22 @@ export default {
       this.ruleForm.yingyezhizhao = fileUrls
     },
     onSubmit() {
+      // 再次检查用户是否已登录
+      if (!localStorage.getItem('frontToken')) {
+        this.$message.error('请先登录');
+        this.$router.push('/login');
+        return;
+      }
       this.$refs['ruleForm'].validate((valid) => {
         if (!valid) return
+        // 确保 userid 有效后再提交
+        const userid = localStorage.getItem('frontUserid')
+        if (!userid) {
+          this.$message.error('请先登录后再提交申请')
+          this.$router.push('/login')
+          return
+        }
+        this.ruleForm.userid = Number(userid)
         this.$http.post('qiyeruzhu/apply', this.ruleForm).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message.success(data.msg || '提交成功')

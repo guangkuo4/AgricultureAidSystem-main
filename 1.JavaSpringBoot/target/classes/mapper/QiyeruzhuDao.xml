@@ -13,6 +13,7 @@
         <result property="sfsh" column="sfsh"/>
         <result property="shhf" column="shhf"/>
         <result property="shenhetime" column="shenhetime"/>
+        <result property="ruzhuliyou" column="ruzhuliyou"/>
     </resultMap>
 
     <select id="selectListVO" resultType="com.entity.vo.QiyeruzhuVO">

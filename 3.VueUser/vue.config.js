@@ -38,6 +38,11 @@ lintOnSave: false,
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: { '^/api': '' }
+            },
+            '/upload': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+                secure: false
             }
         }
     },

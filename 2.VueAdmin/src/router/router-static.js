@@ -80,12 +80,12 @@ export const routes = [{
       }
       ,{
 	path: '/discussnongjixuetang',
-        name: '农技学堂评论',
+        name: '助农乐学评论',
         component: discussnongjixuetang
       }
       ,{
 	path: '/discusszhunongtuopin',
-        name: '助农脱贫评论',
+        name: '助农案例评论',
         component: discusszhunongtuopin
       }
       ,{
@@ -120,7 +120,7 @@ export const routes = [{
       }
       ,{
 	path: '/nongjixuetang',
-        name: '农技学堂',
+        name: '助农乐学',
         component: nongjixuetang
       }
       ,{
@@ -130,7 +130,7 @@ export const routes = [{
       }
       ,{
 	path: '/zhunongtuopin',
-        name: '助农脱贫',
+        name: '助农案例',
         component: zhunongtuopin
       }
       ,{

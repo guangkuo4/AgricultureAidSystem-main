@@ -42,6 +42,9 @@ public class QiyeruzhuEntity<T> implements Serializable {
     /** 联系电话 */
     private String lianxidianhua;
 
+    /** 入驻理由 */
+    private String ruzhuliyou;
+
     /** 营业执照(图片/文件) */
     private String yingyezhizhao;
 
@@ -62,6 +65,9 @@ public class QiyeruzhuEntity<T> implements Serializable {
     @DateTimeFormat
     private Date shenhetime;
 
+    /** 申请人用户id */
+    private Long userid;
+
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat
     private Date addtime;
@@ -72,6 +78,14 @@ public class QiyeruzhuEntity<T> implements Serializable {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
     }
 
     public Long getId() {
@@ -104,6 +118,14 @@ public class QiyeruzhuEntity<T> implements Serializable {
 
     public void setLianxidianhua(String lianxidianhua) {
         this.lianxidianhua = lianxidianhua;
+    }
+
+    public String getRuzhuliyou() {
+        return ruzhuliyou;
+    }
+
+    public void setRuzhuliyou(String ruzhuliyou) {
+        this.ruzhuliyou = ruzhuliyou;
     }
 
     public String getYingyezhizhao() {

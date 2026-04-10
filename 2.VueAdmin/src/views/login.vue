@@ -150,17 +150,23 @@ export default {
     },
 
     login() {
+      if (this.flag) return
+      this.flag = true
+
       if (!this.rulesForm.username) {
         this.$message.error("请输入用户名");
+        this.flag = false
         return;
       }
       if (!this.rulesForm.password) {
         this.$message.error("请输入密码");
+        this.flag = false
         return;
       }
       if(this.roles.length>1) {
         if (!this.rulesForm.role) {
           this.$message.error("请选择角色");
+          this.flag = false
           return;
         }
 
@@ -174,7 +180,7 @@ export default {
         this.tableName = this.roles[0].tableName;
         this.rulesForm.role = this.roles[0].roleName;
       }
-      
+
       this.loginPost()
     },
     loginPost() {
@@ -190,8 +196,10 @@ export default {
           this.$router.replace({ path: "/" });
         } else {
           this.$message.error(data.msg);
+          this.flag = false
         }
       }).catch((err) => {
+        this.flag = false
         const msg = (err.response && err.response.data && err.response.data.msg) || err.message || "网络异常，请确认后端已启动在 http://localhost:8080";
         this.$message.error(msg);
       });

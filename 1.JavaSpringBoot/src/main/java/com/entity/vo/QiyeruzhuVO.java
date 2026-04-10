@@ -17,6 +17,7 @@ public class QiyeruzhuVO implements Serializable {
     private String qiyemingcheng;
     private String lianxiren;
     private String lianxidianhua;
+    private String ruzhuliyou;
     private String yingyezhizhao;
     private String shenqingzhanghao;
     private String sfsh;
@@ -48,6 +49,14 @@ public class QiyeruzhuVO implements Serializable {
 
     public void setLianxidianhua(String lianxidianhua) {
         this.lianxidianhua = lianxidianhua;
+    }
+
+    public String getRuzhuliyou() {
+        return ruzhuliyou;
+    }
+
+    public void setRuzhuliyou(String ruzhuliyou) {
+        this.ruzhuliyou = ruzhuliyou;
     }
 
     public String getYingyezhizhao() {
