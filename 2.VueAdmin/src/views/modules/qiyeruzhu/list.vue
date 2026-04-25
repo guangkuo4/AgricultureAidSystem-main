@@ -5,8 +5,8 @@
       <el-row :style='{"padding":"0px","margin":"0 0 20px","borderRadius":"0px","textAlign":"left","background":"none","display":"block","width":"100%","fontSize":"inherit","order":"2"}'>
         <div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}'>
           <label class="item-label"
-                 :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}'>企业名称</label>
-          <el-input v-model="searchForm.qiyemingcheng" placeholder="企业名称" @keydown.enter.native="search()" clearable></el-input>
+                 :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}'>农商企业名称</label>
+          <el-input v-model="searchForm.qiyemingcheng" placeholder="农商/企业名称" @keydown.enter.native="search()" clearable></el-input>
         </div>
         <div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}' class="select">
           <label class="item-label"
@@ -30,7 +30,7 @@
                 :style='{"padding":"0","borderColor":"#edf7ff","color":"inherit","borderRadius":"12px","borderWidth":"0px 0px 0 0px","background":"none","width":"100%","fontSize":"inherit","borderStyle":"solid"}'>
         <el-table-column type="selection" align="center" width="50"></el-table-column>
         <el-table-column label="序号" type="index" width="50" />
-        <el-table-column prop="qiyemingcheng" label="企业名称" />
+        <el-table-column prop="qiyemingcheng" label="农商企业名称" />
         <el-table-column prop="lianxiren" label="联系人" width="120" />
         <el-table-column prop="lianxidianhua" label="联系电话" width="130" />
         <el-table-column prop="shenqingzhanghao" label="申请账号" width="140" />
@@ -64,7 +64,7 @@
 
     <el-dialog title="申请详情" :visible.sync="viewVisible" width="720px">
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="企业名称">{{currentRow.qiyemingcheng}}</el-descriptions-item>
+        <el-descriptions-item label="农商企业名称">{{currentRow.qiyemingcheng}}</el-descriptions-item>
         <el-descriptions-item label="联系人">{{currentRow.lianxiren}}</el-descriptions-item>
         <el-descriptions-item label="联系电话">{{currentRow.lianxidianhua}}</el-descriptions-item>
         <el-descriptions-item label="申请账号">{{currentRow.shenqingzhanghao}}</el-descriptions-item>

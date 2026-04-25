@@ -37,7 +37,7 @@
 					<el-table-column :resizable='true' :sortable='true' prop="value" width="200" label="值">
 						<template slot-scope="scope">
 							<div v-if="scope.row.value">
-								<img v-for="(item,index) in scope.row.value.split(',')" :key="index" :src="item.substring(0,4)=='http' ? item : $base.url+item" width="100" height="100" style="margin-right:5px;">
+								<img v-for="(item,index) in scope.row.value.split(',')" :key="index" :src="getImgSrc(item)" width="100" height="100" style="margin-right:5px;">
 							</div>
 							<div v-else>无图片</div>
 						</template>
@@ -168,6 +168,14 @@ import AddOrUpdate from "./add-or-update";
 
 
     init () {
+    },
+    getImgSrc(item) {
+      const v = (item || "").trim();
+      if (!v) return "";
+      if (v.startsWith("http://") || v.startsWith("https://")) return v;
+      const base = (this.$base.url || "").replace(/\/?$/, "/");
+      // 去掉可能存在的 upload/ 前缀，只保留文件名再加正确前缀
+      return base + "upload/" + v.replace(/^upload\//, "");
     },
     search() {
       this.pageIndex = 1;

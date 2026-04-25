@@ -26,7 +26,7 @@
 					></file-upload>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.value" label="值" prop="value">
-					&lt;img class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.value.split(',')" :src="item.substring(0,4)=='http' ? item : $base.url+item" width="100" height="100"&gt;
+					&lt;img class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.value.split(',')" :src="getImgSrc(item)" width="100" height="100"&gt;
 				</el-form-item>
 			</template>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="textarea" v-if="type!='info'" label="url" prop="url">
@@ -175,6 +175,14 @@ export default {
 		// 下载
 		download(file){
 			window.open(`${file}`)
+		},
+		// 统一图片路径拼接
+		getImgSrc(item) {
+			const v = (item || "").trim();
+			if (!v) return "";
+			if (v.startsWith("http://") || v.startsWith("https://")) return v;
+			const base = (this.$base.url || "").replace(/\/?$/, "/");
+			return base + "upload/" + v.replace(/^upload\//, "");
 		},
 		// 初始化
 		init(id,type) {

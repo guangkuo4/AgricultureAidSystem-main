@@ -79,6 +79,7 @@ public class QiyeruzhuServiceImpl extends ServiceImpl<QiyeruzhuDao, QiyeruzhuEnt
     @Override
     @Transactional(rollbackFor = Exception.class)
     public R audit(Map<String, Object> params) {
+        System.out.println("========== 审核流程开始 ==========");
         System.out.println("收到审核请求: " + params);
         if (params == null || params.get("id") == null || params.get("sfsh") == null) {
             return R.error("参数错误");
@@ -91,6 +92,8 @@ public class QiyeruzhuServiceImpl extends ServiceImpl<QiyeruzhuDao, QiyeruzhuEnt
         if (entity == null) {
             return R.error("记录不存在");
         }
+        System.out.println("查询到的申请记录: " + entity);
+        System.out.println("申请记录的 userid: " + entity.getUserid());
 
         // 统一状态值
         if (!"通过".equals(sfsh) && !"驳回".equals(sfsh) && !"待审核".equals(sfsh)) {
@@ -135,8 +138,9 @@ public class QiyeruzhuServiceImpl extends ServiceImpl<QiyeruzhuDao, QiyeruzhuEnt
             com.entity.MessageEntity message = new com.entity.MessageEntity();
             message.setId(new Date().getTime());
             message.setAddtime(new Date());
-            
+
             Long msgUserid = userId;
+            // 优先用传入的userId；为空时通过申请账号反查用户ID
             if (msgUserid == null && shenqingzhanghao != null) {
                 YonghuEntity yonghu = yonghuService.selectOne(
                         new EntityWrapper<YonghuEntity>().eq("yonghuzhanghao", shenqingzhanghao));
@@ -145,9 +149,10 @@ public class QiyeruzhuServiceImpl extends ServiceImpl<QiyeruzhuDao, QiyeruzhuEnt
                 }
             }
             if (msgUserid == null) {
-                msgUserid = 1L;
+                System.out.println("无法确定消息接收者，跳过消息发送");
+                return;
             }
-            
+
             message.setUserid(msgUserid);
             message.setTitle("入驻申请审核结果");
             StringBuilder content = new StringBuilder();
@@ -159,11 +164,11 @@ public class QiyeruzhuServiceImpl extends ServiceImpl<QiyeruzhuDao, QiyeruzhuEnt
             message.setType("审核通知");
             message.setStatus("未读");
             message.setRelatedId(id);
+
             messageService.insert(message);
             System.out.println("消息通知发送成功，userId: " + msgUserid);
         } catch (Exception e) {
             System.out.println("发送消息通知失败（不影响审核）: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

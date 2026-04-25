@@ -17,7 +17,9 @@ export default {
     }
   },
   mounted() {
-    this.getCarouselData();
+    this.$nextTick(() => {
+      this.getCarouselData();
+    });
   },
   methods: {
     carouselImgSrc(item) {

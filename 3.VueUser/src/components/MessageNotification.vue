@@ -37,18 +37,60 @@ export default {
   data() {
     return {
       messages: [],
-      unreadCount: 0
+      unreadCount: 0,
+      pollTimer: null,
+      previousToken: localStorage.getItem('frontToken')
     }
   },
   mounted() {
-    this.getMessages()
+    // 监听 localStorage 变化（退出登录时 Token 被清除）
+    window.addEventListener('storage', this.handleStorageChange)
+    const currentToken = localStorage.getItem('frontToken')
+    if (currentToken && currentToken !== 'null' && currentToken !== 'undefined') {
+      this.getMessages()
+      this.startPolling()
+    }
+  },
+  beforeDestroy() {
+    this.stopPolling()
+    window.removeEventListener('storage', this.handleStorageChange)
   },
   methods: {
+    handleStorageChange(e) {
+      // localStorage.clear() 时所有 key 都会触发，这里只处理 Token 变化
+      if (e.key === 'frontToken' || e.key === null) {
+        const currentToken = localStorage.getItem('frontToken')
+        if (!currentToken || currentToken === 'null' || currentToken === 'undefined') {
+          this.stopPolling()
+          this.messages = []
+          this.unreadCount = 0
+        }
+      }
+    },
+    // 启动轮询：每 10 秒刷新一次消息
+    startPolling() {
+      this.stopPolling()
+      const userid = localStorage.getItem('frontUserid')
+      if (!userid) return
+      this.pollTimer = setInterval(() => {
+        const uid = localStorage.getItem('frontUserid')
+        if (uid) {
+          this.getMessages()
+        }
+      }, 10000)
+    },
+    stopPolling() {
+      if (this.pollTimer) {
+        clearInterval(this.pollTimer)
+        this.pollTimer = null
+      }
+    },
     getMessages() {
       const userid = localStorage.getItem('frontUserid')
       if (!userid) {
         this.messages = []
         this.unreadCount = 0
+        this.stopPolling()
         return
       }
 
@@ -56,24 +98,24 @@ export default {
         params: { userid: userid }
       }).then(res => {
         if (res.data.code === 0) {
-          this.messages = (res.data.page.list || []).slice(0, 10) // 下拉最多显示10条
-          this.unreadCount = this.messages.filter(m => m.status === '未读').length
+          const newMessages = (res.data.page.list || []).slice(0, 10)
+          this.unreadCount = newMessages.filter(m => m.status === '未读').length
+          if (JSON.stringify(newMessages) !== JSON.stringify(this.messages)) {
+            this.messages = newMessages
+          }
         }
-      }).catch(err => {
-        console.error('获取消息失败:', err)
       })
     },
     handleCommand(id) {
-      // 标记消息为已读
       this.$http.post('/message/update', {
         id: id,
         status: '已读'
       }).then(res => {
         if (res.data.code === 0) {
-          const message = this.messages.find(m => m.id === id)
+          const message = this.messages.find(m => m.id == id)
           if (message) {
             message.status = '已读'
-            this.unreadCount--
+            this.unreadCount = Math.max(0, this.unreadCount - 1)
           }
         }
       }).catch(err => {
@@ -100,7 +142,7 @@ export default {
       })
     },
     goToMessageCenter() {
-      this.$router.push('/message')
+      this.$router.push('/index/message')
     },
     formatTime(time) {
       if (!time) return ''
@@ -147,7 +189,7 @@ export default {
   max-width: 300px;
   padding: 10px;
   border-bottom: 1px solid #f0f0f0;
-  
+
   &:last-child {
     border-bottom: none;
   }

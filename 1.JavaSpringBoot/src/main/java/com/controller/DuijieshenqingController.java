@@ -32,6 +32,9 @@ import com.entity.view.DuijieshenqingView;
 
 import com.service.DuijieshenqingService;
 import com.service.TokenService;
+import com.service.MessageService;
+import com.service.YonghuService;
+import com.entity.MessageEntity;
 import com.utils.PageUtils;
 import com.utils.R;
 import com.utils.MPUtil;
@@ -51,6 +54,8 @@ import java.io.IOException;
 public class DuijieshenqingController {
     @Autowired
     private DuijieshenqingService duijieshenqingService;
+    @Autowired
+    private MessageService messageService;
 
 
 
@@ -176,7 +181,33 @@ public class DuijieshenqingController {
         if(duijieshenqingService.selectCount(new EntityWrapper<DuijieshenqingEntity>().ne("id", duijieshenqing.getId()).eq("shenqingbianhao", duijieshenqing.getShenqingbianhao()))>0) {
             return R.error("申请编号已存在");
         }
+        
+        // 先获取原数据，检查是否是审核操作
+        DuijieshenqingEntity oldEntity = duijieshenqingService.selectById(duijieshenqing.getId());
         duijieshenqingService.updateById(duijieshenqing);//全部更新
+        
+        // 检查是否是审核操作（sfsh 字段有变化）
+        if (oldEntity != null && !oldEntity.getSfsh().equals(duijieshenqing.getSfsh())) {
+            // 发送审核结果消息
+            MessageEntity message = new MessageEntity();
+            message.setUserid(duijieshenqing.getUserid());
+            message.setTitle("对接申请审核结果");
+            String content = "您的对接申请（" + duijieshenqing.getShenqingbianhao() + "）已完成审核。";
+            if ("是".equals(duijieshenqing.getSfsh())) {
+                content += "审核结果：通过";
+            } else {
+                content += "审核结果：驳回";
+            }
+            if (StringUtils.isNotBlank(duijieshenqing.getShhf())) {
+                content += "，审核意见：" + duijieshenqing.getShhf();
+            }
+            message.setContent(content);
+            message.setStatus("未读");
+            message.setType("审核通知");
+            message.setAddtime(new Date());
+            messageService.insert(message);
+        }
+        
         return R.ok();
     }
 

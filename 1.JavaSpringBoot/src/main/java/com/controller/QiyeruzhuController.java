@@ -163,16 +163,18 @@ public class QiyeruzhuController {
     public R audit(@RequestBody Map<String, Object> params) {
         R result = qiyeruzhuService.audit(params);
         if (result.get("code") != null && result.get("code").equals(0)) {
-            // 审核成功，发送消息通知
-            @SuppressWarnings("unchecked")
-            Map<String, Object> data = (Map<String, Object>) result.get("data");
-            if (data != null) {
-                Long userId = (Long) data.get("userId");
-                String shenqingzhanghao = (String) data.get("shenqingzhanghao");
-                Long id = (Long) data.get("id");
-                String sfsh = (String) data.get("sfsh");
-                String shhf = (String) data.get("shhf");
-                qiyeruzhuService.sendAuditMessage(userId, shenqingzhanghao, id, sfsh, shhf);
+            // 直接查申请记录，确保 userId 取到
+            Object idObj = params.get("id");
+            if (idObj != null) {
+                QiyeruzhuEntity entity = qiyeruzhuService.selectById(Long.valueOf(idObj.toString()));
+                if (entity != null) {
+                    Long targetUserId = entity.getUserid();
+                    String shenqingzhanghao = entity.getShenqingzhanghao();
+                    String sfsh = params.get("sfsh") != null ? params.get("sfsh").toString() : "";
+                    String shhf = params.get("shhf") != null ? params.get("shhf").toString() : "";
+                    Long relatedId = Long.valueOf(idObj.toString());
+                    qiyeruzhuService.sendAuditMessage(targetUserId, shenqingzhanghao, relatedId, sfsh, shhf);
+                }
             }
         }
         return result;

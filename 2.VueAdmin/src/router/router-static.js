@@ -140,7 +140,7 @@ export const routes = [{
       }
       ,{
 	path: '/qiyeruzhu',
-        name: '企业入驻申请',
+        name: '农商企业入驻申请',
         component: qiyeruzhu
       }
       ,{

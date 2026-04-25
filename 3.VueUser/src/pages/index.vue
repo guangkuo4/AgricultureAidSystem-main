@@ -882,7 +882,8 @@ export default {
 			if (v.startsWith("http://") || v.startsWith("https://")) {
 				return v;
 			}
-			const base = (this.baseUrl || "").replace(/\/?$/, "/");
+			// resourceUrl 指向上传文件目录（开发环境 /upload/，生产环境 http://localhost:8080/upload/）
+			const base = (this.$config.resourceUrl || this.$config.baseUrl || "").replace(/\/?$/, "/");
 			return base + v.replace(/^\//, "");
 		},
 		getCarousel() {
