@@ -1,45 +1,7 @@
 <template>
 <div class="home-preview" :style='{"width":"100%","margin":"10px auto","alignItems":"flex-start","flexWrap":"wrap","display":"flex"}'>
 
-
-
-		<!-- 关于我们 -->
-		<div id="about" class="animate__animated" :style='{"padding":"30px 30px 30px 10%","boxShadow":"0 1px 6px rgba(255, 255, 255, .3)","margin":"0 0 0","display":"flex","flexWrap":"wrap","background":"url(http://codegen.caihongy.cn/20231125/447e503c74a84f1aa12e161d0010c879.png)","width":"50%","backgroundSize":"cover","backgroundPosition":"left center","position":"relative","backgroundRepeat":"no-repeat","height":"auto","order":"2"}'>
-		  <div :style='{"margin":"0 0 20px","color":"#fff","textAlign":"left","width":"100%","lineHeight":"1.5","fontSize":"30px","order":"1"}'>{{aboutUsDetail.title}}</div>
-		  <div :style='{"margin":"0 0 10px","color":"#999","textAlign":"center","display":"none","width":"100%","lineHeight":"1.5","fontSize":"20px"}'>{{aboutUsDetail.subtitle}}</div>
-		  <div :style='{"padding":"0 10px 20px","margin":"0","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","height":"auto","order":"3"}'>
-		    <img :style='{"margin":"0 10px","objectFit":"cover","flex":1,"display":"block","height":"160px"}' :src="baseUrl + aboutUsDetail.picture1">
-		    <img :style='{"margin":"0 10px","objectFit":"cover","flex":1,"display":"block","height":"160px"}' :src="baseUrl + aboutUsDetail.picture2">
-		    <img :style='{"margin":"0 10px","objectFit":"cover","flex":1,"display":"none","height":"120px"}' :src="baseUrl + aboutUsDetail.picture3">
-		  </div>
-		  <div :style='{"padding":"20px 20px 0","margin":"0 0 0 0","color":"#000","display":"-webkit-box","overflow":"hidden","background":"#fff","width":"100%","lineHeight":"2","fontSize":"16px","-webkit-box-orient":"vertical","-webkit-line-clamp":"6","height":"220px","order":"2"}' v-html="aboutUsDetail.content"></div>
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <button type="button" class="home-more-btn home-more-btn--corner" @click="toDetail('aboutusDetail',aboutUsDetail)">查看更多</button>
-		</div>
-		<!-- 关于我们 -->
-
-		<!-- 系统简介 -->
-		<div id="system" class="animate__animated" :style='{"padding":"30px 10% 30px 30px","boxShadow":"none","margin":"0 0 0","display":"flex","flexWrap":"wrap","background":"url(http://codegen.caihongy.cn/20231125/447e503c74a84f1aa12e161d0010c879.png)","width":"50%","backgroundSize":"cover","backgroundPosition":"right center","position":"relative","backgroundRepeat":"no-repeat","height":"auto","order":"3"}'>
-		  <div :style='{"margin":"0 0 20px","color":"#fff","textAlign":"left","width":"100%","lineHeight":"1.5","fontSize":"30px","order":"1"}'>{{systemIntroductionDetail.title}}</div>
-		  <div :style='{"margin":"0 0 10px","color":"#999","textAlign":"center","display":"none","width":"100%","lineHeight":"1.5","fontSize":"20px"}'>{{systemIntroductionDetail.subtitle}}</div>
-		  <div :style='{"padding":"30px 10px","margin":"0","background":"#fff","flexDirection":"column","display":"flex","width":"45%","justifyContent":"space-between","height":"400px","order":"3"}'>
-		    <img :style='{"width":"100%","margin":"0","objectFit":"cover","display":"block","height":"160px"}' :src="baseUrl + systemIntroductionDetail.picture1">
-		    <img :style='{"width":"100%","margin":"0","objectFit":"cover","display":"block","height":"160px"}' :src="baseUrl + systemIntroductionDetail.picture2">
-		    <img :style='{"margin":"0 10px","objectFit":"cover","display":"none","height":"120px"}' :src="baseUrl + systemIntroductionDetail.picture3">
-		  </div>
-		  <div :style='{"padding":"20px 20px","margin":"0 0","color":"#000","display":"-webkit-box","overflow":"hidden","background":"#fff","width":"55%","lineHeight":"1.8","fontSize":"16px","textOverflow":"ellipsis","-webkit-box-orient":"vertical","-webkit-line-clamp":"13","order":"2","height":"400px"}' v-html="systemIntroductionDetail.content"></div>
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <div :style='{"width":"285px","background":"url(http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg) 0% 0% / cover no-repeat","display":"none","height":"100px"}' />
-		  <button type="button" class="home-more-btn home-more-btn--corner home-more-btn--system-corner" @click="toDetail('systemintroDetail',systemIntroductionDetail)">查看更多</button>
-		</div>
-		<!-- 系统简介 -->
-		
-	<!-- 新闻资讯 -->
+<!-- 新闻资讯 -->
 	<div id="animate_newsnews" class="news animate__animated" :style='{"padding":"34px 6%","margin":"0 auto","background":"linear-gradient(180deg, rgba(241, 248, 233, 0.86), rgba(255, 255, 255, 0.92))","width":"100%","backgroundSize":"cover","backgroundPosition":"center center","position":"relative","backgroundRepeat":"no-repeat","order":"6"}'>
 		<div v-if="false" class="idea newsIdea" :style='{"padding":"20px","flexWrap":"wrap","background":"#efefef","justifyContent":"space-between","display":"flex"}'>
 			<div class="box1" :style='{"width":"20%","background":"#fff","height":"80px"}'></div>
@@ -147,23 +109,35 @@
 	
 	
 
-	<div v-if="zhunongshangpinRecommend.length" class="list list10 index-pv1 list10zhunongshangpin" :style='{"width":"100%","padding":"10px","background":"none","height":"auto"}'>
-	  <div :style='{"width":"100%","background":"none","height":"600px"}'>
-	    <div class="swiper-container recommendSwiper10 recommend-list-10zhunongshangpin">
-	      <div class="swiper-wrapper">
-	        <div class="swiper-slide" v-for="item,index in zhunongshangpinRecommend" :key="index">
-	          <div class="list-item animation-box recommend-card" :style='{"width":"100%","position":"relative","height":"auto"}' @click="toDetail('zhunongshangpinDetail', item)">
-				<div class="recommend-img">
-					<img :name="item.id" v-if="preHttp(item.tupian)" :src="item.tupian.split(',')[0]" alt="" />
-					<img :name="item.id" v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" alt="" />
-				</div>
-				<div class="line1 recommend-name">{{item.chanpinmingcheng}}</div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	<div v-if="zhunongshangpinRecommend.length" class="list list10 index-pv1 list10zhunongshangpin" :style='{"width":"100%","padding":"10px 0","background":"none","height":"auto"}'>
+  <div :style='{"width":"100%","display":"grid","gridTemplateColumns":"repeat(3, 1fr)","gap":"20px","height":"auto"}'>
+    <div 
+      class="list-item animation-box recommend-card" 
+      v-for="item,index in zhunongshangpinRecommend" 
+      :key="index"
+      @click="toDetail('zhunongshangpinDetail', item)"
+    >
+      <div class="recommend-img">
+        <img :name="item.id" v-if="preHttp(item.tupian)" :src="item.tupian.split(',')[0]" :alt="item.chanpinmingcheng" />
+        <img :name="item.id" v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" :alt="item.chanpinmingcheng" />
+        <div class="recommend-tag">
+          <i class="el-icon-leaf"></i>
+        </div>
+      </div>
+      <div class="recommend-info">
+        <div class="recommend-name">{{item.chanpinmingcheng}}</div>
+        <div class="recommend-price" v-if="item.price">
+          <span class="price-symbol">¥</span>
+          <span class="price-value">{{item.price}}</span>
+        </div>
+        <div class="recommend-footer">
+          <span class="recommend-store">{{item.storeupnum || 0}}人收藏</span>
+          <span class="recommend-btn">查看</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -895,38 +869,117 @@ import Swiper from "swiper";
 				border-color: rgba(46, 125, 50, 0.22);
 			}
 			
-			/* 图片包裹：自然边框 + 轻微内阴影 */
-			.recommend-img {
-				border-radius: 16px;
-				background: linear-gradient(180deg, rgba(241, 248, 233, 0.72), rgba(255, 255, 255, 0.92));
-				border: 1px solid rgba(46, 125, 50, 0.10);
-				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 8px 18px rgba(16, 24, 16, 0.07);
+			/* 推荐卡片整体 */
+			.recommend-card {
+				background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 252, 248, 0.95));
+				border-radius: 20px;
+				border: 1px solid rgba(46, 125, 50, 0.12);
+				box-shadow: 0 8px 28px rgba(27, 94, 32, 0.08);
 				overflow: hidden;
-				padding: 10px;
-				box-sizing: border-box;
+				transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+				cursor: pointer;
+			}
+			.recommend-card:hover {
+				transform: translateY(-8px);
+				box-shadow: 0 16px 42px rgba(27, 94, 32, 0.14);
+			}
+			
+			/* 图片包裹 */
+			.recommend-img {
+				position: relative;
+				width: 100%;
+				height: 220px;
+				overflow: hidden;
+				background: linear-gradient(135deg, rgba(248, 252, 248, 0.95), rgba(240, 248, 240, 0.9));
 			}
 			.recommend-img img {
 				width: 100%;
-				height: 220px;
+				height: 100%;
 				display: block;
-				object-fit: contain;
-				background: rgba(255, 255, 255, 0.35);
-				transform: none;
-				transition: filter 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+				object-fit: cover;
+				transition: transform 0.6s ease;
 			}
 			.recommend-card:hover .recommend-img img {
-				filter: saturate(1.02) contrast(1.03);
+				transform: scale(1.08);
 			}
 			
-			.recommend-name {
-				padding: 10px 6px 0;
-				line-height: 1.6;
+			/* 标签 */
+			.recommend-tag {
+				position: absolute;
+				top: 12px;
+				left: 12px;
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				background: linear-gradient(135deg, rgba(102, 187, 106, 0.92), rgba(46, 125, 50, 0.88));
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 14px rgba(46, 125, 50, 0.3);
+			}
+			.recommend-tag i {
+				color: #fff;
 				font-size: 16px;
-				font-weight: 900;
+			}
+			
+			/* 信息区域 */
+			.recommend-info {
+				padding: 16px 18px;
+			}
+			
+			/* 名称 */
+			.recommend-name {
+				font-size: 16px;
+				font-weight: 700;
 				color: rgba(27, 43, 27, 0.92);
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
+				margin-bottom: 8px;
+			}
+			
+			/* 价格 */
+			.recommend-price {
+				display: flex;
+				align-items: baseline;
+				margin-bottom: 12px;
+			}
+			.price-symbol {
+				font-size: 14px;
+				font-weight: 600;
+				color: #ef5350;
+				margin-right: 2px;
+			}
+			.price-value {
+				font-size: 26px;
+				font-weight: 900;
+				color: #ef5350;
+			}
+			
+			/* 底部信息 */
+			.recommend-footer {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+			.recommend-store {
+				font-size: 13px;
+				color: rgba(47, 58, 47, 0.65);
+				display: flex;
+				align-items: center;
+			}
+			.recommend-btn {
+				padding: 6px 16px;
+				background: linear-gradient(135deg, rgba(102, 187, 106, 0.95), rgba(46, 125, 50, 0.90));
+				color: #fff;
+				font-size: 13px;
+				font-weight: 600;
+				border-radius: 20px;
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+			.recommend-card:hover .recommend-btn {
+				transform: scale(1.05);
+				box-shadow: 0 4px 14px rgba(46, 125, 50, 0.3);
 			}
 
 			.list3 .swiper-button-prev {

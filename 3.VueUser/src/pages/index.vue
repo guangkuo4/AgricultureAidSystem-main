@@ -455,41 +455,75 @@
 
 		<!-- 时令精选 + 信任条 + 页脚：整体贴底，避免与导航栏之间被 flex 撑出大块空白 -->
 		<div class="index-page-tail">
-		<!-- 时令精选推荐 -->
-		<div class="featured-section" v-if="featuredList.length">
+		<!-- 助农乐学推荐 -->
+		<div class="featured-section" v-if="courseList.length">
 			<div class="featured-section__hd">
 				<div class="featured-section__label">
-					<i class="el-icon-sunrise-1"></i>
-					时令精选
+					<i class="el-icon-education"></i>
+					助农乐学
 				</div>
-				<div class="featured-section__meta">当季热卖 · 产地直发</div>
+				<div class="featured-section__meta">专业课程 · 助农增收</div>
 			</div>
 			<div class="featured-grid">
 				<div
 					class="featured-card"
-					v-for="item in featuredList"
+					v-for="item in courseList"
 					:key="item.id"
-					@click="goMenu('/index/zhunongshangpin')"
+					@click="goMenu('/index/nongjixuetang')"
 				>
 					<div class="featured-card__img">
-						<img v-if="item.tupian" :src="baseUrl + item.tupian" :alt="item.mingcheng">
-						<div v-else class="featured-card__placeholder">
-							<i class="el-icon-picture-outline"></i>
+						<img v-if="item.kechengzhaopian" :src="baseUrl + item.kechengzhaopian" :alt="item.kechengbiaoti" @error="courseImgError(e)">
+						<div class="featured-card__placeholder">
+							<i class="el-icon-book-open"></i>
+							<span>暂无封面</span>
 						</div>
-						<div class="featured-card__tag">
-							<i class="el-icon-s-marketing"></i>
-							精选
+						<div class="featured-card__tag course-tag">
+							<i class="el-icon-play"></i>
+							课程
 						</div>
 					</div>
 					<div class="featured-card__body">
-						<div class="featured-card__name">{{ item.mingcheng || item.title || '助农好物' }}</div>
-						<div class="featured-card__desc">{{ item.jianjie || item.content || '源自优质产地，绿色健康直达' }}</div>
+						<div class="featured-card__name">{{ item.kechengbiaoti || item.title || '农业课程' }}</div>
+						<div class="featured-card__desc">{{ item.kechengjianjie || item.content || '专业农业技术培训课程' }}</div>
 						<div class="featured-card__footer">
-							<span class="featured-card__price" v-if="item.price">¥{{ item.price }}</span>
+							<span class="featured-card__views">
+								<i class="el-icon-view"></i>
+								{{ item.clicknum || 0 }}人学习
+							</span>
 							<span class="featured-card__btn">
-								去看看 <i class="el-icon-arrow-right"></i>
+								去学习 <i class="el-icon-arrow-right"></i>
 							</span>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 关于我们与系统简介 -->
+		<div class="about-section">
+			<div class="about-card about-card--about" v-if="aboutUsDetail.title">
+				<div class="about-card__content">
+					<div class="about-card__icon-wrap">
+						<div class="about-card__icon">
+							<i class="el-icon-user"></i>
+						</div>
+					</div>
+					<div class="about-card__text">
+						<h3 class="about-card__title">{{ aboutUsDetail.title }}</h3>
+						<p class="about-card__desc" v-html="aboutUsDetail.content"></p>
+					</div>
+				</div>
+			</div>
+			<div class="about-card about-card--system" v-if="systemIntroductionDetail.title">
+				<div class="about-card__content">
+					<div class="about-card__icon-wrap">
+						<div class="about-card__icon">
+							<i class="el-icon-s-platform"></i>
+						</div>
+					</div>
+					<div class="about-card__text">
+						<h3 class="about-card__title">{{ systemIntroductionDetail.title }}</h3>
+						<p class="about-card__desc" v-html="systemIntroductionDetail.content"></p>
 					</div>
 				</div>
 			</div>
@@ -518,7 +552,7 @@
 				</div>
 				<div class="trust-bar__item">
 					<div class="trust-bar__icon trust-bar__icon--3">
-						<i class="el-icon-shield"></i>
+						<i class="el-icon-lock"></i>
 					</div>
 					<div class="trust-bar__text">
 						<div class="trust-bar__title">信息安全</div>
@@ -571,17 +605,6 @@
 						</div>
 						<div class="footer-text">
 							以低饱和自然绿为主的清新体验，帮助你更高效地获取农产品与农技信息。
-						</div>
-						<div class="footer-social">
-							<div class="footer-social__item" title="微信公众号">
-								<i class="el-icon-chat-line-round"></i>
-							</div>
-							<div class="footer-social__item" title="微博">
-								<i class="el-icon-share"></i>
-							</div>
-							<div class="footer-social__item" title="联系我们">
-								<i class="el-icon-phone-outline"></i>
-							</div>
 						</div>
 					</div>
 					<div class="footer-col">
@@ -711,8 +734,10 @@ export default {
             activeIndex: '0',
 			mobileNavOpen: false,
 			showHeroIntro: true,
-			roleMenus: [{"backMenu":[{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-paint","buttons":["新增","查看","修改","删除"],"menu":"农商","menuJump":"列表","tableName":"nonghu"}],"menu":"农商管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-wenzi","buttons":["新增","查看","修改","删除"],"menu":"用户","menuJump":"列表","tableName":"yonghu"}],"menu":"用户管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-link","buttons":["新增","查看","修改","删除"],"menu":"产品分类","menuJump":"列表","tableName":"chanpinfenlei"}],"menu":"产品分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-cardboard","buttons":["新增","查看","修改","删除"],"menu":"文章分类","menuJump":"列表","tableName":"wenzhangfenlei"}],"menu":"文章分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-similar","buttons":["查看","修改","删除","查看评论","产品库存统计","产品分类","首页总数","首页统计"],"menu":"助农商品","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品管理"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-send","buttons":["新增","查看","修改","删除","查看评论","文章分类","文章数量","首页总数","首页统计"],"menu":"助农脱贫","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫管理"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-time","buttons":["新增","查看","修改","删除","查看评论","课程占比","首页总数","首页统计"],"menu":"农技学堂","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"农技学堂管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-news","buttons":["新增","查看","修改","删除"],"menu":"公告资讯","tableName":"news"},{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-news","buttons":["新增","查看","修改","删除"],"menu":"公告资讯分类","tableName":"newstype"},{"allButtons":["查看","修改"],"appFrontIcon":"cuIcon-skin","buttons":["查看","修改"],"menu":"关于我们","tableName":"aboutus"},{"allButtons":["查看","修改"],"appFrontIcon":"cuIcon-circle","buttons":["查看","修改"],"menu":"系统简介","tableName":"systemintro"},{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","修改","删除"],"menu":"轮播图管理","tableName":"config"}],"menu":"系统管理"},{"child":[{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"已取消订单","tableName":"orders/已取消"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流"],"appFrontIcon":"cuIcon-pay","buttons":["查看","删除"],"menu":"已退款订单","tableName":"orders/已退款"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","确认收货","物流"],"appFrontIcon":"cuIcon-phone","buttons":["查看","删除"],"menu":"已发货订单","tableName":"orders/已发货"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"未支付订单","tableName":"orders/未支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","发货","物流","核销"],"appFrontIcon":"cuIcon-album","buttons":["查看","删除"],"menu":"已支付订单","tableName":"orders/已支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流","退货审核"],"appFrontIcon":"cuIcon-vipcard","buttons":["查看","删除","日销量","月销量","日销额","月销额"],"menu":"已完成订单","tableName":"orders/已完成"}],"menu":"订单管理"}],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"农技学堂列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"农技学堂模块"}],"hasBackLogin":"是","hasBackRegister":"否","hasFrontLogin":"否","hasFrontRegister":"否","roleName":"管理员","tableName":"users"},{"backMenu":[{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-link","buttons":["新增","查看","修改","删除"],"menu":"产品分类","menuJump":"列表","tableName":"chanpinfenlei"}],"menu":"产品分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-similar","buttons":["新增","查看","修改","删除","查看评论"],"menu":"助农商品","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品管理"},{"child":[{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","发货","物流","核销"],"appFrontIcon":"cuIcon-album","buttons":["查看","删除","发货"],"menu":"已支付订单","tableName":"orders/已支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流","退货审核"],"appFrontIcon":"cuIcon-vipcard","buttons":["查看","删除","日销量","月销量","日销额","月销额"],"menu":"已完成订单","tableName":"orders/已完成"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"已取消订单","tableName":"orders/已取消"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流"],"appFrontIcon":"cuIcon-pay","buttons":["查看","删除"],"menu":"已退款订单","tableName":"orders/已退款"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","确认收货","物流"],"appFrontIcon":"cuIcon-phone","buttons":["查看","删除"],"menu":"已发货订单","tableName":"orders/已发货"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"未支付订单","tableName":"orders/未支付"}],"menu":"订单管理"}],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"农技学堂列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"农技学堂模块"}],"hasBackLogin":"是","hasBackRegister":"是","hasFrontLogin":"否","hasFrontRegister":"否","roleName":"农商","tableName":"nonghu"},{"backMenu":[],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"农技学堂列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"农技学堂模块"}],"hasBackLogin":"否","hasBackRegister":"否","hasFrontLogin":"是","hasFrontRegister":"是","roleName":"用户","tableName":"yonghu"}],
+			roleMenus: [{"backMenu":[{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-paint","buttons":["新增","查看","修改","删除"],"menu":"农商","menuJump":"列表","tableName":"nonghu"}],"menu":"农商管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-wenzi","buttons":["新增","查看","修改","删除"],"menu":"用户","menuJump":"列表","tableName":"yonghu"}],"menu":"用户管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-link","buttons":["新增","查看","修改","删除"],"menu":"产品分类","menuJump":"列表","tableName":"chanpinfenlei"}],"menu":"产品分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-cardboard","buttons":["新增","查看","修改","删除"],"menu":"文章分类","menuJump":"列表","tableName":"wenzhangfenlei"}],"menu":"文章分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-similar","buttons":["查看","修改","删除","查看评论","产品库存统计","产品分类","首页总数","首页统计"],"menu":"助农商品","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品管理"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-send","buttons":["新增","查看","修改","删除","查看评论","文章分类","文章数量","首页总数","首页统计"],"menu":"助农脱贫","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫管理"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-time","buttons":["新增","查看","修改","删除","查看评论","课程占比","首页总数","首页统计"],"menu":"助农乐学","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"助农乐学管理"},{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-news","buttons":["新增","查看","修改","删除"],"menu":"公告资讯","tableName":"news"},{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-news","buttons":["新增","查看","修改","删除"],"menu":"公告资讯分类","tableName":"newstype"},{"allButtons":["查看","修改"],"appFrontIcon":"cuIcon-skin","buttons":["查看","修改"],"menu":"关于我们","tableName":"aboutus"},{"allButtons":["查看","修改"],"appFrontIcon":"cuIcon-circle","buttons":["查看","修改"],"menu":"系统简介","tableName":"systemintro"},{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","修改","删除"],"menu":"轮播图管理","tableName":"config"}],"menu":"系统管理"},{"child":[{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"已取消订单","tableName":"orders/已取消"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流"],"appFrontIcon":"cuIcon-pay","buttons":["查看","删除"],"menu":"已退款订单","tableName":"orders/已退款"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","确认收货","物流"],"appFrontIcon":"cuIcon-phone","buttons":["查看","删除"],"menu":"已发货订单","tableName":"orders/已发货"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"未支付订单","tableName":"orders/未支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","发货","物流","核销"],"appFrontIcon":"cuIcon-album","buttons":["查看","删除"],"menu":"已支付订单","tableName":"orders/已支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流","退货审核"],"appFrontIcon":"cuIcon-vipcard","buttons":["查看","删除","日销量","月销量","日销额","月销额"],"menu":"已完成订单","tableName":"orders/已完成"}],"menu":"订单管理"}],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"助农乐学列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"助农乐学模块"}],"hasBackLogin":"是","hasBackRegister":"否","hasFrontLogin":"否","hasFrontRegister":"否","roleName":"管理员","tableName":"users"},{"backMenu":[{"child":[{"allButtons":["新增","查看","修改","删除"],"appFrontIcon":"cuIcon-link","buttons":["新增","查看","修改","删除"],"menu":"产品分类","menuJump":"列表","tableName":"chanpinfenlei"}],"menu":"产品分类管理"},{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-similar","buttons":["新增","查看","修改","删除","查看评论"],"menu":"助农商品","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品管理"},{"child":[{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","发货","物流","核销"],"appFrontIcon":"cuIcon-album","buttons":["查看","删除","发货"],"menu":"已支付订单","tableName":"orders/已支付"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流","退货审核"],"appFrontIcon":"cuIcon-vipcard","buttons":["查看","删除","日销量","月销量","日销额","月销额"],"menu":"已完成订单","tableName":"orders/已完成"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"已取消订单","tableName":"orders/已取消"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","物流"],"appFrontIcon":"cuIcon-pay","buttons":["查看","删除"],"menu":"已退款订单","tableName":"orders/已退款"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额","确认收货","物流"],"appFrontIcon":"cuIcon-phone","buttons":["查看","删除"],"menu":"已发货订单","tableName":"orders/已发货"},{"allButtons":["新增","查看","修改","删除","导出","日销量","月销量","年销量","品销量","类销量","日销额","月销额","年销额","品销额","类销额"],"appFrontIcon":"cuIcon-vip","buttons":["查看","删除"],"menu":"未支付订单","tableName":"orders/未支付"}],"menu":"订单管理"}],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"助农乐学列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"助农乐学模块"}],"hasBackLogin":"是","hasBackRegister":"是","hasFrontLogin":"否","hasFrontRegister":"否","roleName":"农商","tableName":"nonghu"},{"backMenu":[],"frontMenu":[{"child":[{"allButtons":["新增","查看","修改","删除","产品库存统计","产品分类","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-attentionfavor","buttons":["查看","查看评论"],"menu":"助农商品列表","menuJump":"列表","tableName":"zhunongshangpin"}],"menu":"助农商品模块"},{"child":[{"allButtons":["新增","查看","修改","删除","文章分类","文章数量","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-cardboard","buttons":["查看","查看评论"],"menu":"助农脱贫列表","menuJump":"列表","tableName":"zhunongtuopin"}],"menu":"助农脱贫模块"},{"child":[{"allButtons":["新增","查看","修改","删除","课程占比","查看评论","首页总数","首页统计"],"appFrontIcon":"cuIcon-goodsnew","buttons":["查看","查看评论"],"menu":"助农乐学列表","menuJump":"列表","tableName":"nongjixuetang"}],"menu":"助农乐学模块"}],"hasBackLogin":"否","hasBackRegister":"否","hasFrontLogin":"是","hasFrontRegister":"是","roleName":"用户","tableName":"yonghu"}],
 			baseUrl: '',
+			aboutUsDetail: {},
+			systemIntroductionDetail: {},
 			carouselList: [],
 			menuList: [],
 			statsData: {
@@ -721,7 +746,7 @@ export default {
 				courses: 0,
 				news: 0,
 			},
-			featuredList: [],
+			courseList: [],
 			form: {
 				ask: '',
 				userid: localStorage.getItem('frontUserid')
@@ -778,6 +803,8 @@ export default {
     },
     mounted() {
         this.activeIndex = localStorage.getItem('keyPath') || '0';
+        this.getAboutUs();
+        this.getSystemIntroduction();
     },
     computed: {
 		activeMenu() {
@@ -936,12 +963,40 @@ export default {
 			};
 			requestAnimationFrame(step);
 		},
+		imgError(e) {
+			e.target.style.display = 'none';
+			var placeholder = e.target.parentElement.querySelector('.featured-card__placeholder');
+			if (placeholder) {
+				placeholder.style.display = 'flex';
+			}
+		},
 		getFeaturedData() {
-			this.$http.get('zhunongshangpin/list', {params: { page: 1, limit: 4, sort: 'id', order: 'desc' }}).then(res => {
+			this.$http.get('nongjixuetang/list', {params: { page: 1, limit: 4, sort: 'id', order: 'desc' }}).then(res => {
 				if (res.data.code === 0 && res.data.data && res.data.data.list) {
-					this.featuredList = res.data.data.list.slice(0, 4);
+					this.courseList = res.data.data.list.slice(0, 4);
 				}
 			}).catch(() => {});
+		},
+		getAboutUs() {
+			this.$http.get('aboutus/detail/1', {}).then(res => {
+				if (res.data.code === 0 && res.data.data) {
+					this.aboutUsDetail = res.data.data;
+				}
+			}).catch(() => {});
+		},
+		getSystemIntroduction() {
+			this.$http.get('systemintro/detail/1', {}).then(res => {
+				if (res.data.code === 0 && res.data.data) {
+					this.systemIntroductionDetail = res.data.data;
+				}
+			}).catch(() => {});
+		},
+		courseImgError(e) {
+			e.target.style.display = 'none';
+			var placeholder = e.target.parentElement.querySelector('.featured-card__placeholder');
+			if (placeholder) {
+				placeholder.style.display = 'flex';
+			}
 		},
 		carouselClick(url) {
 			if (url) {
@@ -2246,11 +2301,17 @@ export default {
 	.featured-card__placeholder {
 		width: 100%;
 		height: 100%;
-		display: flex;
+		display: none;
 		align-items: center;
 		justify-content: center;
 		color: var(--ag-green-300);
 		font-size: 36px;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.featured-card__placeholder span {
+		font-size: 12px;
+		color: var(--ag-green-200);
 	}
 	.featured-card__tag {
 		position: absolute;
@@ -2266,6 +2327,9 @@ export default {
 		font-size: 11px;
 		font-weight: 700;
 		backdrop-filter: blur(4px);
+	}
+	.featured-card__tag.course-tag {
+		background: linear-gradient(135deg, rgba(63, 81, 181, 0.92), rgba(48, 63, 159, 0.88));
 	}
 	.featured-card__body {
 		padding: 14px 16px 16px;
@@ -2300,6 +2364,13 @@ export default {
 		font-weight: 800;
 		color: #e53935;
 	}
+	.featured-card__views {
+		font-size: 12px;
+		color: var(--ag-text-400);
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
 	.featured-card__btn {
 		font-size: 12px;
 		color: var(--ag-green-700);
@@ -2307,6 +2378,94 @@ export default {
 		display: flex;
 		align-items: center;
 		gap: 3px;
+	}
+
+	/* ========== 关于我们/系统简介 ========== */
+	.about-section {
+		display: flex;
+		gap: 0;
+		margin-top: 30px;
+	}
+	.about-card {
+		flex: 1;
+		padding: 45px 40px;
+		position: relative;
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	.about-card--about {
+		background: linear-gradient(135deg, rgba(27, 94, 32, 0.95), rgba(46, 125, 50, 0.92));
+	}
+	.about-card--system {
+		background: linear-gradient(135deg, rgba(79, 70, 229, 0.95), rgba(99, 102, 241, 0.92));
+	}
+	.about-card::before {
+		content: '';
+		position: absolute;
+		top: -50%;
+		right: -20%;
+		width: 200px;
+		height: 200px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.08);
+	}
+	.about-card::after {
+		content: '';
+		position: absolute;
+		bottom: -30%;
+		left: -10%;
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.05);
+	}
+	.about-card:hover {
+		transform: scale(1.02);
+	}
+	.about-card__content {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		position: relative;
+		z-index: 1;
+	}
+	.about-card__icon-wrap {
+		flex-shrink: 0;
+	}
+	.about-card__icon {
+		width: 72px;
+		height: 72px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.15);
+		backdrop-filter: blur(10px);
+		border-radius: 20px;
+		color: #fff;
+		font-size: 32px;
+		transition: all var(--ag-transition);
+	}
+	.about-card:hover .about-card__icon {
+		transform: scale(1.15);
+		background: rgba(255, 255, 255, 0.22);
+	}
+	.about-card__text {
+		flex: 1;
+	}
+	.about-card__title {
+		font-size: 22px;
+		font-weight: 800;
+		color: #fff;
+		margin: 0 0 12px;
+		line-height: 1.2;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	}
+	.about-card__desc {
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.8;
+		font-size: 14px;
+		margin: 0;
+		text-align: left;
 	}
 
 	/* ========== 平台优势信任条 ========== */

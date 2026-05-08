@@ -78,9 +78,13 @@
           <!-- 样式二 -->
           <div class="list2 index-pv1" :style='{"padding":"0","flexWrap":"wrap","background":"none","display":"grid","gridTemplateColumns":"repeat(2, 1fr)","gap":"25px","width":"100%","height":"auto"}'>
             <div :style='{"padding":"0","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","margin":"0","background":"#fff","borderRadius":"16px","overflow":"hidden","display":"flex","width":"100%","fontSize":"0","position":"relative","height":"auto","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","cursor":"pointer","border":"none"}' v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
-              <div :style='{"border":"0","width":"200px","padding":"0","height":"180px","flexShrink":"0","overflow":"hidden"}'>
-                <img @click.stop="imgPreView(item.tupian)" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-if="item.tupian && item.tupian.substr(0,4)=='http'" :src="item.tupian.split(',')[0]" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" />
-                <img @click.stop="imgPreView(baseUrl + (item.tupian?item.tupian.split(',')[0]:''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" />
+              <div :style='{"border":"0","width":"200px","padding":"0","height":"180px","flexShrink":"0","overflow":"hidden","position":"relative","background":"#f8faf8"}'>
+                <img @click.stop="imgPreView(item.tupian)" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f8faf8","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-if="item.tupian && item.tupian.substr(0,4)=='http'" :src="item.tupian.split(',')[0]" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" @error="imgError" />
+                <img @click.stop="imgPreView(baseUrl + (item.tupian?item.tupian.split(',')[0]:''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f8faf8","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" @error="imgError" />
+                <div class="placeholder" :style='{"display":"none","position":"absolute","top":"0","left":"0","width":"100%","height":"100%","background":"linear-gradient(135deg, #f0f4f0 0%, #e8f0e8 100%)","flexDirection":"column","justifyContent":"center","alignItems":"center"}'>
+                  <i class="el-icon-picture-outline" :style='{"fontSize":"48px","color":"#a8c0a8"}'></i>
+                  <span :style='{"fontSize":"13px","color":"#88a088","marginTop":"8px"}'>暂无图片</span>
+                </div>
               </div>
               <div class="item-info" :style='{"padding":"22px","overflow":"hidden","alignItems":"flex-start","flexWrap":"wrap","flex":"1","display":"flex","flexDirection":"column","height":"auto","background":"linear-gradient(180deg, rgba(46, 125, 50, 0.02) 0%, rgba(46, 125, 50, 0.04) 100%)"}'>
                 <div :style='{"padding":"0 0 8px 0","whiteSpace":"nowrap","overflow":"hidden","color":"#1a1a1a","width":"100%","lineHeight":"1.4","fontSize":"18px","textOverflow":"ellipsis","fontWeight":"bold","order":"1"}' class="name">{{item.chanpinmingcheng}}</div>
@@ -273,6 +277,13 @@
       imgPreView(url){
         this.previewImg = url
         this.previewVisible = true
+      },
+      imgError(e) {
+        e.target.style.display = 'none';
+        var placeholder = e.target.parentElement.querySelector('.placeholder');
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+        }
       },
       toDetail(item) {
         let params = {
