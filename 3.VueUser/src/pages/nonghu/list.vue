@@ -15,8 +15,8 @@
 	
     <el-form :inline="true" :model="formSearch" class="list-form-pv" :style='{"padding":"10px 0 10px","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex","width":"100%","height":"auto","order":"1"}'>
       <el-form-item :style='{"margin":"0 10px 0px 0"}'>
-	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px 0 0","lineHeight":"42px","display":"inline-block"}'>农户账号：</div>
-        <el-input v-model="formSearch.nonghuzhanghao" placeholder="农户账号" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
+	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px 0 0","lineHeight":"42px","display":"inline-block"}'>农商/企业账号：</div>
+        <el-input v-model="formSearch.nonghuzhanghao" placeholder="农商/企业账号" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
       </el-form-item>
 	  <el-button v-if=" true " :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","color":"#fff","borderRadius":"4px","background":"#000","width":"auto","fontSize":"14px","lineHeight":"42px","height":"42px"}' type="primary" @click="getList(1, curFenlei)"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-search"></i>查询</el-button>
 	  <el-button v-if="btnAuth('nonghu','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"4px","background":"#000","width":"auto","fontSize":"14px","lineHeight":"42px","height":"42px"}' type="primary" @click="add('/index/nonghuAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>

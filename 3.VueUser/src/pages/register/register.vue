@@ -28,7 +28,7 @@
 							<div class="icon-box">
 								<span class="input-icon">👤</span>
 							</div>
-							<el-input class="custom-input" v-model="registerForm.nonghuzhanghao" placeholder="请输入农户账号" />
+							<el-input class="custom-input" v-model="registerForm.nonghuzhanghao" placeholder="请输入农商/企业账号" />
 						</div>
 					</el-form-item>
 					<el-form-item v-if="tableName=='nonghu'" prop="mima">
@@ -52,7 +52,7 @@
 							<div class="icon-box">
 								<span class="input-icon">📝</span>
 							</div>
-							<el-input class="custom-input" v-model="registerForm.nonghuxingming" placeholder="请输入农户姓名" />
+							<el-input class="custom-input" v-model="registerForm.nonghuxingming" placeholder="请输入农商/企业姓名" />
 						</div>
 					</el-form-item>
 					<el-form-item v-if="tableName=='nonghu'" prop="xingbie">
@@ -70,7 +70,7 @@
 							<div class="icon-box">
 								<span class="input-icon">📱</span>
 							</div>
-							<el-input class="custom-input" v-model="registerForm.nonghudianhua" placeholder="请输入农户电话" />
+							<el-input class="custom-input" v-model="registerForm.nonghudianhua" placeholder="请输入农商/企业电话" />
 						</div>
 					</el-form-item>
 					<el-form-item v-if="tableName=='nonghu'" prop="touxiang">
@@ -225,13 +225,13 @@ export default {
 				}
 			}
 			if ('nonghu' == this.tableName) {
-				this.requiredRules.nonghuzhanghao = [{ required: true, message: '请输入农户账号', trigger: 'blur' }]
+				this.requiredRules.nonghuzhanghao = [{ required: true, message: '请输入农商/企业账号', trigger: 'blur' }]
 			}
 			if ('nonghu' == this.tableName) {
 				this.requiredRules.mima = [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }]
 			}
 			if ('nonghu' == this.tableName) {
-				this.requiredRules.nonghuxingming = [{ required: true, message: '请输入农户姓名', trigger: 'blur' }]
+				this.requiredRules.nonghuxingming = [{ required: true, message: '请输入农商/企业姓名', trigger: 'blur' }]
 			}
 			if ('yonghu' == this.tableName) {
 				this.requiredRules.yonghuzhanghao = [{ required: true, message: '请输入用户账号', trigger: 'blur' }]
@@ -249,13 +249,13 @@ export default {
 		if(this.$route.query.pageFlag=='register'){
 			const tableName = this.$route.query.role;
 		  if ('nonghu' == tableName) {
-			this.rules.nonghuzhanghao = [{ required: true, message: '请输入农户账号', trigger: 'blur' }];
+			this.rules.nonghuzhanghao = [{ required: true, message: '请输入农商/企业账号', trigger: 'blur' }];
 		  }
 		  if ('nonghu' == tableName) {
 			this.rules.mima = [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }];
 		}
 		  if ('nonghu' == tableName) {
-			this.rules.nonghuxingming = [{ required: true, message: '请输入农户姓名', trigger: 'blur' }];
+			this.rules.nonghuxingming = [{ required: true, message: '请输入农商/企业姓名', trigger: 'blur' }];
 		  }
 			this.nonghuxingbieOptions = "男,女".split(',');
 		  if ('nonghu' == tableName) {
@@ -306,7 +306,7 @@ export default {
           if (!valid) return
           var url = this.tableName + '/register'
           if ((!this.registerForm.nonghuzhanghao) && `nonghu` == this.tableName) {
-            ErrorHandler.showError(`农户账号不能为空`)
+            ErrorHandler.showError(`农商/企业账号不能为空`)
             return
           }
           if (`nonghu` == this.tableName && this.registerForm.mima != this.registerForm.mima2) {
@@ -318,11 +318,11 @@ export default {
             return
           }
           if ((!this.registerForm.nonghuxingming) && `nonghu` == this.tableName) {
-            ErrorHandler.showError(`农户姓名不能为空`)
+            ErrorHandler.showError(`农商/企业姓名不能为空`)
             return
           }
           if (`nonghu` == this.tableName && this.registerForm.nonghudianhua && (!this.$validate.isMobile2(this.registerForm.nonghudianhua))) {
-            ErrorHandler.showError(`农户电话应输入手机格式`)
+            ErrorHandler.showError(`农商/企业电话应输入手机格式`)
             return
           }
           if ((!this.registerForm.yonghuzhanghao) && `yonghu` == this.tableName) {

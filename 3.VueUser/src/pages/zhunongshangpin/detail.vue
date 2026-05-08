@@ -106,11 +106,11 @@
 					<div :style='{"fontSize":"13px","color":"#455445","fontWeight":"500"}'>{{detail.guige}}</div>
 				</div>
 				<div class="item" :style='{"padding":"12px 20px","margin":"0 0 8px 0","background":"#f8faf8","borderRadius":"12px","display":"flex","justifyContent":"spaceBetween","alignItems":"center"}'>
-					<div class="lable" :style='{"color":"#607060","fontSize":"13px","width":"100px","fontWeight":"600"}'>农户账号</div>
+					<div class="lable" :style='{"color":"#607060","fontSize":"13px","width":"100px","fontWeight":"600"}'>农商/企业账号</div>
 					<div :style='{"fontSize":"13px","color":"#455445","fontWeight":"500"}'>{{detail.nonghuzhanghao}}</div>
 				</div>
 				<div class="item" :style='{"padding":"12px 20px","margin":"0 0 8px 0","background":"#f8faf8","borderRadius":"12px","display":"flex","justifyContent":"spaceBetween","alignItems":"center"}'>
-					<div class="lable" :style='{"color":"#607060","fontSize":"13px","width":"100px","fontWeight":"600"}'>农户姓名</div>
+					<div class="lable" :style='{"color":"#607060","fontSize":"13px","width":"100px","fontWeight":"600"}'>农商/企业姓名</div>
 					<div :style='{"fontSize":"13px","color":"#388e3c","fontWeight":"600"}'>{{detail.nonghuxingming}}</div>
 				</div>
 				<div class="item" :style='{"padding":"12px 20px","margin":"0 0 8px 0","background":"#f8faf8","borderRadius":"12px","display":"flex","justifyContent":"spaceBetween","alignItems":"center"}'>

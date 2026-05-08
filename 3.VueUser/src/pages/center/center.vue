@@ -33,7 +33,7 @@
           {{sessionForm.yonghuxingming}}
         </div>
         <div :style='{"fontSize":"14px","color":"#2E7D32","background":"rgba(46, 125, 50, 0.1)","padding":"4px 12px","borderRadius":"20px","display":"inline-block"}'>
-          <span v-if="userTableName=='nonghu'">农户用户</span>
+          <span v-if="userTableName=='nonghu'">农商/企业用户</span>
           <span v-if="userTableName=='yonghu'">普通用户</span>
         </div>
       </div>
@@ -105,19 +105,19 @@
         <el-tab-pane label="个人中心">
           <div :style='{"fontSize":"20px","fontWeight":"bold","color":"#1a1a1a","marginBottom":"25px","paddingBottom":"15px","borderBottom":"2px solid rgba(46, 125, 50, 0.1)"}'>编辑资料</div>
           <el-form class="center-preview-pv" ref="sessionForm" :model="sessionForm" :rules="rules" label-width="100px">
-            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户账号" prop="nonghuzhanghao">
-              <el-input v-model="sessionForm.nonghuzhanghao" placeholder="农户账号" readonly :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0","background":"#f5f5f5"}'></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农商/企业账号" prop="nonghuzhanghao">
+              <el-input v-model="sessionForm.nonghuzhanghao" placeholder="农商/企业账号" readonly :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0","background":"#f5f5f5"}'></el-input>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户姓名" prop="nonghuxingming">
-              <el-input v-model="sessionForm.nonghuxingming" placeholder="请输入农户姓名" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农商/企业姓名" prop="nonghuxingming">
+              <el-input v-model="sessionForm.nonghuxingming" placeholder="请输入农商/企业姓名" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
             <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="性别">
               <el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :style='{"width":"100%","height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'>
                 <el-option v-for="(item, index) in dynamicProp.xingbie" :key="index" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农户电话" prop="nonghudianhua">
-              <el-input v-model="sessionForm.nonghudianhua" placeholder="请输入农户电话" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
+            <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="农商/企业电话" prop="nonghudianhua">
+              <el-input v-model="sessionForm.nonghudianhua" placeholder="请输入农商/企业电话" :style='{"height":"40px","borderRadius":"6px","border":"1px solid #e0e0e0"}'></el-input>
             </el-form-item>
             <el-form-item :style='{"marginBottom":"24px"}' v-if="userTableName=='nonghu'" label="头像">
               <file-upload
@@ -361,9 +361,9 @@ import ErrorHandler from '@/utils/errorHandler'
       }
 
       if ('nonghu' == this.userTableName) {
-        this.$set(this.rules, 'nonghuzhanghao', [{ required: true, message: '请输入农户账号', trigger: 'blur' }]);
+        this.$set(this.rules, 'nonghuzhanghao', [{ required: true, message: '请输入农商/企业账号', trigger: 'blur' }]);
         this.$set(this.rules, 'mima', [{ required: true, message: '请输入密码', trigger: 'blur' }]);
-        this.$set(this.rules, 'nonghuxingming', [{ required: true, message: '请输入农户姓名', trigger: 'blur' }]);
+        this.$set(this.rules, 'nonghuxingming', [{ required: true, message: '请输入农商/企业姓名', trigger: 'blur' }]);
         this.$set(this.rules, 'nonghudianhua', [{ required: false, validator: this.$validate.isMobile, trigger: 'blur' }]);
         this.$set(this.rules, 'money', [{ required: false, validator: this.$validate.isNumber, trigger: 'blur' }]);
       }

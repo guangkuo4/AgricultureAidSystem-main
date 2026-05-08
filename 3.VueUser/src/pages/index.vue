@@ -223,14 +223,14 @@
 								</svg>
 								助农扶贫 · 主题表达
 							</div>
-							<h2 class="mission__title">连接农户与用户，让帮扶看得见、可追溯、可持续</h2>
+							<h2 class="mission__title">连接农商/企业与用户，让帮扶看得见、可追溯、可持续</h2>
 							<p class="mission__desc">
 								以<span class="mission__hl">助农商品</span><span class="mission__sep"> + </span><span class="mission__hl">扶贫项目</span><span class="mission__sep"> + </span><span class="mission__hl">助农乐学</span>为核心，打造信息透明、体验清爽的服务平台，让公益与效率并行。
 							</p>
 							<ul class="mission__points">
 								<li><i class="el-icon-circle-check"></i><span>统一展示与检索，减少信息碎片化与重复</span></li>
 								<li><i class="el-icon-circle-check"></i><span>关键流程可回溯，增强协作与监督的可预期性</span></li>
-								<li><i class="el-icon-circle-check"></i><span>清爽界面与一致交互，降低农户与访客使用门槛</span></li>
+								<li><i class="el-icon-circle-check"></i><span>清爽界面与一致交互，降低农商/企业与访客使用门槛</span></li>
 							</ul>
 						</div>
 						<div class="mission__pillars" aria-label="平台体验原则">
@@ -438,7 +438,7 @@
 							<div class="entry-card__icon entry-card__icon--enterprise">
 								<i class="el-icon-office-building"></i>
 							</div>
-							<div class="entry-card__title">农商入驻</div>
+							<div class="entry-card__title">农商企业入驻</div>
 						</div>
 						<div class="entry-card__desc">为农商企业提供便捷的入驻通道，拓展销售渠道</div>
 						<div class="entry-card__footer">
@@ -647,7 +647,7 @@
 							</a>
 							<a @click.prevent="goMenu('/index/qiyeruzhuApply')" href="#">
 								<i class="el-icon-d-arrow-right"></i>
-								农商入驻
+								农商企业入驻
 							</a>
 							<a v-if="Token" @click.prevent="goMenu('/index/cart')" href="#">
 								<i class="el-icon-d-arrow-right"></i>

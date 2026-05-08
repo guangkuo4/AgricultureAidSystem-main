@@ -61,13 +61,13 @@
             <el-input v-model="ruleForm.guige" 
                 placeholder="规格" clearable :disabled=" false  ||ro.guige"></el-input>
           </el-form-item>
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="农户账号" prop="nonghuzhanghao">
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="农商/企业账号" prop="nonghuzhanghao">
             <el-input v-model="ruleForm.nonghuzhanghao" 
-                placeholder="农户账号" clearable :disabled=" false  ||ro.nonghuzhanghao"></el-input>
+                placeholder="农商/企业账号" clearable :disabled=" false  ||ro.nonghuzhanghao"></el-input>
           </el-form-item>
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="农户姓名" prop="nonghuxingming">
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="农商/企业姓名" prop="nonghuxingming">
             <el-input v-model="ruleForm.nonghuxingming" 
-                placeholder="农户姓名" clearable :disabled=" false  ||ro.nonghuxingming"></el-input>
+                placeholder="农商/企业姓名" clearable :disabled=" false  ||ro.nonghuxingming"></el-input>
           </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="单限" prop="onelimittimes">
             <el-input v-model.number="ruleForm.onelimittimes" 

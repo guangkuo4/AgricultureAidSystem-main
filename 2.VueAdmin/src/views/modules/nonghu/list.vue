@@ -5,8 +5,8 @@
 			<el-form class="center-form-pv" :style='{"padding":"0px 0px 0","margin":"0px","overflow":"hidden","flexWrap":"wrap","background":"none","display":"flex","fontSize":"inherit"}' :inline="true" :model="searchForm">
 				<el-row :style='{"padding":"0px","margin":"0 0 20px","borderRadius":"0px","textAlign":"left","background":"none","display":"block","width":"100%","fontSize":"inherit","order":"2"}' >
 					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}'>
-						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">农户账号</label>
-						<el-input v-model="searchForm.nonghuzhanghao" placeholder="农户账号" @keydown.enter.native="search()" clearable></el-input>
+						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">农商/企业账号</label>
+						<el-input v-model="searchForm.nonghuzhanghao" placeholder="农商/企业账号" @keydown.enter.native="search()" clearable></el-input>
 					</div>
 					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}' class="select" label="性别" prop="xingbie">
 						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">性别</label>
@@ -47,14 +47,14 @@
 					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="50" />
 					<el-table-column :resizable='true' :sortable='true'  
 						prop="nonghuzhanghao"
-						label="农户账号">
+						label="农商/企业账号">
 						<template slot-scope="scope">
 							{{scope.row.nonghuzhanghao}}
 						</template>
 					</el-table-column>
 					<el-table-column :resizable='true' :sortable='true'  
 						prop="nonghuxingming"
-						label="农户姓名">
+						label="农商/企业姓名">
 						<template slot-scope="scope">
 							{{scope.row.nonghuxingming}}
 						</template>
@@ -68,7 +68,7 @@
 					</el-table-column>
 					<el-table-column :resizable='true' :sortable='true'  
 						prop="nonghudianhua"
-						label="农户电话">
+						label="农商/企业电话">
 						<template slot-scope="scope">
 							{{scope.row.nonghudianhua}}
 						</template>

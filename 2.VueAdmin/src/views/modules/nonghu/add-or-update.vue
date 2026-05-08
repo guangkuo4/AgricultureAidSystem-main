@@ -9,11 +9,11 @@
 			label-width="150px"
 		>
 			<template >
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农户账号" prop="nonghuzhanghao">
-					<el-input v-model="ruleForm.nonghuzhanghao" placeholder="农户账号" clearable  :readonly="ro.nonghuzhanghao"></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农商/企业账号" prop="nonghuzhanghao">
+					<el-input v-model="ruleForm.nonghuzhanghao" placeholder="农商/企业账号" clearable  :readonly="ro.nonghuzhanghao"></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农户账号" prop="nonghuzhanghao">
-					<el-input v-model="ruleForm.nonghuzhanghao" placeholder="农户账号" readonly></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农商/企业账号" prop="nonghuzhanghao">
+					<el-input v-model="ruleForm.nonghuzhanghao" placeholder="农商/企业账号" readonly></el-input>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="密码" prop="mima">
 					<el-input v-model="ruleForm.mima" placeholder="密码" clearable  :readonly="ro.mima"></el-input>
@@ -21,11 +21,11 @@
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="密码" prop="mima">
 					<el-input v-model="ruleForm.mima" placeholder="密码" readonly></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农户姓名" prop="nonghuxingming">
-					<el-input v-model="ruleForm.nonghuxingming" placeholder="农户姓名" clearable  :readonly="ro.nonghuxingming"></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农商/企业姓名" prop="nonghuxingming">
+					<el-input v-model="ruleForm.nonghuxingming" placeholder="农商/企业姓名" clearable  :readonly="ro.nonghuxingming"></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农户姓名" prop="nonghuxingming">
-					<el-input v-model="ruleForm.nonghuxingming" placeholder="农户姓名" readonly></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农商/企业姓名" prop="nonghuxingming">
+					<el-input v-model="ruleForm.nonghuxingming" placeholder="农商/企业姓名" readonly></el-input>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="select" v-if="type!='info'"  label="性别" prop="xingbie">
 					<el-select :disabled="ro.xingbie" v-model="ruleForm.xingbie" placeholder="请选择性别" >
@@ -41,11 +41,11 @@
 					<el-input v-model="ruleForm.xingbie"
 						placeholder="性别" readonly></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农户电话" prop="nonghudianhua">
-					<el-input v-model="ruleForm.nonghudianhua" placeholder="农户电话" clearable  :readonly="ro.nonghudianhua"></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="农商/企业电话" prop="nonghudianhua">
+					<el-input v-model="ruleForm.nonghudianhua" placeholder="农商/企业电话" clearable  :readonly="ro.nonghudianhua"></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农户电话" prop="nonghudianhua">
-					<el-input v-model="ruleForm.nonghudianhua" placeholder="农户电话" readonly></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="农商/企业电话" prop="nonghudianhua">
+					<el-input v-model="ruleForm.nonghudianhua" placeholder="农商/企业电话" readonly></el-input>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.touxiang" label="头像" prop="touxiang">
 					<file-upload
@@ -180,13 +180,13 @@ export default {
 			
 			rules: {
 				nonghuzhanghao: [
-					{ required: true, message: '农户账号不能为空', trigger: 'blur' },
+					{ required: true, message: '农商/企业账号不能为空', trigger: 'blur' },
 				],
 				mima: [
 					{ required: true, message: '密码不能为空', trigger: 'blur' },
 				],
 				nonghuxingming: [
-					{ required: true, message: '农户姓名不能为空', trigger: 'blur' },
+					{ required: true, message: '农商/企业姓名不能为空', trigger: 'blur' },
 				],
 				xingbie: [
 				],
