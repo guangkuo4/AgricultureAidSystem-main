@@ -80,7 +80,7 @@
 						<template slot-scope="scope">
 							<div v-if="scope.row.tupian">
 								<img v-if="scope.row.tupian.substring(0,4)=='http'" :src="scope.row.tupian.split(',')[0]" width="100" height="100">
-								<img v-else :src="$base.url+scope.row.tupian.split(',')[0]" width="100" height="100">
+								<img v-else :src="$base.url+'file/uploads?fileName='+scope.row.tupian.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
 							</div>
 							<div v-else>无图片</div>
 						</template>
@@ -454,7 +454,7 @@ import AddOrUpdate from "./add-or-update";
         page: this.pageIndex,
         limit: this.pageSize,
         sort: 'id',
-        order: 'desc',
+        order: 'asc',
       }
            if(this.searchForm.chanpinmingcheng!='' && this.searchForm.chanpinmingcheng!=undefined){
             params['chanpinmingcheng'] = '%' + this.searchForm.chanpinmingcheng + '%'
@@ -571,7 +571,11 @@ import AddOrUpdate from "./add-or-update";
 		if(!file){
 			return false
 		}
-		window.open((location.href.split(this.$base.name).length>1 ? location.href.split(this.$base.name)[0] :'') + this.$base.name + '/' + file)
+		if(file.substring(0,4)=='http'){
+			window.open(file)
+		}else{
+			window.open((location.href.split(this.$base.name).length>1 ? location.href.split(this.$base.name)[0] :'') + this.$base.name + '/file/uploads?fileName=' + file.replace(/^upload\//,''))
+		}
 	},
 	zhunongshangpinstatusChange(e,row){
 		if(row.status==0){

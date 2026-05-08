@@ -16,7 +16,7 @@
 			<div class="nongji-detail__grid">
 				<div class="nongji-detail__media" v-if="detailBanner.length">
 					<div class="nongji-detail__media-main">
-						<img id="big" class="nongji-detail__media-img" :src="swiperBigUrl" alt="课程图片">
+						<img id="big" class="nongji-detail__media-img" :src="getSwiperImg(swiperBigUrl)" alt="课程图片">
 					</div>
 					<div class="nongji-detail__thumbs">
 						<button
@@ -24,11 +24,11 @@
 							class="nongji-detail__thumb"
 							v-for="(item, idx) in detailBanner"
 							:key="idx"
-							@click="item.substr(0,4)=='http' ? swiperClick3(item) : swiperClick3(baseUrl + item)"
+							@click="swiperClick3(getSwiperImg(item))"
 						>
 							<img
 								class="nongji-detail__thumb-img"
-								:src="item.substr(0,4)=='http' ? item : (baseUrl + item)"
+								:src="getSwiperImg(item)"
 								alt=""
 							>
 						</button>
@@ -89,7 +89,7 @@
 			<div class="nongji-detail__video" v-if="detail.kechengshipin">
 				<div class="nongji-detail__video-label"><i class="el-icon-video-camera"></i> 课程视频</div>
 				<div class="nongji-detail__video-box">
-					<video class="nongji-detail__video-el" :src="baseUrl + detail.kechengshipin" controls playsinline>
+					<video class="nongji-detail__video-el" :src="getSwiperImg(detail.kechengshipin)" controls playsinline>
 						您的浏览器不支持视频播放
 					</video>
 				</div>
@@ -124,8 +124,8 @@
 						@mouseleave="discussLeave"
 					>
 						<div class="user">
-							<el-image v-if="item.avatarurl" :size="50" :src="baseUrl + item.avatarurl"></el-image>
-							<el-image v-if="!item.avatarurl" :size="50" :src="require('@/assets/touxiang.png')"></el-image>
+							<el-image v-if="item.avatarurl" :size="50" :src="baseUrl + 'upload/' + item.avatarurl"></el-image>
+							<el-image v-if="!item.avatarurl" :size="50" :src="require('@/assets/avator.svg')"></el-image>
 							<div class="name">{{ item.nickname }}</div>
 						</div>
 						<div class="content-block-ask">
@@ -231,6 +231,13 @@
 		swiperClick3(src) {
 			this.swiperBigUrl = src
 		},
+        getSwiperImg(item) {
+            if (!item) return '';
+            if (String(item).substr(0, 4) == 'http') return item;
+            // 去掉已有的 upload/ 前缀，统一加完整前缀
+            var name = String(item).replace(/^upload\//, '');
+            return this.baseUrl + 'upload/' + name;
+        },
         init() {
 		  this.id = this.$route.query.id
           this.baseUrl = this.$config.baseUrl;
@@ -248,18 +255,14 @@
 
             }
 			if (this.detailBanner.length) {
-				if (this.detailBanner[0].substr(0,4)=='http') {
-					this.swiperBigUrl = this.detailBanner[0]
-				} else {
-					this.swiperBigUrl = this.baseUrl + this.detailBanner[0]
-				}
+				this.swiperBigUrl = this.getSwiperImg(this.detailBanner[0])
 			}
           });
         },
       storeup(type) {
         if (type == 1 && !this.isStoreup) {
           this.storeupParams.name = this.title;
-          this.storeupParams.picture = this.detailBanner[0];
+          this.storeupParams.picture = this.detailBanner[0].replace(/^upload\//, '');
           this.storeupParams.refid = this.detail.id;
           this.storeupParams.type = type;
           this.$http.post('storeup/add', this.storeupParams).then(res => {

@@ -49,7 +49,7 @@
 			  <div class="samll" :style='{"width":"100%","padding":"0 0","background":"#fff","display":"flex","height":"100px"}'>
 			    <div :style='{"border":"0","width":"25%","margin":"0 5px","position":"relative","background":"#fff","height":"100%"}' v-for="item in detailBanner" :key="item.id">
 				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-if="item.substr(0,4)=='http'" :src="item" @click="swiperClick3(item)" class="image">
-				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-else :src="baseUrl + item" @click="swiperClick3(baseUrl + item)" class="image">
+				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-else :src="baseUrl + 'upload/' + item" @click="swiperClick3(baseUrl + 'upload/' + item)" class="image">
 			    </div>
 			  </div>
 			</div>
@@ -79,8 +79,8 @@
 					<div :style='{"padding":"20px","margin":"0 0 20px","borderColor":"#999","alignItems":"center","borderWidth":"0","background":"#F7F9FA","width":"100%","borderStyle":"solid","height":"auto"}' v-for="item in infoList" :key="item.id" @mouseenter="discussEnter(item.id)"
 						@mouseleave="discussLeave">
 						<div class="user" :style='{"width":"100%","alignItems":"center","display":"flex","height":"auto"}'>
-							<el-image v-if="item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="baseUrl + item.avatarurl"></el-image>
-							<el-image v-if="!item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="require('@/assets/touxiang.png')"></el-image>
+							<el-image v-if="item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="baseUrl + 'upload/' + item.avatarurl"></el-image>
+							<el-image v-if="!item.avatarurl" :style='{"width":"40px","margin":"0 10px 0 0","borderRadius":"100%","objectFit":"cover","height":"40px"}' :size="50" :src="require('@/assets/avator.svg')"></el-image>
 							<div :style='{"color":"#333","fontSize":"16px"}' class="name">{{item.nickname}}</div>
 						</div>
 						<div :style='{"padding":"8px","boxShadow":"none","margin":"10px 0px 0px","color":"#9E9E9E","borderRadius":"0","background":"none","wordWrap":"break-word","lineHeight":"30px","fontSize":"14px"}' class="content-block-ask">
@@ -193,7 +193,7 @@
 				if (this.detailBanner[0].substr(0,4)=='http') {
 					this.swiperBigUrl = this.detailBanner[0]
 				} else {
-					this.swiperBigUrl = this.baseUrl + this.detailBanner[0]
+					this.swiperBigUrl = this.baseUrl + 'upload/' + this.detailBanner[0]
 				}
 			}
           });

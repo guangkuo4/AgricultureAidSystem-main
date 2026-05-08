@@ -33,7 +33,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture1" label="图片1" prop="picture1">
 					<img v-if="ruleForm.picture1.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture1.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture1.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture1.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.picture2" label="图片2" prop="picture2">
 					<file-upload
@@ -47,7 +47,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture2" label="图片2" prop="picture2">
 					<img v-if="ruleForm.picture2.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture2.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture2.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture2.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.picture3" label="图片3" prop="picture3">
 					<file-upload
@@ -61,7 +61,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture3" label="图片3" prop="picture3">
 					<img v-if="ruleForm.picture3.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture3.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture3.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture3.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 			</template>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-if="type!='info'"  label="内容" prop="content">
@@ -288,10 +288,7 @@ export default {
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
-        this.ruleForm = data.data;
-        //解决前台上传图片后台不显示的问题
-        let reg=new RegExp('../../../upload','g')//g代表全部
-        this.ruleForm.content = this.ruleForm.content.replace(reg,'../../../springboot2855f2n2/upload');
+          this.ruleForm = data.data;
         } else {
           this.$message.error(data.msg);
         }
@@ -306,15 +303,15 @@ export default {
 
 
 	if(this.ruleForm.picture1!=null) {
-		this.ruleForm.picture1 = this.ruleForm.picture1.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.picture1 = this.ruleForm.picture1.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 	if(this.ruleForm.picture2!=null) {
-		this.ruleForm.picture2 = this.ruleForm.picture2.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.picture2 = this.ruleForm.picture2.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 	if(this.ruleForm.picture3!=null) {
-		this.ruleForm.picture3 = this.ruleForm.picture3.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.picture3 = this.ruleForm.picture3.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 var objcross = this.$storage.getObj('crossObj');

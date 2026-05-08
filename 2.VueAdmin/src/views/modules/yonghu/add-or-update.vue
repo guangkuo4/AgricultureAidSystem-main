@@ -59,7 +59,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.touxiang" label="头像" prop="touxiang">
 					<img v-if="ruleForm.touxiang.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.touxiang.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.touxiang.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.touxiang.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="select" v-if="type!='info'"  label="是否会员" prop="vip">
 					<el-select :disabled="ro.vip" v-model="ruleForm.vip" placeholder="请选择是否会员" >
@@ -345,7 +345,7 @@ export default {
 
 
 	if(this.ruleForm.touxiang!=null) {
-		this.ruleForm.touxiang = this.ruleForm.touxiang.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.touxiang = this.ruleForm.touxiang.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 

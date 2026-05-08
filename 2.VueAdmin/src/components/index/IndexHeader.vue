@@ -14,7 +14,7 @@
 		
 		<el-dropdown @command="handleCommand" trigger="click" :style='{"padding":"0 0px 0 0","color":"inherit","background":"url() no-repeat right center / 26px","display":"inline-block","fontSize":"inherit","position":"static","zIndex":"9999","order":"10"}'>
 		  <div class="el-dropdown-link" :style='{"alignItems":"center","display":"flex"}'>
-		    <el-image v-if="user" :style='{"width":"32px","margin":"0 10px","objectFit":"cover","borderRadius":"100%","display":"inline-block","height":"32px"}' :src="avatar?this.$base.url + avatar : require('@/assets/img/avator.png')" fit="cover"></el-image>
+		    <el-image v-if="user" :style='{"width":"32px","margin":"0 10px","objectFit":"cover","borderRadius":"100%","display":"inline-block","height":"32px"}' :src="getAvatarSrc()" fit="cover"></el-image>
 		    <span :style='{"color":"inherit","lineHeight":"32px","fontSize":"14px"}'>{{this.$storage.get('adminName')}}</span>
 		    <span class="icon iconfont icon-xiala" :style='{"margin":"0 0 0 5px","fontSize":"14px","color":"inherit","display":"none"}'></span>
 		  </div>
@@ -101,6 +101,13 @@
 			},
 			onIndexTap(){
 				window.location.href = `${this.$base.indexUrl}`
+			},
+			getAvatarSrc() {
+				let val = this.$storage.get('headportrait')
+				if (!val) return require('@/assets/img/avator.svg')
+				if (String(val).substr(0, 4) == 'http') return val
+				var name = String(val).replace(/^upload\//, '')
+				return this.$base.url + 'upload/' + name
 			},
 		}
 	};

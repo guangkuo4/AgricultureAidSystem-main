@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="wxBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#07c160"/>
+      <stop offset="100%" style="stop-color:#4caf50"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="20" fill="url(#wxBg)"/>
+  <path d="M70 155 Q70 125 90 110 Q80 130 85 155 Z" fill="#ffffff"/>
+  <path d="M100 130 Q100 100 130 90 Q120 110 125 130 Z" fill="#ffffff" opacity="0.8"/>
+  <circle cx="90" cy="85" r="8" fill="#ffffff" opacity="0.9"/>
+  <circle cx="120" cy="70" r="6" fill="#ffffff" opacity="0.8"/>
+  <text x="100" y="185" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="bold" font-family="Arial, sans-serif">wechat</text>
+</svg>

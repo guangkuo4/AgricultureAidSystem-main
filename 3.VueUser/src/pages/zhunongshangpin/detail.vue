@@ -35,7 +35,7 @@
 			  <div class="samll" :style='{"width":"100%","padding":"0 0","background":"#fff","display":"flex","height":"90px","gap":"12px"}'>
 			    <div :style='{"border":"0","flex":"1","margin":"0","position":"relative","background":"#fff","height":"100%","borderRadius":"12px","overflow":"hidden","cursor":"pointer","transition":"all 0.25s ease","border":"2px solid transparent"}' v-for="item in detailBanner" :key="item.id">
 				  <img :style='{"width":"100%","boxShadow":"none","objectFit":"cover","display":"block","height":"100%","zIndex":"1","transition":"transform 0.3s ease"}' v-if="item.substr(0,4)=='http'" :src="item" @click="swiperClick3(item)" class="image">
-				  <img :style='{"width":"100%","boxShadow":"none","objectFit":"cover","display":"block","height":"100%","zIndex":"1","transition":"transform 0.3s ease"}' v-else :src="baseUrl + item" @click="swiperClick3(baseUrl + item)" class="image">
+				  <img :style='{"width":"100%","boxShadow":"none","objectFit":"cover","display":"block","height":"100%","zIndex":"1","transition":"transform 0.3s ease"}' v-else :src="getSwiperImg(item)" @click="swiperClick3(getSwiperImg(item))" class="image">
 			    </div>
 			  </div>
 		</div>
@@ -182,8 +182,8 @@
 					<div :style='{"padding":"24px","margin":"0 0 16px","borderColor":"rgba(46, 125, 50, 0.1)","alignItems":"flex-start","borderWidth":"0 0 1px 0","background":"#fff","borderStyle":"solid","height":"auto","borderRadius":"16px","border":"1px solid rgba(46, 125, 50, 0.1)"}' v-for="item in infoList" :key="item.id" @mouseenter="discussEnter(item.id)"
 						@mouseleave="discussLeave">
 						<div class="user" :style='{"width":"100%","alignItems":"center","display":"flex","height":"auto","gap":"12px"}'>
-							<el-image v-if="item.avatarurl" :style='{"width":"44px","margin":"0","borderRadius":"50%","objectFit":"cover","height":"44px","border":"2px solid rgba(46, 125, 50, 0.2)"}' :size="50" :src="baseUrl + item.avatarurl"></el-image>
-							<el-image v-else :style='{"width":"44px","margin":"0","borderRadius":"50%","objectFit":"cover","height":"44px","border":"2px solid rgba(46, 125, 50, 0.2)"}' :size="50" :src="require('@/assets/touxiang.png')"></el-image>
+							<el-image v-if="item.avatarurl" :style='{"width":"44px","margin":"0","borderRadius":"50%","objectFit":"cover","height":"44px","border":"2px solid rgba(46, 125, 50, 0.2)"}' :size="50" :src="baseUrl + 'upload/' + item.avatarurl"></el-image>
+							<el-image v-else :style='{"width":"44px","margin":"0","borderRadius":"50%","objectFit":"cover","height":"44px","border":"2px solid rgba(46, 125, 50, 0.2)"}' :size="50" :src="require('@/assets/avator.svg')"></el-image>
 							<div>
 								<div :style='{"color":"#1a2e1a","fontSize":"15px","fontWeight":"600"}' class="name">{{item.nickname}}</div>
 								<div :style='{"color":"#607060","fontSize":"12px","marginTop":"2px"}'>{{item.addtime}}</div>
@@ -304,6 +304,12 @@
 		swiperClick3(src) {
 			this.swiperBigUrl = src
 		},
+        getSwiperImg(item) {
+            if (!item) return '';
+            if (String(item).substr(0, 4) == 'http') return item;
+            var name = String(item).replace(/^upload\//, '');
+            return this.baseUrl + 'upload/' + name;
+        },
         init() {
 		  this.id = this.$route.query.id
           this.baseUrl = this.$config.baseUrl;
@@ -322,11 +328,7 @@
 
             }
 			if (this.detailBanner.length) {
-				if (this.detailBanner[0].substr(0,4)=='http') {
-					this.swiperBigUrl = this.detailBanner[0]
-				} else {
-					this.swiperBigUrl = this.baseUrl + this.detailBanner[0]
-				}
+				this.swiperBigUrl = this.getSwiperImg(this.detailBanner[0])
 			}
           });
         },

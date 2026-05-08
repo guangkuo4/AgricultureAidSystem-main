@@ -61,7 +61,7 @@
         <!-- 商品图片和名称 -->
         <div :style='{"flex":"1","display":"flex","alignItems":"center"}'>
           <div :style='{"width":"100px","height":"100px","borderRadius":"12px","overflow":"hidden","marginRight":"20px","border":"1px solid #e8e8e8","flexShrink":"0"}'>
-            <el-image :src="baseUrl + item.picture" fit="cover" :style='{"width":"100%","height":"100%"}'></el-image>
+            <el-image :src="baseUrl + 'upload/' + item.picture" fit="cover" :style='{"width":"100%","height":"100%"}'></el-image>
           </div>
           <div>
             <div :style='{"fontSize":"16px","fontWeight":"600","color":"#1a1a1a","marginBottom":"8px","lineHeight":"1.4"}'>{{ item.goodname }}</div>

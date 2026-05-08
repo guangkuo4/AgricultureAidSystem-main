@@ -27,7 +27,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.image" label="image" prop="image">
 					<img v-if="ruleForm.image.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.image.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.image.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.image.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 			</template>
 			<el-form-item :style='{"padding":"0 10px","margin":"30px 0","alignItems":"center","textAlign":"center","display":"flex","width":"100%","perspective":"320px","-webkitPerspective":"320px","fontSize":"48px","justifyContent":"flex-end"}' class="btn">
@@ -228,7 +228,7 @@ export default {
 
 
 	if(this.ruleForm.image!=null) {
-		this.ruleForm.image = this.ruleForm.image.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.image = this.ruleForm.image.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 var objcross = this.$storage.getObj('crossObj');

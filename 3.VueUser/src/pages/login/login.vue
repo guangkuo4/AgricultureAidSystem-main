@@ -79,7 +79,7 @@
 
 <script>
 import menu from '@/config/menu'
-import loginBg from '@/assets/login-bg.png'
+import loginBg from '@/assets/login-bg.svg'
 import ErrorHandler from '@/utils/errorHandler'
 export default {
 	data() {

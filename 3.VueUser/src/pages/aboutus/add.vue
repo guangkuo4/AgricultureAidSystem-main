@@ -28,7 +28,7 @@
           </el-form-item>
             <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' class="upload" v-else label="图片1" prop="picture1">
                 <img v-if="ruleForm.picture1.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture1.split(',')[0]" width="100" height="100">
-                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture1.split(',')" :src="baseUrl+item" width="100" height="100">
+                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture1.split(',')" :src="baseUrl+'upload/'+item" width="100" height="100">
             </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="图片2" v-if="type!='cross' || (type=='cross' && !ro.picture2)" prop="picture2">
             <file-upload
@@ -42,7 +42,7 @@
           </el-form-item>
             <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' class="upload" v-else label="图片2" prop="picture2">
                 <img v-if="ruleForm.picture2.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture2.split(',')[0]" width="100" height="100">
-                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture2.split(',')" :src="baseUrl+item" width="100" height="100">
+                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture2.split(',')" :src="baseUrl+'upload/'+item" width="100" height="100">
             </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="图片3" v-if="type!='cross' || (type=='cross' && !ro.picture3)" prop="picture3">
             <file-upload
@@ -56,7 +56,7 @@
           </el-form-item>
             <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' class="upload" v-else label="图片3" prop="picture3">
                 <img v-if="ruleForm.picture3.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture3.split(',')[0]" width="100" height="100">
-                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture3.split(',')" :src="baseUrl+item" width="100" height="100">
+                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture3.split(',')" :src="baseUrl+'upload/'+item" width="100" height="100">
             </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="内容" prop="content">
             <editor 

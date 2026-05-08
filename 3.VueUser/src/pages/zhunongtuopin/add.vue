@@ -37,7 +37,7 @@
           </el-form-item>
             <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' class="upload" v-else label="文章照片" prop="wenzhangzhaopian">
                 <img v-if="ruleForm.wenzhangzhaopian.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.wenzhangzhaopian.split(',')[0]" width="100" height="100">
-                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.wenzhangzhaopian.split(',')" :src="baseUrl+item" width="100" height="100">
+                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.wenzhangzhaopian.split(',')" :src="baseUrl+'upload/'+item" width="100" height="100">
             </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="发布时间" prop="fabushijian">
               <el-date-picker

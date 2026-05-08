@@ -47,7 +47,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.wenzhangzhaopian" label="文章照片" prop="wenzhangzhaopian">
 					<img v-if="ruleForm.wenzhangzhaopian.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.wenzhangzhaopian.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.wenzhangzhaopian.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.wenzhangzhaopian.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="date" v-if="type!='info'" label="发布时间" prop="fabushijian">
 					<el-date-picker
@@ -351,10 +351,7 @@ export default {
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
-        this.ruleForm = data.data;
-        //解决前台上传图片后台不显示的问题
-        let reg=new RegExp('../../../upload','g')//g代表全部
-        this.ruleForm.wenzhangxiangqing = this.ruleForm.wenzhangxiangqing.replace(reg,'../../../springboot2855f2n2/upload');
+          this.ruleForm = data.data;
         } else {
           this.$message.error(data.msg);
         }
@@ -372,7 +369,7 @@ export default {
 
 
 	if(this.ruleForm.wenzhangzhaopian!=null) {
-		this.ruleForm.wenzhangzhaopian = this.ruleForm.wenzhangzhaopian.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.wenzhangzhaopian = this.ruleForm.wenzhangzhaopian.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 

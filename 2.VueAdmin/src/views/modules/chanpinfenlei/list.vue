@@ -51,7 +51,7 @@
 						<template slot-scope="scope">
 							<div v-if="scope.row.image">
 								<img v-if="scope.row.image.substring(0,4)=='http'" :src="scope.row.image.split(',')[0]" width="100" height="100">
-								<img v-else :src="$base.url+scope.row.image.split(',')[0]" width="100" height="100">
+								<img v-else :src="$base.url+'upload/'+scope.row.image.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
 							</div>
 							<div v-else>无图片</div>
 						</template>

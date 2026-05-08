@@ -35,7 +35,7 @@
       <div v-if="newsList[0]">
         <div @click="toNewsDetail(newsList[0])">
           <div>
-            <img :src="baseUrl + newsList[0].picture" alt="">
+            <img :src="baseUrl + 'upload/' + newsList[0].picture" alt="">
             <div>头条推荐</div>
           </div>
           <div>
@@ -52,7 +52,7 @@
         <template v-for="(item,index) in newsList">
           <div v-if="index > 0 && index < 7" @click="toNewsDetail(item)">
             <div>
-              <img :src="baseUrl + item.picture" alt="">
+              <img :src="baseUrl + 'upload/' + item.picture" alt="">
               <div>{{item.typename || '最新资讯'}}</div>
             </div>
             <div>
@@ -119,7 +119,7 @@
       <div>热门资讯</div>
       <div>
         <div v-for="item in hotList" :key="item.id" @click="toNewsDetail(item)">
-          <img :src="baseUrl + item.picture" alt="">
+          <img :src="baseUrl + 'upload/' + item.picture" alt="">
           <div>
             <div>{{ item.title }}</div>
             <div>{{item.addtime.split(" ")[0]}}</div>
@@ -133,7 +133,7 @@
       <div>最新动态</div>
       <div>
         <div v-for="item in recommendList" :key="item.id" @click="toNewsDetail(item)">
-          <img :src="baseUrl + item.picture" alt="">
+          <img :src="baseUrl + 'upload/' + item.picture" alt="">
           <div>
             <div>{{ item.title }}</div>
             <div>{{item.addtime.split(" ")[0]}}</div>

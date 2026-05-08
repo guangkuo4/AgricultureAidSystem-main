@@ -246,9 +246,7 @@ export default {
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
-        this.ruleForm = data.data;
-        //解决前台上传图片后台不显示的问题
-        let reg=new RegExp('../../../upload','g')//g代表全部
+          this.ruleForm = data.data;
         } else {
           this.$message.error(data.msg);
         }
@@ -262,7 +260,7 @@ export default {
 
 
 	if(this.ruleForm.avatarurl!=null) {
-		this.ruleForm.avatarurl = this.ruleForm.avatarurl.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.avatarurl = this.ruleForm.avatarurl.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"");
 	}
 
 

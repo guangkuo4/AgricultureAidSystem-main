@@ -48,7 +48,7 @@
         <div :style='{"padding":"0","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","margin":"0","background":"#fff","borderRadius":"16px","overflow":"hidden","display":"flex","width":"100%","fontSize":"0","position":"relative","height":"auto","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","cursor":"pointer","border":"none"}' v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
           <div :style='{"border":"0","width":"260px","padding":"0","height":"180px","flexShrink":"0","overflow":"hidden"}'>
             <img @click.stop="imgPreView(item.kechengzhaopian)" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-if="item.kechengzhaopian && item.kechengzhaopian.substr(0,4)=='http'" :src="item.kechengzhaopian.split(',')[0]" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'">
-            <img @click.stop="imgPreView(baseUrl + (item.kechengzhaopian?item.kechengzhaopian.split(',')[0]:''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="baseUrl + (item.kechengzhaopian?item.kechengzhaopian.split(',')[0]:'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'">
+            <img @click.stop="imgPreView(baseUrl + (item.kechengzhaopian?item.kechengzhaopian.split(',')[0].replace(/^upload\//,''):''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="resourceUrl + (item.kechengzhaopian?item.kechengzhaopian.split(',')[0].replace(/^upload\//,''):'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'">
           </div>
           <div class="item-info" :style='{"padding":"25px","overflow":"hidden","alignItems":"flex-start","flexWrap":"wrap","flex":"1","display":"flex","flexDirection":"column","height":"auto","background":"linear-gradient(180deg, rgba(46, 125, 50, 0.02) 0%, rgba(46, 125, 50, 0.04) 100%)"}'>
             <div :style='{"padding":"0 0 12px 0","whiteSpace":"nowrap","overflow":"hidden","color":"#1a1a1a","width":"100%","lineHeight":"1.4","fontSize":"20px","textOverflow":"ellipsis","fontWeight":"bold","order":"1"}' class="name">{{item.kechengbiaoti}}</div>
@@ -110,7 +110,7 @@
         selectOptionsList: [],
         layouts: '',
         swiperIndex: -1,
-        baseUrl: '',
+        resourceUrl: '',
         breadcrumbItem: [
           {
             name: '助农乐学'
@@ -143,7 +143,7 @@
       if(this.$route.query.centerType){
         this.centerType = true
       }
-      this.baseUrl = this.$config.baseUrl;
+      this.resourceUrl = this.$config.resourceUrl;
       this.kechengfenleiOptions = '种植技术,养殖技术,农机使用,其他'.split(',');
       this.selectOptionsList.push({name:'课程分类',list:this.kechengfenleiOptions,tableName: 'kechengfenlei',check: -1})
       this.getFenlei();

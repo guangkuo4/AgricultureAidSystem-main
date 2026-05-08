@@ -9,7 +9,7 @@
 		  </el-button>
 		  <div class="userinfo"
 		    :style="verticalStyle2[isCollapse?'close':'open'].userinfo.box.default">
-		    <el-image v-if="avatar" :style="verticalStyle2[isCollapse?'close':'open'].userinfo.img.default" :src="avatar?this.$base.url + avatar:require('@/assets/img/avator.png')" fit="cover"></el-image>
+		    <el-image v-if="avatar" :style="verticalStyle2[isCollapse?'close':'open'].userinfo.img.default" :src="avatar?this.$base.url + avatar:require('@/assets/img/avator.svg')" fit="cover"></el-image>
 		    <div :style="verticalStyle2[isCollapse?'close':'open'].userinfo.nickname.default">
 		      {{this.$storage.get('adminName')}}</div>
 		  </div>

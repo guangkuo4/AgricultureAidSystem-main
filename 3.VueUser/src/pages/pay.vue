@@ -14,32 +14,32 @@
     <div class="pay-type-content">
       <div class="pay-type-item">
         <el-radio v-model="type" label="微信支付"></el-radio>
-        <img src="@/assets/weixin.png" alt>
+        <img src="@/assets/weixin.svg" alt>
         <!-- <span>微信支付</span> -->
       </div>
       <div class="pay-type-item">
         <el-radio v-model="type" label="支付宝支付"></el-radio>
-        <img src="@/assets/zhifubao.png" alt>
+        <img src="@/assets/zhifubao.svg" alt>
         <!-- <span>支付宝支付</span> -->
       </div>
       <div class="pay-type-item">
         <el-radio v-model="type" label="建设银行"></el-radio>
-        <img src="@/assets/jianshe.png" alt>
+        <img src="@/assets/jianshe.svg" alt>
         <!-- <span>建设银行</span> -->
       </div>
       <div class="pay-type-item">
         <el-radio v-model="type" label="农业银行"></el-radio>
-        <img src="@/assets/nongye.png" alt>
+        <img src="@/assets/nongye.svg" alt>
         <!-- <span>农业银行</span> -->
       </div>
       <div class="pay-type-item">
         <el-radio v-model="type" label="中国银行"></el-radio>
-        <img src="@/assets/zhongguo.png" alt>
+        <img src="@/assets/zhongguo.svg" alt>
         <!-- <span>中国银行</span> -->
       </div>
       <div class="pay-type-item">
         <el-radio v-model="type" label="交通银行"></el-radio>
-        <img src="@/assets/jiaotong.png" alt>
+        <img src="@/assets/jiaotong.svg" alt>
         <!-- <span>交通银行</span> -->
       </div>
     </div>

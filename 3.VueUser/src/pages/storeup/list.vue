@@ -16,7 +16,7 @@
       <el-col :span="6" v-for="(item, index) in storeupList" :key="index" @click.native="toDetail(item)">
         <el-card :body-style="{ padding: '0px', cursor: 'pointer' }">
           <el-image v-if="item.picture && item.picture.substr(0,4)=='http'" :src="item.picture" fit="fill" class="image"></el-image>
-          <el-image v-else :src="baseUrl + item.picture" fit="fill" class="image"></el-image>
+          <el-image v-else :src="baseUrl + 'upload/' + item.picture" fit="fill" class="image"></el-image>
           <div style="padding: 14px;">
             <span v-if="item.remark">{{item.name}}</span>
             <span v-if="!item.remark">{{item.name}}</span>

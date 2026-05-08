@@ -27,7 +27,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture" label="图片" prop="picture">
 					<img v-if="ruleForm.picture.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="推荐类型" prop="inteltype">
 					<el-input v-model="ruleForm.inteltype" placeholder="推荐类型" clearable  :readonly="ro.inteltype"></el-input>
@@ -292,7 +292,7 @@ export default {
 
 
 	if(this.ruleForm.picture!=null) {
-		this.ruleForm.picture = this.ruleForm.picture.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.picture = this.ruleForm.picture.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 

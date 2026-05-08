@@ -76,10 +76,10 @@
           <div v-if="currentRow.yingyezhizhao">
             <el-image
               v-if="currentRow.yingyezhizhao && !currentRow.yingyezhizhao.startsWith('http')"
-              :src="$base.url + 'upload/' + currentRow.yingyezhizhao"
+              :src="$base.url + 'file/uploads?fileName=' + currentRow.yingyezhizhao.replace(/^upload\//,'')"
               fit="contain"
               style="max-width: 300px; max-height: 200px; border-radius: 6px; cursor: pointer;"
-              @click="previewImage($base.url + 'upload/' + currentRow.yingyezhizhao)"
+              @click="previewImage($base.url + 'file/uploads?fileName=' + currentRow.yingyezhizhao.replace(/^upload\//,''))"
             ></el-image>
             <el-image
               v-else-if="currentRow.yingyezhizhao"

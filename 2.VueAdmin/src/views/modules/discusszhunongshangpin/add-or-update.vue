@@ -262,7 +262,7 @@ export default {
 
 
 	if(this.ruleForm.avatarurl!=null) {
-		this.ruleForm.avatarurl = this.ruleForm.avatarurl.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.avatarurl = this.ruleForm.avatarurl.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"");
 	}
 
 

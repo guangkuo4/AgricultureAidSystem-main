@@ -41,7 +41,7 @@
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.kechengzhaopian" label="课程照片" prop="kechengzhaopian">
 					<img v-if="ruleForm.kechengzhaopian.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.kechengzhaopian.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.kechengzhaopian.split(',')" :src="$base.url+item" width="100" height="100">
+					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.kechengzhaopian.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info'&& !ro.kechengshipin" label="课程视频" prop="kechengshipin">
 					<file-upload
@@ -54,7 +54,7 @@
 					></file-upload>
 				</el-form-item> 
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else-if="ruleForm.kechengshipin" label="课程视频" prop="kechengshipin">
-					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small" @click="download($base.url+ruleForm.kechengshipin)">预览</el-button>
+					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small" @click="download($base.url+'file/uploads?fileName='+ruleForm.kechengshipin)">预览</el-button>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else-if="!ruleForm.kechengshipin" label="课程视频" prop="kechengshipin">
 					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small">无</el-button>
@@ -70,7 +70,7 @@
 					></file-upload>
 				</el-form-item>  
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else-if="ruleForm.wendangziliao" label="文档资料" prop="wendangziliao">
-					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small" @click="download($base.url+ruleForm.wendangziliao)">下载</el-button>
+					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small" @click="download($base.url+'file/download?fileName='+ruleForm.wendangziliao.replace(/^upload\//,''))">下载</el-button>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else-if="!ruleForm.wendangziliao" label="文档资料" prop="wendangziliao">
 					<el-button :style='{"border":"0px solid #000","cursor":"pointer","padding":"0 20px","margin":"0 20px 0 0","color":"inherit","textAlign":"left","minWidth":"350px","outline":"none","borderRadius":"0px","background":"#fff","width":"auto","lineHeight":"36px","fontSize":"14px","height":"36px"}' type="text" size="small">无</el-button>
@@ -256,7 +256,12 @@ export default {
 		
 		// 下载
 		download(file){
-			window.open(`${file}`)
+			if(!file) return;
+			if(file.indexOf('http')===0){
+				window.open(file)
+			}else{
+				window.open(file)
+			}
 		},
 		// 初始化
 		init(id,type) {
@@ -354,10 +359,7 @@ export default {
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
-        this.ruleForm = data.data;
-        //解决前台上传图片后台不显示的问题
-        let reg=new RegExp('../../../upload','g')//g代表全部
-        this.ruleForm.kechengxiangqing = this.ruleForm.kechengxiangqing.replace(reg,'../../../springboot2855f2n2/upload');
+          this.ruleForm = data.data;
         } else {
           this.$message.error(data.msg);
         }
@@ -371,15 +373,15 @@ export default {
 
 
 	if(this.ruleForm.kechengzhaopian!=null) {
-		this.ruleForm.kechengzhaopian = this.ruleForm.kechengzhaopian.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.kechengzhaopian = this.ruleForm.kechengzhaopian.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 	if(this.ruleForm.kechengshipin!=null) {
-		this.ruleForm.kechengshipin = this.ruleForm.kechengshipin.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.kechengshipin = this.ruleForm.kechengshipin.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
 	}
 
 	if(this.ruleForm.wendangziliao!=null) {
-		this.ruleForm.wendangziliao = this.ruleForm.wendangziliao.replace(new RegExp(this.$base.url,"g"),"");
+		this.ruleForm.wendangziliao = this.ruleForm.wendangziliao.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"").replace(new RegExp("file/download\?fileName=","g"),"");
 	}
 
 

@@ -47,7 +47,7 @@
           <div :style='{"color":"inherit","fontSize":"14px","fontWeight":"500"}'>全部</div>
         </div>
         <div class="item" :class="swiperIndex == index ? 'active' : ''" v-for="(item, index) in fenlei" :key="index" @click="getList(1, item[feileiColumn], 'btn' + index)" :ref="'btn' + index" plain :style='{"cursor":"pointer","borderRadius":"12px","padding":"15px","margin":"0 0 10px","color":"#555","background":"#f8faf8","display":"flex","width":"100%","alignItems":"center","transition":"all 0.3s ease","border":"1px solid transparent"}'>
-          <img v-if="item.image" :style='{"width":"40px","margin":"0 10px 0 0","objectFit":"cover","display":"block","height":"40px","borderRadius":"8px"}' :src="baseUrl + (item.image?item.image.split(',')[0]:'')">
+          <img v-if="item.image" :style='{"width":"40px","margin":"0 10px 0 0","objectFit":"cover","display":"block","height":"40px","borderRadius":"8px"}' :src="resourceUrl + (item.image?item.image.split(',')[0].replace(/^upload\//,''):'')">
           <i v-else class="el-icon-goods" :style='{"marginRight":"10px","fontSize":"16px"}'></i>
           <div :style='{"color":"inherit","fontSize":"14px","fontWeight":"500"}'>{{item[feileiColumn]}}</div>
         </div>
@@ -61,6 +61,11 @@
             <i class="el-icon-sort" :style='{"marginRight":"8px","color":"#2E7D32"}'></i>
             排序方式
           </div>
+          <el-button :style='{"border":"0","padding":"0 20px","margin":"0 10px 0 0","borderRadius":"8px","background":sortType!="id"?"#f8faf8":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":sortType!="id"?"#555":"#fff","fontWeight":"500"}' @click="sortClick('id')">
+            <i class="el-icon-sort" :style='{"marginRight":"5px"}'></i>
+            默认
+            <i v-if="sortType=='id'" :class="sortOrder=='asc'?'el-icon-arrow-up':'el-icon-arrow-down'" :style='{"marginLeft":"5px"}'></i>
+          </el-button>
           <el-button :style='{"border":"0","padding":"0 20px","margin":"0 10px 0 0","borderRadius":"8px","background":sortType!="price"?"#f8faf8":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":sortType!="price"?"#555":"#fff","fontWeight":"500"}' @click="sortClick('price')">
             <i class="el-icon-price-tag" :style='{"marginRight":"5px"}'></i>
             价格
@@ -80,7 +85,7 @@
             <div :style='{"padding":"0","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","margin":"0","background":"#fff","borderRadius":"16px","overflow":"hidden","display":"flex","width":"100%","fontSize":"0","position":"relative","height":"auto","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","cursor":"pointer","border":"none"}' v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
               <div :style='{"border":"0","width":"200px","padding":"0","height":"180px","flexShrink":"0","overflow":"hidden","position":"relative","background":"#f8faf8"}'>
                 <img @click.stop="imgPreView(item.tupian)" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f8faf8","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-if="item.tupian && item.tupian.substr(0,4)=='http'" :src="item.tupian.split(',')[0]" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" @error="imgError" />
-                <img @click.stop="imgPreView(baseUrl + (item.tupian?item.tupian.split(',')[0]:''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f8faf8","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" @error="imgError" />
+                <img @click.stop="imgPreView(resourceUrl + (item.tupian?item.tupian.split(',')[0].replace(/^upload\//,''):''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f8faf8","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="resourceUrl + (item.tupian?item.tupian.split(',')[0].replace(/^upload\//,''):'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" @error="imgError" />
                 <div class="placeholder" :style='{"display":"none","position":"absolute","top":"0","left":"0","width":"100%","height":"100%","background":"linear-gradient(135deg, #f0f4f0 0%, #e8f0e8 100%)","flexDirection":"column","justifyContent":"center","alignItems":"center"}'>
                   <i class="el-icon-picture-outline" :style='{"fontSize":"48px","color":"#a8c0a8"}'></i>
                   <span :style='{"fontSize":"13px","color":"#88a088","marginTop":"8px"}'>暂无图片</span>
@@ -152,7 +157,7 @@
         selectOptionsList: [],
         layouts: '',
         swiperIndex: -1,
-        baseUrl: '',
+        resourceUrl: '',
         breadcrumbItem: [
           {
             name: '助农商品'
@@ -177,14 +182,14 @@
         previewImg: '',
         previewVisible: false,
         sortType: 'id',
-        sortOrder: 'desc',
+        sortOrder: 'asc',
       }
     },
     created() {
       if(this.$route.query.centerType){
         this.centerType = true
       }
-      this.baseUrl = this.$config.baseUrl;
+      this.resourceUrl = this.$config.resourceUrl;
       this.getFenlei();
       this.getList(1, '全部');
     },

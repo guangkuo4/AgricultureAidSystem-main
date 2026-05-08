@@ -53,7 +53,7 @@
 				@click="toDetail('newsDetail', item)"
 			>
 				<div class="news-thumb">
-					<img v-if="item.picture" :src="baseUrl + item.picture" alt="" />
+					<img v-if="item.picture" :src="baseUrl + 'upload/' + item.picture" alt="" />
 					<div v-else class="news-thumb__placeholder">NEWS</div>
 				</div>
 				<div class="news-meta">
@@ -119,7 +119,7 @@
     >
       <div class="recommend-img">
         <img :name="item.id" v-if="preHttp(item.tupian)" :src="item.tupian.split(',')[0]" :alt="item.chanpinmingcheng" />
-        <img :name="item.id" v-else :src="baseUrl + (item.tupian?item.tupian.split(',')[0]:'')" :alt="item.chanpinmingcheng" />
+        <img :name="item.id" v-else :src="baseUrl + 'upload/' + (item.tupian?item.tupian.split(',')[0]:'')" :alt="item.chanpinmingcheng" />
         <div class="recommend-tag">
           <i class="el-icon-leaf"></i>
         </div>
@@ -185,7 +185,7 @@
 		<template v-for="item,index in listList11zhunongtuopin">
 	    <div v-if="index < 6" :style='{"cursor":"pointer","padding":"15px 20px","margin":"0","borderColor":"#efefef","alignItems":"center","borderWidth":"0","display":"flex","width":"100%","borderStyle":"solid","justifyContent":"center","height":"auto"}' class="item" @click="listIndexClick11(item, 'zhunongtuopin')">
 	      <span class="icon iconfont icon-jiantou34" :style='{"margin":"0 5px 0 0","lineHeight":"44px","fontSize":"16px","color":"#333","display":"none"}'></span>
-	      <img v-if="item.image" :style='{"width":"60px","margin":"0 20px 0 0","objectFit":"cover","borderRadius":"5px","display":"inline-block","height":"60px"}' :src="baseUrl + (item.image?item.image.split(',')[0]:'')">
+	      <img v-if="item.image" :style='{"width":"60px","margin":"0 20px 0 0","objectFit":"cover","borderRadius":"5px","display":"inline-block","height":"60px"}' :src="baseUrl + 'upload/' + (item.image?item.image.split(',')[0]:'')">
 		  <span :style='{"color":"#fff","lineHeight":"44px","fontSize":"18px"}'>{{item[listColumn11zhunongtuopin]}}</span>
 	    </div>
 		</template>
@@ -193,7 +193,7 @@
 	  <div class="list" :style='{"flexWrap":"wrap","flex":"1","background":"#F1F2F3","display":"flex","width":"calc(100% - 300px)","justifyContent":"space-between","height":"auto"}'>
 	    <div :style='{"border":"1px solid #D8D8D8","width":"calc(100% / 3)","padding":"40px","position":"relative","height":"auto"}' class="item list-item animation-box" v-for="item,index in zhunongtuopinList" :key="index" @click="toDetail('zhunongtuopinDetail', item)">
 			<img :name="item.id" :style='{"width":"100%","objectFit":"contain","display":"block","height":"200px"}' v-if="preHttp(item.wenzhangzhaopian)" :src="item.wenzhangzhaopian.split(',')[0]" alt="" />
-			<img :name="item.id" :style='{"width":"100%","objectFit":"contain","display":"block","height":"200px"}' v-else :src="baseUrl + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:'')" alt="" />
+			<img :name="item.id" :style='{"width":"100%","objectFit":"contain","display":"block","height":"200px"}' v-else :src="baseUrl + 'upload/' + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:'')" alt="" />
 			<div class="line1" :style='{"padding":"10px 10px 0","lineHeight":"32px","fontSize":"18px","color":"#000","textAlign":"center"}'>{{item.wenzhangbiaoti}}</div>
 			<div class="line1" :style='{"padding":"10px 10px 0","lineHeight":"32px","fontSize":"18px","color":"#000","textAlign":"center"}'>{{item.wenzhangfenlei}}</div>
 	    </div>

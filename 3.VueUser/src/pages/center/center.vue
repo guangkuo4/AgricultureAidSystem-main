@@ -251,13 +251,13 @@
           <el-radio-group v-model="chongzhiForm.radio" :style='{"width":"100%"}'>
             <el-radio label="微信支付" :style='{"display":"block","marginBottom":"15px","padding":"15px","border":"1px solid #e0e0e0","borderRadius":"8px","width":"100%"}'>
               <div :style='{"display":"flex","alignItems":"center"}'>
-                <el-image style="width: 30px; height: 30px; margin-right: 10px;" :src="require('@/assets/weixin.png')" fit="fill"></el-image>
+                <el-image style="width: 30px; height: 30px; margin-right: 10px;" :src="require('@/assets/weixin.svg')" fit="fill"></el-image>
                 <span>微信支付</span>
               </div>
             </el-radio>
             <el-radio label="支付宝支付" :style='{"display":"block","marginBottom":"15px","padding":"15px","border":"1px solid #e0e0e0","borderRadius":"8px","width":"100%"}'>
               <div :style='{"display":"flex","alignItems":"center"}'>
-                <el-image style="width: 30px; height: 30px; margin-right: 10px;" :src="require('@/assets/zhifubao.png')" fit="fill"></el-image>
+                <el-image style="width: 30px; height: 30px; margin-right: 10px;" :src="require('@/assets/zhifubao.svg')" fit="fill"></el-image>
                 <span>支付宝支付</span>
               </div>
             </el-radio>

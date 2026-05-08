@@ -74,7 +74,7 @@
 			</el-form-item>
 			<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else-if="ruleForm.tupian" class="upload" label="项目图片" prop="tupian">
 				<img v-if="ruleForm.tupian.substring(0,4)=='http'" class="upload-img" style="max-width:200px;" :src="ruleForm.tupian">
-				<img v-else class="upload-img" style="max-width:200px;" :src="$base.url+ruleForm.tupian">
+				<img v-else class="upload-img" style="max-width:200px;" :src="$base.url+'file/uploads?fileName='+ruleForm.tupian.replace(/^upload\//,'')">
 			</el-form-item>
 
 			<el-form-item :style='{"width":"96%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-if="type!='info'" label="项目详情" prop="xiangmuxiangqing">
@@ -196,6 +196,9 @@ export default {
 			this.ruleForm.tupian = file;
 		},
 		onSubmit() {
+		if(this.ruleForm.tupian) {
+			this.ruleForm.tupian = this.ruleForm.tupian.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
+		}
 			this.$refs.ruleForm.validate(valid => {
 				if (!valid) return;
 				this.$http({

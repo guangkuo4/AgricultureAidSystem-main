@@ -97,7 +97,8 @@ export default {
         }
       }
       if (body && body.code === 0 && body.file) {
-        fileList[fileList.length - 1]["url"] = "upload/" + body.file;
+        // body.file is just the filename (e.g. "1744357200000.jpg"), store as-is (no upload/ prefix)
+        fileList[fileList.length - 1]["url"] = body.file;
         this.setFileList(fileList);
         this.$emit("change", this.fileUrlList.join(","));
       } else {

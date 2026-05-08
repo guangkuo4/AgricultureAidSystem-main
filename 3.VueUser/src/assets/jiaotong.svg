@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="bcmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6f00"/>
+      <stop offset="100%" style="stop-color:#e65100"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="16" fill="url(#bcmBg)"/>
+  <text x="80" y="70" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold" font-family="Arial">BCM</text>
+  <text x="80" y="100" text-anchor="middle" fill="#ffffff" font-size="14" font-family="Arial">��L</text>
+  <rect x="20" y="115" width="120" height="2" fill="#ffffff" opacity="0.4"/>
+  <text x="80" y="140" text-anchor="middle" fill="#ffffff" font-size="12" opacity="0.8" font-family="Arial">Bank of Communications</text>
+</svg>

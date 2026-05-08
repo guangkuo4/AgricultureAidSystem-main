@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import registerBg from '@/assets/register-bg.png'
+import registerBg from '@/assets/register-bg.svg'
 import ErrorHandler from '@/utils/errorHandler'
 export default {
     data() {

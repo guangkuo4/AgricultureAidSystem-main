@@ -41,7 +41,7 @@
 			  <div class="samll" :style='{"width":"100%","padding":"0 0","background":"#fff","display":"flex","height":"100px"}'>
 			    <div :style='{"border":"0","width":"25%","margin":"0 5px","position":"relative","background":"#fff","height":"100%"}' v-for="item in detailBanner" :key="item.id">
 				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-if="item.substr(0,4)=='http'" :src="item" @click="swiperClick3(item)" class="image">
-				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-else :src="baseUrl + item" @click="swiperClick3(baseUrl + item)" class="image">
+				  <img :style='{"width":"100%","boxShadow":"0 1px 8px rgba(0,0,0,.2)","objectFit":"contain","display":"block","height":"100%","zIndex":"1"}' v-else :src="baseUrl + 'upload/' + item" @click="swiperClick3(baseUrl + 'upload/' + item)" class="image">
 			    </div>
 			  </div>
 			</div>
@@ -120,7 +120,7 @@
 				if (this.detailBanner[0].substr(0,4)=='http') {
 					this.swiperBigUrl = this.detailBanner[0]
 				} else {
-					this.swiperBigUrl = this.baseUrl + this.detailBanner[0]
+					this.swiperBigUrl = this.baseUrl + 'upload/' + this.detailBanner[0]
 				}
 			}
           });

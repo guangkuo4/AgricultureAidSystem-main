@@ -40,7 +40,7 @@
 				<div class="user-info" @click="goMenu('/index/center')">
 					<div class="user-avatar">
 						<img v-if="headportrait" :src="getAvatarUrl(headportrait)" alt="头像">
-						<img v-else src="@/assets/avator.png" alt="默认头像">
+						<img v-else src="@/assets/avator.svg" alt="默认头像">
 					</div>
 					<span class="user-name">{{username}}</span>
 				</div>
@@ -472,7 +472,7 @@
 					@click="goMenu('/index/nongjixuetang')"
 				>
 					<div class="featured-card__img">
-						<img v-if="item.kechengzhaopian" :src="baseUrl + item.kechengzhaopian" :alt="item.kechengbiaoti" @error="courseImgError(e)">
+						<img v-if="item.kechengzhaopian" :src="baseUrl + 'upload/' + item.kechengzhaopian" :alt="item.kechengbiaoti" @error="courseImgError(e)">
 						<div class="featured-card__placeholder">
 							<i class="el-icon-book-open"></i>
 							<span>暂无封面</span>

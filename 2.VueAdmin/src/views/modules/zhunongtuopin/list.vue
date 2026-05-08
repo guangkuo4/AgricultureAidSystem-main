@@ -72,8 +72,8 @@
 					<el-table-column :resizable='true' :sortable='true' prop="wenzhangzhaopian" width="200" label="文章照片">
 						<template slot-scope="scope">
 							<div v-if="scope.row.wenzhangzhaopian">
-								<img v-if="scope.row.wenzhangzhaopian.substring(0,4)=='http'" :src="scope.row.wenzhangzhaopian.split(',')[0]" width="100" height="100">
-								<img v-else :src="$base.url+scope.row.wenzhangzhaopian.split(',')[0]" width="100" height="100">
+							<img v-if="scope.row.wenzhangzhaopian.substring(0,4)=='http'" :src="scope.row.wenzhangzhaopian.split(',')[0]" width="100" height="100">
+							<img v-else :src="$base.url+'file/uploads?fileName='+scope.row.wenzhangzhaopian.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
 							</div>
 							<div v-else>无图片</div>
 						</template>
