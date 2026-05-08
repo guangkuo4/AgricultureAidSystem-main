@@ -1,39 +1,48 @@
 <template>
-<div class="content" :style='{"padding":"20px 30px 20px","alignItems":"flex-start","flexWrap":"wrap","background":"url(http://codegen.caihongy.cn/20231003/cc88bae96def417689c07dc1358d4a32.png) no-repeat center top / cover","display":"flex","fontSize":"14px","height":"100%"}'>
+<div class="content" :style='{"padding":"20px 30px 20px","alignItems":"flex-start","flexWrap":"wrap","background":"#f5f7fa","display":"flex","fontSize":"14px","height":"100%"}'>
 	<!-- 轮播图 -->
-	<div :style='{"width":"100%","marginBottom":"20px","order":"-1"}'>
+	<div :style='{"width":"100%","marginBottom":"20px","order":"-1","borderRadius":"12px","overflow":"hidden","boxShadow":"0 4px 20px rgba(0,0,0,.08)"}'>
 		<Carousel />
 	</div>
 	<!-- notice -->
 	<!-- title -->
 	<div class="text" :style='{"margin":"30px auto 40px","color":"rgb(51, 51, 51)","textAlign":"center","display":"none","width":"100%","fontSize":"22px","fontWeight":"500"}'>欢迎使用 {{this.$project.projectName}}</div>
 	<!-- statis -->
-	<div :style='{"border":"0px solid rgba(126, 96, 16, .1)","padding":"0px 0","margin":"0 0px 20px 0px","alignItems":"center","color":"#62779c","flexWrap":"wrap","background":"none","display":"flex","width":"100%","fontSize":"14px","order":"0"}'>
-		<div :style='{"boxShadow":"0 0px 0px rgba(0,0,0,.3)","padding":"12px 0","margin":"0 2% 20px 0","borderColor":"rgba(126, 96, 16, .1)","alignItems":"center","textAlign":"left","flexDirection":"row-reverse","display":"flex","borderRadius":"8px","background":"url(http://codegen.caihongy.cn/20231003/b8ae010ba2ff44268dee3545917b55dd.png) no-repeat right bottom / 80% 80%,#fff","borderWidth":"0 0 0px","width":"18%","borderStyle":"solid"}' v-if="isAuth('zhunongshangpin','首页总数')">
-			<div :style='{"alignItems":"center","borderRadius":"100%","background":"none","display":"flex","width":"80px","justifyContent":"center","height":"48px"}'>
-				<span class="icon iconfont icon-tongji7" :style='{"color":"inherit","fontSize":"32px"}'></span>
+	<div class="stats-container">
+		<div class="stats-card stats-card--green" v-if="isAuth('zhunongshangpin','首页总数')">
+			<div class="stats-icon stats-icon--green">
+				<span class="icon iconfont icon-tongji7"></span>
 			</div>
-			<div :style='{"width":"auto","flexDirection":"column","justifyContent":"center","display":"flex"}'>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"34px","color":"inherit","fontWeight":"bold","height":"24px"}'>{{zhunongshangpinCount}}</div>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农商品总数</div>
+			<div class="stats-content">
+				<div class="stats-value">{{zhunongshangpinCount}}</div>
+				<div class="stats-label">助农商品总数</div>
 			</div>
-		</div>
-		<div :style='{"boxShadow":"0 0px 0px rgba(0,0,0,.3)","padding":"12px 0","margin":"0 2% 20px 0","borderColor":"rgba(126, 96, 16, .1)","alignItems":"center","textAlign":"left","flexDirection":"row-reverse","display":"flex","borderRadius":"8px","background":"url(http://codegen.caihongy.cn/20231003/b8ae010ba2ff44268dee3545917b55dd.png) no-repeat right bottom / 80% 80%,#fff","borderWidth":"0 0 0px","width":"18%","borderStyle":"solid"}' v-if="isAuth('zhunongtuopin','首页总数')">
-			<div :style='{"alignItems":"center","borderRadius":"100%","background":"none","display":"flex","width":"80px","justifyContent":"center","height":"48px"}'>
-				<span class="icon iconfont icon-tongji7" :style='{"color":"inherit","fontSize":"32px"}'></span>
-			</div>
-			<div :style='{"width":"auto","flexDirection":"column","justifyContent":"center","display":"flex"}'>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"34px","color":"inherit","fontWeight":"bold","height":"24px"}'>{{zhunongtuopinCount}}</div>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农案例总数</div>
+			<div class="stats-trend stats-trend--up">
+				<i class="el-icon-trending-up"></i>
 			</div>
 		</div>
-		<div :style='{"boxShadow":"0 0px 0px rgba(0,0,0,.3)","padding":"12px 0","margin":"0 2% 20px 0","borderColor":"rgba(126, 96, 16, .1)","alignItems":"center","textAlign":"left","flexDirection":"row-reverse","display":"flex","borderRadius":"8px","background":"url(http://codegen.caihongy.cn/20231003/b8ae010ba2ff44268dee3545917b55dd.png) no-repeat right bottom / 80% 80%,#fff","borderWidth":"0 0 0px","width":"18%","borderStyle":"solid"}' v-if="isAuth('nongjixuetang','首页总数')">
-			<div :style='{"alignItems":"center","borderRadius":"100%","background":"none","display":"flex","width":"80px","justifyContent":"center","height":"48px"}'>
-				<span class="icon iconfont icon-tongji7" :style='{"color":"inherit","fontSize":"32px"}'></span>
+		<div class="stats-card stats-card--blue" v-if="isAuth('zhunongtuopin','首页总数')">
+			<div class="stats-icon stats-icon--blue">
+				<span class="icon iconfont icon-tongji7"></span>
 			</div>
-			<div :style='{"width":"auto","flexDirection":"column","justifyContent":"center","display":"flex"}'>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"34px","color":"inherit","fontWeight":"bold","height":"24px"}'>{{nongjixuetangCount}}</div>
-				<div :style='{"margin":"5px 0","lineHeight":"24px","fontSize":"inherit","color":"inherit","height":"24px"}'>助农乐学总数</div>
+			<div class="stats-content">
+				<div class="stats-value">{{zhunongtuopinCount}}</div>
+				<div class="stats-label">助农案例总数</div>
+			</div>
+			<div class="stats-trend stats-trend--up">
+				<i class="el-icon-trending-up"></i>
+			</div>
+		</div>
+		<div class="stats-card stats-card--orange" v-if="isAuth('nongjixuetang','首页总数')">
+			<div class="stats-icon stats-icon--orange">
+				<span class="icon iconfont icon-tongji7"></span>
+			</div>
+			<div class="stats-content">
+				<div class="stats-value">{{nongjixuetangCount}}</div>
+				<div class="stats-label">助农乐学总数</div>
+			</div>
+			<div class="stats-trend stats-trend--up">
+				<i class="el-icon-trending-up"></i>
 			</div>
 		</div>
 	</div>
@@ -177,7 +186,7 @@ export default {
 			this.$nextTick(()=>{
         const chartDom = document.getElementById("zhunongshangpinChart1");
         if (!chartDom) return;
-        var zhunongshangpinChart1 = echarts.init(chartDom,'macarons');
+        var zhunongshangpinChart1 = echarts.init(chartDom);
         this.$http({
             url: `zhunongshangpin/value/chanpinmingcheng/alllimittimes`,
             method: "get",
@@ -245,7 +254,7 @@ export default {
       this.$nextTick(()=>{
         const chartDom = document.getElementById("zhunongshangpinChart2");
         if (!chartDom) return;
-        var zhunongshangpinChart2 = echarts.init(chartDom,'macarons');
+        var zhunongshangpinChart2 = echarts.init(chartDom);
         this.$http({
             url: "zhunongshangpin/group/chanpinfenlei",
             method: "get",
@@ -324,7 +333,7 @@ export default {
 			this.$nextTick(()=>{
         const chartDom = document.getElementById("zhunongtuopinChart1");
         if (!chartDom) return;
-        var zhunongtuopinChart1 = echarts.init(chartDom,'macarons');
+        var zhunongtuopinChart1 = echarts.init(chartDom);
         this.$http({
             url: "zhunongtuopin/group/wenzhangfenlei",
             method: "get",
@@ -391,7 +400,7 @@ export default {
       this.$nextTick(()=>{
         const chartDom = document.getElementById("zhunongtuopinChart2");
         if (!chartDom) return;
-        var zhunongtuopinChart2 = echarts.init(chartDom,'macarons');
+        var zhunongtuopinChart2 = echarts.init(chartDom);
         this.$http({
             url: "zhunongtuopin/group/fabushijian",
             method: "get",
@@ -471,7 +480,7 @@ export default {
 			this.$nextTick(()=>{
         const chartDom = document.getElementById("nongjixuetangChart1");
         if (!chartDom) return;
-        var nongjixuetangChart1 = echarts.init(chartDom,'macarons');
+        var nongjixuetangChart1 = echarts.init(chartDom);
         this.$http({
             url: "nongjixuetang/group/kechengfenlei",
             method: "get",
@@ -906,6 +915,136 @@ export default {
 				z-index: 1;
 			}
 	
+	/* 统计卡片样式 */
+	.stats-container {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		margin-bottom: 20px;
+		flex-wrap: wrap;
+	}
+
+	.stats-card {
+		display: flex;
+		align-items: center;
+		background: #fff;
+		border-radius: 16px;
+		padding: 24px;
+		width: calc(33.33% - 14px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+		transition: all 0.3s ease;
+		border: 1px solid #f0f0f0;
+		position: relative;
+		overflow: hidden;
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			width: 4px;
+		}
+
+		&--green::before {
+			background: linear-gradient(180deg, #66bb6a, #2e7d32);
+		}
+
+		&--blue::before {
+			background: linear-gradient(180deg, #42a5f5, #1e88e5);
+		}
+
+		&--orange::before {
+			background: linear-gradient(180deg, #ffb74d, #f57c00);
+		}
+
+		&:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+		}
+
+		&--green:hover {
+			border-color: #66bb6a;
+		}
+
+		&--blue:hover {
+			border-color: #42a5f5;
+		}
+
+		&--orange:hover {
+			border-color: #ffb74d;
+		}
+	}
+
+	.stats-icon {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 20px;
+		font-size: 28px;
+		color: #fff;
+		flex-shrink: 0;
+
+		&--green {
+			background: linear-gradient(135deg, #66bb6a, #2e7d32);
+			box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3);
+		}
+
+		&--blue {
+			background: linear-gradient(135deg, #42a5f5, #1e88e5);
+			box-shadow: 0 4px 15px rgba(66, 165, 245, 0.3);
+		}
+
+		&--orange {
+			background: linear-gradient(135deg, #ffb74d, #f57c00);
+			box-shadow: 0 4px 15px rgba(255, 183, 77, 0.3);
+		}
+	}
+
+	.stats-content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.stats-value {
+		font-size: 36px;
+		font-weight: 700;
+		color: #1a1a1a;
+		line-height: 1.2;
+		margin-bottom: 4px;
+		letter-spacing: -1px;
+	}
+
+	.stats-label {
+		font-size: 14px;
+		color: #666;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	.stats-trend {
+		display: flex;
+		align-items: center;
+		padding: 6px 12px;
+		border-radius: 20px;
+		font-size: 12px;
+		font-weight: 500;
+
+		&--up {
+			background: rgba(102, 187, 106, 0.1);
+			color: #66bb6a;
+		}
+
+		&--down {
+			background: rgba(238, 102, 102, 0.1);
+			color: #ee6666;
+		}
+	}
+
 	.echarts-flag-2 {
 	  display: flex;
 	  flex-wrap: wrap;
