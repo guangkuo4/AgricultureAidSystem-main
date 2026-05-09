@@ -17,7 +17,7 @@
       <el-table-column label="商品" align="center" width="200px">
         <template slot-scope="scope">
           <div class="shangpin">
-            <el-image style="width: 100px; height: 100px" :src="baseUrl + scope.row.picture" fit="fill"></el-image>
+            <el-image style="width: 100px; height: 100px" :src="(scope.row.picture && scope.row.picture.indexOf('://') > -1) ? scope.row.picture : (baseUrl + 'upload/' + scope.row.picture)" fit="fill"></el-image>
             <span style="margin-left: 10px" >{{ scope.row.goodname }}</span>
           </div>
         </template>

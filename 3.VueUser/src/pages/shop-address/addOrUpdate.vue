@@ -17,8 +17,8 @@
         <el-input v-model="form.address" placeholder="请输入地址"></el-input>
       </el-form-item>
       <el-form-item :style='{"padding":"0","margin":"0"}'>
-        <el-button :style='{"border":"0","cursor":"pointer","padding":"0","margin":"0 20px 0 0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"5px","background":"#A293B6","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' type="primary" @click="onSubmit('form')">添加</el-button>
-        <el-button v-if="!isBuy" :style='{"border":"none","cursor":"pointer","padding":"0","margin":"0","outline":"none","color":"#fff","borderRadius":"5px","background":"#9e9e9e","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' @click="goBack">取消</el-button>
+        <el-button :style='{"border":"0","cursor":"pointer","margin":"0 20px 0 0","outline":"none","color":"rgba(255, 255, 255, 1)","borderRadius":"5px","background":"#A293B6","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' type="primary" @click="onSubmit('form')">添加</el-button>
+        <el-button v-if="!isBuy" :style='{"border":"none","cursor":"pointer","margin":"0","outline":"none","color":"#fff","borderRadius":"5px","background":"#9e9e9e","width":"128px","lineHeight":"40px","fontSize":"14px","height":"40px"}' @click="goBack">取消</el-button>
       </el-form-item>
     </el-form>
 
@@ -319,10 +319,13 @@
   color: #fff;
   font-weight: 700;
   font-size: 15px;
-  padding: 12px 36px !important;
+  padding: 0 36px !important;
   margin: 0 24px 0 0;
   box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
   transition: all 0.3s ease;
+  line-height: 40px !important;
+  height: 40px;
+  display: inline-block;
 
   &:hover {
     transform: translateY(-2px);
@@ -338,9 +341,12 @@
   color: #fff;
   font-weight: 600;
   font-size: 15px;
-  padding: 12px 28px !important;
+  padding: 0 28px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  line-height: 40px !important;
+  height: 40px;
+  display: inline-block;
 
   &:hover {
     transform: translateY(-2px);

@@ -42,7 +42,7 @@
           <div class="shangpin">
             <el-image
               style="width: 100px; height: 100px"
-              :src="baseUrl + scope.row.picture"
+              :src="(scope.row.picture && scope.row.picture.indexOf('://') > -1) ? scope.row.picture : (baseUrl + 'upload/' + scope.row.picture)"
               fit="fill"></el-image>
             <span style="margin-left: 10px">{{ scope.row.goodname }}</span>
           </div>
