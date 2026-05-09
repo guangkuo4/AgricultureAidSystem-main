@@ -97,7 +97,7 @@
             </el-form-item>
             <div :style='{"marginLeft":"140px","fontSize":"13px","color":"#f56c6c","display":"flex","alignItems":"center"}'>
               <i class="el-icon-warning" :style='{"marginRight":"5px"}'></i>
-              农商企业申请必须上传营业执照
+              农商/企业入驻需上传营业执照，平台将对资质信息进行核验，确保经营主体真实合规
             </div>
           </div>
 

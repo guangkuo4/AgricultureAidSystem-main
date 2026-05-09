@@ -165,7 +165,7 @@
 	</div>
 	
 	<div class="title lists-hd" :style='{"width":"100%","margin":"10px 0 24px","lineHeight":"1.2","textAlign":"left","background":"none","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}'>
-	  <span class="lists-section-title">助农案例展示</span>
+	  <span class="lists-section-title">助农案例</span>
 	  <button type="button" class="home-more-btn" @click="moreBtn('zhunongtuopin')">查看更多</button>
 	</div>
 	
@@ -190,12 +190,27 @@
 	    </div>
 		</template>
 	  </div>
-	  <div class="list" :style='{"flexWrap":"wrap","flex":"1","background":"#F1F2F3","display":"flex","width":"calc(100% - 300px)","justifyContent":"space-between","height":"auto"}'>
-	    <div :style='{"border":"1px solid #D8D8D8","width":"calc(100% / 3)","padding":"40px","position":"relative","height":"auto"}' class="item list-item animation-box" v-for="item,index in zhunongtuopinList" :key="index" @click="toDetail('zhunongtuopinDetail', item)">
-			<img :name="item.id" :style='{"width":"100%","objectFit":"contain","display":"block","height":"200px"}' v-if="preHttp(item.wenzhangzhaopian)" :src="item.wenzhangzhaopian.split(',')[0]" alt="" />
-			<img :name="item.id" :style='{"width":"100%","objectFit":"contain","display":"block","height":"200px"}' v-else :src="baseUrl + 'upload/' + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:'')" alt="" />
-			<div class="line1" :style='{"padding":"10px 10px 0","lineHeight":"32px","fontSize":"18px","color":"#000","textAlign":"center"}'>{{item.wenzhangbiaoti}}</div>
-			<div class="line1" :style='{"padding":"10px 10px 0","lineHeight":"32px","fontSize":"18px","color":"#000","textAlign":"center"}'>{{item.wenzhangfenlei}}</div>
+	  <div class="list zhunongtuopin-grid" :style='{"flexWrap":"wrap","flex":"1","background":"transparent","display":"grid","gridTemplateColumns":"repeat(3, 1fr)","gap":"20px","padding":"0","width":"calc(100% - 300px)","justifyItems":"stretch","height":"auto"}'>
+	    <div :style='{"border":"0","borderRadius":"20px","overflow":"hidden","position":"relative","background":"linear-gradient(180deg, rgba(255,255,255,0.97), rgba(241,248,233,0.88))","boxShadow":"0 8px 32px rgba(27,94,32,0.10)","cursor":"pointer","transition":"all 300ms cubic-bezier(0.2,0.8,0.2,1)","display":"flex","flexDirection":"column","height":"auto"}' class="item list-item animation-box zhunongtuopin-card" v-for="item,index in zhunongtuopinList" :key="index" @click="toDetail('zhunongtuopinDetail', item)">
+			<div class="zhunongtuopin-img-wrap" :style='{"position":"relative","overflow":"hidden","width":"100%","height":"200px","background":"linear-gradient(135deg, rgba(241,248,233,0.8), rgba(200,230,201,0.5))"}'>
+				<img :name="item.id" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%","transition":"transform 0.5s ease"}' v-if="preHttp(item.wenzhangzhaopian)" :src="item.wenzhangzhaopian.split(',')[0]" alt="" />
+				<img :name="item.id" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%","transition":"transform 0.5s ease"}' v-else :src="baseUrl + 'upload/' + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:'')" alt="" />
+				<div class="zhunongtuopin-overlay" :style='{"position":"absolute","inset":"0","background":"linear-gradient(180deg, transparent 40%, rgba(27,94,32,0.55) 100%)","opacity":"0","transition":"opacity 0.3s ease"}'></div>
+				<div class="zhunongtuopin-index" :style='{"position":"absolute","top":"14px","right":"14px","width":"36px","height":"36px","borderRadius":"50%","background":"rgba(255,255,255,0.92)","display":"flex","alignItems":"center","justifyContent":"center","fontSize":"14px","fontWeight":"900","color":"#2e7d32","boxShadow":"0 4px 12px rgba(0,0,0,0.15)"}'>{{index + 1}}</div>
+			</div>
+			<div class="zhunongtuopin-body" :style='{"padding":"18px 18px 20px","display":"flex","flexDirection":"column","gap":"10px","flex":"1"}'>
+				<div class="zhunongtuopin-tag" :style='{"display":"inline-flex","alignItems":"center","gap":"6px","background":"rgba(46,125,50,0.10)","border":"1px solid rgba(46,125,50,0.16)","borderRadius":"999px","padding":"4px 12px","width":"fit-content"}'>
+					<span :style='{"width":"6px","height":"6px","borderRadius":"50%","background":"#66bb6a","display":"inline-block","flexShrink":"0"}'></span>
+					<span :style='{"fontSize":"12px","fontWeight":"600","color":"#2e7d32","lineHeight":"1"}'>{{item.wenzhangfenlei}}</span>
+				</div>
+				<div class="zhunongtuopin-title" :style='{"fontSize":"16px","fontWeight":"900","color":"rgba(27,43,27,0.92)","lineHeight":"1.5","display":"-webkit-box","WebkitLineClamp":"2","WebkitBoxOrient":"vertical","overflow":"hidden","textOverflow":"ellipsis"}'>{{item.wenzhangbiaoti}}</div>
+				<div class="zhunongtuopin-footer" :style='{"marginTop":"auto","display":"flex","alignItems":"center","justifyContent":"space-between","paddingTop":"12px","borderTop":"1px solid rgba(46,125,50,0.08)"}'>
+					<div class="zhunongtuopin-cta" :style='{"display":"inline-flex","alignItems":"center","gap":"6px","color":"#2e7d32","fontSize":"13px","fontWeight":"700"}'>
+						<span>阅读全文</span>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					</div>
+				</div>
+			</div>
 	    </div>
 	  </div>
 	</div>
@@ -516,12 +531,23 @@ import Swiper from "swiper";
 			box-shadow: var(--ag-shadow);
 			padding: 28px 18px !important;
 		}
-		#animate_listzhunongtuopin .lists-section-title {
+		.lists-section-title {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
 			color: var(--ag-green-900) !important;
-			font-weight: 950 !important;
+			font-weight: 950;
 			font-size: 32px;
 			letter-spacing: 0.6px;
 			text-shadow: 0 10px 26px rgba(27, 94, 32, 0.10);
+		}
+		.lists-section-title::before {
+			content: "";
+			width: 12px;
+			height: 12px;
+			border-radius: 999px;
+			background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+			box-shadow: 0 0 0 6px rgba(102, 187, 106, 0.14);
 		}
 		#animate_listzhunongtuopin .list11 {
 			background: transparent !important;
@@ -589,17 +615,34 @@ import Swiper from "swiper";
 			object-fit: cover !important;
 		}
 
+		/* 助农案例新卡片样式 */
+		.zhunongtuopin-grid .zhunongtuopin-card {
+			&:hover {
+				transform: translateY(-8px) !important;
+				box-shadow: 0 24px 60px rgba(27, 94, 32, 0.16) !important;
+				img { transform: scale(1.06); }
+				.zhunongtuopin-overlay { opacity: 1 !important; }
+				.zhunongtuopin-cta { gap: 10px; }
+			}
+		}
+
 		@media (max-width: 1200px) {
-			#animate_listzhunongtuopin .list11 > .list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+			.zhunongtuopin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 		}
 		@media (max-width: 768px) {
 			#animate_listzhunongtuopin .list11 { flex-direction: column !important; }
 			#animate_listzhunongtuopin .tab { width: 100% !important; }
-			#animate_listzhunongtuopin .list11 > .list { width: 100% !important; grid-template-columns: 1fr; }
+			.zhunongtuopin-grid { width: 100% !important; grid-template-columns: 1fr !important; }
 		}
 		#animate_listzhunongtuopin .list11 > .list > .item.list-item .line1 {
 			color: rgba(27, 43, 27, 0.92) !important;
 			font-weight: 900;
+		}
+		.zhunongtuopin-grid .zhunongtuopin-card .zhunongtuopin-title {
+			color: rgba(27, 43, 27, 0.92) !important;
+			font-weight: 900;
+			font-size: 16px;
+			line-height: 1.5;
 		}
 
 		/* 公告资讯：统一农业绿风格（tab + 卡片） */

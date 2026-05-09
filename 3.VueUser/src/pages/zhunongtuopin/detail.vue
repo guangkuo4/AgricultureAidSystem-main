@@ -52,7 +52,7 @@
 						@click="onThumbClick(item, idx)"
 					>
 						<img v-if="item.substr(0,4)=='http'" :src="item" alt="" />
-						<img v-else :src="baseUrl + 'upload/' + item" alt="" />
+						<img v-else :src="baseUrl + item" alt="" />
 					</button>
 				</div>
 			</div>
@@ -210,14 +210,14 @@
 		},
 		onThumbClick(item, idx) {
 			this.thumbActiveIndex = idx;
-			this.swiperBigUrl = item.substr(0,4) == 'http' ? item : this.baseUrl + 'upload/' + item;
+			this.swiperBigUrl = item.substr(0,4) == 'http' ? item : this.baseUrl + item;
 		},
 		scrollToTop() {
 			window.scrollTo({ top: 0, behavior: 'smooth' });
 		},
         init() {
 		  this.id = this.$route.query.id
-          this.baseUrl = this.$config.baseUrl;
+          this.baseUrl = this.$config.resourceUrl;
           this.$http.get(this.tablename + '/detail/'  + this.id, {}).then(res => {
             if (res.data.code == 0) {
               this.detail = res.data.data;
@@ -235,7 +235,7 @@
 				if (this.detailBanner[0].substr(0,4)=='http') {
 					this.swiperBigUrl = this.detailBanner[0]
 				} else {
-					this.swiperBigUrl = this.baseUrl + 'upload/' + this.detailBanner[0]
+					this.swiperBigUrl = this.baseUrl + this.detailBanner[0]
 				}
 			}
           });

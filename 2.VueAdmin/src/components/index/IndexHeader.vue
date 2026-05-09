@@ -25,6 +25,11 @@
 		    <el-dropdown-item class="item4" :command="'logout'">退出系统</el-dropdown-item>
 		  </el-dropdown-menu>
 		</el-dropdown>
+
+		<div class="front-link" :style='{"cursor":"pointer","margin":"0 12px","lineHeight":"60px","color":"#fff","fontSize":"14px"}' @click="onIndexTap">
+			<span class="icon iconfont icon-fanhui" :style='{"fontSize":"18px","marginRight":"4px"}'></span>
+			<span>前往前台</span>
+		</div>
 		
 	</div>
 </template>

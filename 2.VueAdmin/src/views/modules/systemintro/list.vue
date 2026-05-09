@@ -53,36 +53,6 @@
 							{{scope.row.subtitle}}
 						</template>
 					</el-table-column>
-					<!-- 无 -->
-					<el-table-column :resizable='true' :sortable='true' prop="picture1" width="200" label="图片1">
-						<template slot-scope="scope">
-							<div v-if="scope.row.picture1">
-							<img v-if="scope.row.picture1.substring(0,4)=='http'" :src="scope.row.picture1.split(',')[0]" width="100" height="100">
-							<img v-else :src="$base.url+'file/uploads?fileName='+scope.row.picture1.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
-							</div>
-							<div v-else>无图片</div>
-						</template>
-					</el-table-column>
-					<!-- 无 -->
-					<el-table-column :resizable='true' :sortable='true' prop="picture2" width="200" label="图片2">
-						<template slot-scope="scope">
-							<div v-if="scope.row.picture2">
-							<img v-if="scope.row.picture2.substring(0,4)=='http'" :src="scope.row.picture2.split(',')[0]" width="100" height="100">
-							<img v-else :src="$base.url+'file/uploads?fileName='+scope.row.picture2.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
-							</div>
-							<div v-else>无图片</div>
-						</template>
-					</el-table-column>
-					<!-- 无 -->
-					<el-table-column :resizable='true' :sortable='true' prop="picture3" width="200" label="图片3">
-						<template slot-scope="scope">
-							<div v-if="scope.row.picture3">
-							<img v-if="scope.row.picture3.substring(0,4)=='http'" :src="scope.row.picture3.split(',')[0]" width="100" height="100">
-							<img v-else :src="$base.url+'file/uploads?fileName='+scope.row.picture3.split(',')[0].replace(/^upload\//,'')" width="100" height="100">
-							</div>
-							<div v-else>无图片</div>
-						</template>
-					</el-table-column>
 					<el-table-column width="300" label="操作">
 						<template slot-scope="scope">
 							<el-button class="view" v-if=" isAuth('systemintro','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">

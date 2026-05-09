@@ -21,49 +21,7 @@
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="副标题" prop="subtitle">
 					<el-input v-model="ruleForm.subtitle" placeholder="副标题" readonly></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.picture1" label="图片1" prop="picture1">
-					<file-upload
-						tip="点击上传图片1"
-						action="file/upload"
-						:limit="3"
-						:multiple="true"
-						:fileUrls="ruleForm.picture1?ruleForm.picture1:''"
-						@change="picture1UploadChange"
-					></file-upload>
-				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture1" label="图片1" prop="picture1">
-					<img v-if="ruleForm.picture1.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture1.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture1.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
-				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.picture2" label="图片2" prop="picture2">
-					<file-upload
-						tip="点击上传图片2"
-						action="file/upload"
-						:limit="3"
-						:multiple="true"
-						:fileUrls="ruleForm.picture2?ruleForm.picture2:''"
-						@change="picture2UploadChange"
-					></file-upload>
-				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture2" label="图片2" prop="picture2">
-					<img v-if="ruleForm.picture2.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture2.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture2.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
-				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.picture3" label="图片3" prop="picture3">
-					<file-upload
-						tip="点击上传图片3"
-						action="file/upload"
-						:limit="3"
-						:multiple="true"
-						:fileUrls="ruleForm.picture3?ruleForm.picture3:''"
-						@change="picture3UploadChange"
-					></file-upload>
-				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-else-if="ruleForm.picture3" label="图片3" prop="picture3">
-					<img v-if="ruleForm.picture3.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.picture3.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.picture3.split(',')" :src="$base.url+'file/uploads?fileName='+item.replace(/^upload\//,'')" width="100" height="100">
-				</el-form-item>
-			</template>
+		</template>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-if="type!='info'"  label="内容" prop="content">
 					<editor 
 						style="min-width: 200px; max-width: 600px;"
@@ -168,43 +126,31 @@ export default {
 			type: '',
 			
 			
-			ro:{
-				title : false,
-				subtitle : false,
-				content : false,
-				picture1 : false,
-				picture2 : false,
-				picture3 : false,
-			},
+		ro:{
+			title : false,
+			subtitle : false,
+			content : false,
+		},
 			
 			
-			ruleForm: {
-				title: '',
-				subtitle: '',
-				content: '',
-				picture1: '',
-				picture2: '',
-				picture3: '',
-			},
+		ruleForm: {
+			title: '',
+			subtitle: '',
+			content: '',
+		},
 		
 
 			
-			rules: {
-				title: [
-					{ required: true, message: '标题不能为空', trigger: 'blur' },
-				],
-				subtitle: [
-				],
-				content: [
-					{ required: true, message: '内容不能为空', trigger: 'blur' },
-				],
-				picture1: [
-				],
-				picture2: [
-				],
-				picture3: [
-				],
-			}
+		rules: {
+			title: [
+				{ required: true, message: '标题不能为空', trigger: 'blur' },
+			],
+			subtitle: [
+			],
+			content: [
+				{ required: true, message: '内容不能为空', trigger: 'blur' },
+			],
+		}
 		};
 	},
 	props: ["parent"],
@@ -234,7 +180,7 @@ export default {
 			}else if(this.type=='logistics'){
 				this.logistics=false;
 				this.info(id);
-			}else if(this.type=='cross'){
+			}else 			if(this.type=='cross'){
 				var obj = this.$storage.getObj('crossObj');
 				for (var o in obj){
 						if(o=='title'){
@@ -250,21 +196,6 @@ export default {
 						if(o=='content'){
 							this.ruleForm.content = obj[o];
 							this.ro.content = true;
-							continue;
-						}
-						if(o=='picture1'){
-							this.ruleForm.picture1 = obj[o];
-							this.ro.picture1 = true;
-							continue;
-						}
-						if(o=='picture2'){
-							this.ruleForm.picture2 = obj[o];
-							this.ro.picture2 = true;
-							continue;
-						}
-						if(o=='picture3'){
-							this.ruleForm.picture3 = obj[o];
-							this.ro.picture3 = true;
 							continue;
 						}
 				}
@@ -298,21 +229,6 @@ export default {
 
     // 提交
     onSubmit() {
-
-
-
-
-	if(this.ruleForm.picture1!=null) {
-		this.ruleForm.picture1 = this.ruleForm.picture1.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
-	}
-
-	if(this.ruleForm.picture2!=null) {
-		this.ruleForm.picture2 = this.ruleForm.picture2.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
-	}
-
-	if(this.ruleForm.picture3!=null) {
-		this.ruleForm.picture3 = this.ruleForm.picture3.replace(new RegExp(this.$base.url,"g"),"").replace(new RegExp("upload/","g"),"").replace(new RegExp("file/uploads\?fileName=","g"),"");
-	}
 
 var objcross = this.$storage.getObj('crossObj');
       //更新跨表属性
@@ -431,15 +347,6 @@ var objcross = this.$storage.getObj('crossObj');
       this.parent.addOrUpdateFlag = false;
       this.parent.aboutusCrossAddOrUpdateFlag = false;
       this.parent.contentStyleChange();
-    },
-    picture1UploadChange(fileUrls) {
-	    this.ruleForm.picture1 = fileUrls;
-    },
-    picture2UploadChange(fileUrls) {
-	    this.ruleForm.picture2 = fileUrls;
-    },
-    picture3UploadChange(fileUrls) {
-	    this.ruleForm.picture3 = fileUrls;
     },
   }
 };

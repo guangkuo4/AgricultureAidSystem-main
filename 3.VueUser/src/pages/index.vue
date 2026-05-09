@@ -459,6 +459,7 @@
 		<div class="featured-section" v-if="courseList.length">
 			<div class="featured-section__hd">
 				<div class="featured-section__label">
+					<span class="featured-section__dot"></span>
 					<i class="el-icon-education"></i>
 					助农乐学
 				</div>
@@ -2246,16 +2247,20 @@ export default {
 		margin-bottom: 18px;
 	}
 	.featured-section__label {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		gap: 10px;
 		font-size: 20px;
 		font-weight: 800;
-		color: var(--ag-text-900);
+		color: var(--ag-green-900);
 	}
-	.featured-section__label i {
-		color: #f57c00;
-		font-size: 24px;
+	.featured-section__dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 999px;
+		background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+		box-shadow: 0 0 0 6px rgba(102, 187, 106, 0.14);
+		flex-shrink: 0;
 	}
 	.featured-section__meta {
 		font-size: 13px;

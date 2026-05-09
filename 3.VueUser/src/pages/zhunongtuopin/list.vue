@@ -13,69 +13,131 @@
   </div>
   
   <div class="list-preview" :style='{"width":"80%","margin":"40px auto","position":"relative","background":"transparent"}'>
-    
     <!-- 搜索区域 -->
-    <div class="search-section" :style='{"padding":"0 0 30px 0"}'>
-      <el-form :inline="true" :model="formSearch" class="list-form-pv" :style='{"display":"flex","alignItems":"center","justifyContent":"center","flexWrap":"wrap","background":"#fff","padding":"25px 40px","borderRadius":"16px","border":"none","boxShadow":"0 4px 20px rgba(46, 125, 50, 0.08)"}'>
-        <el-form-item :style='{"margin":"0 15px 0 0"}'>
-          <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px 0 0","lineHeight":"46px","display":"inline-block","fontSize":"14px","fontWeight":"500","color":"#555"}'>文章标题：</div>
-          <el-input v-model="formSearch.wenzhangbiaoti" placeholder="搜索您感兴趣的文章..." @keydown.enter.native="getList(1, curFenlei)" clearable :style='{"width":"280px"}' prefix-icon="el-icon-search"></el-input>
-        </el-form-item>
-        <el-button v-if=" true " :style='{"border":"0","cursor":"pointer","padding":"0 30px","margin":"0","outline":"none","color":"#fff","borderRadius":"10px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","width":"auto","fontSize":"15px","fontWeight":"600","lineHeight":"46px","height":"46px","boxShadow":"0 6px 20px rgba(46, 125, 50, 0.35)"}' type="primary" @click="getList(1, curFenlei)">
-          <i v-if="true" :style='{"color":"#fff","margin":"0 8px 0 0","fontSize":"14px"}' class="el-icon-search"></i>查询
+    <div class="search-section">
+      <el-form :inline="true" :model="formSearch" class="search-form">
+        <div class="search-input-wrapper">
+          <i class="el-icon-search search-icon"></i>
+          <el-input 
+            v-model="formSearch.wenzhangbiaoti" 
+            placeholder="搜索您感兴趣的文章..." 
+            @keydown.enter.native="getList(1, curFenlei)" 
+            clearable 
+            class="search-input"
+          ></el-input>
+        </div>
+        <el-button class="search-btn" type="primary" @click="getList(1, curFenlei)">
+          <i class="el-icon-search"></i>
+          查询
         </el-button>
-        <el-button v-if="btnAuth('zhunongtuopin','新增')" :style='{"border":"1px solid #2E7D32","cursor":"pointer","padding":"0 30px","margin":"0 0 0 15px","outline":"none","color":"#2E7D32","borderRadius":"10px","background":"#fff","width":"auto","fontSize":"15px","fontWeight":"600","lineHeight":"46px","height":"46px"}' type="primary" @click="add('/index/zhunongtuopinAdd')">
-          <i v-if="true" :style='{"color":"#2E7D32","margin":"0 8px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加
+        <el-button v-if="btnAuth('zhunongtuopin','新增')" class="add-btn" @click="add('/index/zhunongtuopinAdd')">
+          <i class="el-icon-circle-plus-outline"></i>
+          添加案例
         </el-button>
       </el-form>
     </div>
     
     <!-- 分类侧边栏 + 内容区域 -->
-    <div :style='{"display":"flex","gap":"30px"}'>
+    <div class="main-content">
       <!-- 左侧分类 -->
-      <div class="category-3" :style='{"padding":"25px","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","margin":"0","background":"#fff","borderRadius":"16px","display":"flex","flexDirection":"column","width":"220px","height":"auto","flexShrink":"0"}'>
-        <div :style='{"fontSize":"16px","fontWeight":"bold","color":"#1a1a1a","marginBottom":"20px","paddingBottom":"15px","borderBottom":"2px solid rgba(46, 125, 50, 0.1)"}'>文章分类</div>
-        <div class="item" :class="swiperIndex == '-1' ? 'active' : ''" @click="getList(1, '全部')" :plain="isPlain" :style='{"cursor":"pointer","borderRadius":"12px","padding":"15px","margin":"0 0 10px","color":"#555","background":"#f8faf8","display":"flex","width":"100%","alignItems":"center","transition":"all 0.3s ease","border":"1px solid transparent"}'>
-          <i class="el-icon-menu" :style='{"marginRight":"10px","fontSize":"16px"}'></i>
-          <div :style='{"color":"inherit","fontSize":"14px","fontWeight":"500"}'>全部</div>
+      <aside class="category-sidebar">
+        <div class="category-header">
+          <i class="el-icon-folder-open"></i>
+          <span>文章分类</span>
         </div>
-        <div class="item" :class="swiperIndex == index ? 'active' : ''" v-for="(item, index) in fenlei" :key="index" @click="getList(1, item[feileiColumn], 'btn' + index)" :ref="'btn' + index" plain :style='{"cursor":"pointer","borderRadius":"12px","padding":"15px","margin":"0 0 10px","color":"#555","background":"#f8faf8","display":"flex","width":"100%","alignItems":"center","transition":"all 0.3s ease","border":"1px solid transparent"}'>
-          <img v-if="item.image" :style='{"width":"40px","margin":"0 10px 0 0","objectFit":"cover","display":"block","height":"40px","borderRadius":"8px"}' :src="baseUrl + (item.image?item.image.split(',')[0]:'')">
-          <i v-else class="el-icon-document" :style='{"marginRight":"10px","fontSize":"16px"}'></i>
-          <div :style='{"color":"inherit","fontSize":"14px","fontWeight":"500"}'>{{item[feileiColumn]}}</div>
+        <nav class="category-nav">
+          <div 
+            class="category-item" 
+            :class="{ active: swiperIndex === '-1' }" 
+            @click="getList(1, '全部')"
+          >
+            <i class="el-icon-menu"></i>
+            <span>全部</span>
+          </div>
+          <div 
+            class="category-item" 
+            v-for="(item, index) in fenlei" 
+            :key="index"
+            :class="{ active: swiperIndex === index }"
+            @click="getList(1, item[feileiColumn], 'btn' + index)"
+          >
+            <img v-if="item.image" :src="baseUrl + (item.image ? item.image.split(',')[0] : '')" class="category-icon" />
+            <i v-else class="el-icon-document"></i>
+            <span>{{item[feileiColumn]}}</span>
+          </div>
+        </nav>
+        
+        <!-- 统计信息 -->
+        <div class="category-stats">
+          <div class="stat-item">
+            <div class="stat-num">{{dataList.length}}</div>
+            <div class="stat-label">当前展示</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">{{total}}</div>
+            <div class="stat-label">总案例数</div>
+          </div>
         </div>
-      </div>
+      </aside>
       
       <!-- 右侧内容 -->
-      <div :style='{"flex":"1"}'>
+      <main class="content-area">
         <!-- 文章列表 -->
-        <div class="list" :style='{"width":"100%","margin":"0 auto 30px","background":"transparent"}'>
-          <!-- 样式二 -->
-          <div class="list2 index-pv1" :style='{"padding":"0","flexWrap":"wrap","background":"none","display":"grid","gridTemplateColumns":"repeat(2, 1fr)","gap":"25px","width":"100%","height":"auto"}'>
-            <div :style='{"padding":"0","boxShadow":"0 4px 15px rgba(0,0,0,0.06)","margin":"0","background":"#fff","borderRadius":"16px","overflow":"hidden","display":"flex","width":"100%","fontSize":"0","position":"relative","height":"auto","transition":"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)","cursor":"pointer","border":"none"}' v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box" @mouseover="e => {e.currentTarget.style.transform='translateY(-8px)';e.currentTarget.style.boxShadow='0 12px 30px rgba(46, 125, 50, 0.18)'}" @mouseout="e => {e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)'}">
-              <div :style='{"border":"0","width":"200px","padding":"0","height":"160px","flexShrink":"0","overflow":"hidden"}'>
-                <img @click.stop="imgPreView(item.wenzhangzhaopian)" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-if="item.wenzhangzhaopian && item.wenzhangzhaopian.substr(0,4)=='http'" :src="item.wenzhangzhaopian.split(',')[0]" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" />
-                <img @click.stop="imgPreView(baseUrl + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:''))" :style='{"border":"none","width":"100%","objectFit":"cover","background":"#f5f5f5","display":"block","height":"100%","transition":"transform 0.6s ease"}' v-else :src="baseUrl + (item.wenzhangzhaopian?item.wenzhangzhaopian.split(',')[0]:'')" class="image" @mouseover="e => e.target.style.transform='scale(1.12)'" @mouseout="e => e.target.style.transform='scale(1)'" />
+        <div class="article-grid">
+          <article 
+            class="article-card" 
+            v-for="(item, index) in dataList" 
+            :key="index" 
+            @click.stop="toDetail(item)"
+          >
+            <div class="article-card__image-wrapper">
+              <img 
+                @click.stop="imgPreView(item.wenzhangzhaopian)" 
+                v-if="item.wenzhangzhaopian && item.wenzhangzhaopian.substr(0,4)=='http'" 
+                :src="item.wenzhangzhaopian.split(',')[0]" 
+                class="article-card__image"
+                @error="imgError"
+              />
+              <img 
+                @click.stop="imgPreView(baseUrl + (item.wenzhangzhaopian ? item.wenzhangzhaopian.split(',')[0] : ''))" 
+                v-else 
+                :src="baseUrl + (item.wenzhangzhaopian ? item.wenzhangzhaopian.split(',')[0] : '')" 
+                class="article-card__image"
+                @error="imgError"
+              />
+              <div class="article-card__placeholder" v-if="!item.wenzhangzhaopian">
+                <i class="el-icon-image"></i>
               </div>
-              <div class="item-info" :style='{"padding":"22px","overflow":"hidden","alignItems":"flex-start","flexWrap":"wrap","flex":"1","display":"flex","flexDirection":"column","height":"auto","background":"linear-gradient(180deg, rgba(46, 125, 50, 0.02) 0%, rgba(46, 125, 50, 0.04) 100%)"}'>
-                <div :style='{"padding":"0 0 10px 0","whiteSpace":"nowrap","overflow":"hidden","color":"#1a1a1a","width":"100%","lineHeight":"1.4","fontSize":"18px","textOverflow":"ellipsis","fontWeight":"bold","order":"1"}' class="name">{{item.wenzhangbiaoti}}</div>
-                <div :style='{"padding":"0 0 12px 0","whiteSpace":"nowrap","overflow":"hidden","color":"#2E7D32","width":"100%","lineHeight":"1","fontSize":"13px","textOverflow":"ellipsis","fontWeight":"600","order":"1","display":"flex","alignItems":"center"}' class="name">
-                  <i class="el-icon-folder-opened" style="margin-right: 6px;"></i>
-                  {{item.wenzhangfenlei}}
-                </div>
-                <div :style='{"display":"flex","width":"100%","marginTop":"auto","paddingTop":"12px","borderTop":"1px solid #e8e8e8"}'>
-                  <div :style='{"width":"auto","padding":"0 15px 0 0","order":"7","display":"flex","alignItems":"center"}'>
-                    <i class="el-icon-time" :style='{"margin":"0 5px 0 0","lineHeight":"1","fontSize":"13px","color":"#bbb"}'></i>
-                    <span :style='{"color":"#bbb","lineHeight":"1","fontSize":"13px"}'>{{item.addtime}}</span>
-                  </div>
-                  <div :style='{"width":"auto","padding":"0","order":"4","display":"flex","alignItems":"center"}'>
-                    <i class="el-icon-star-off" :style='{"margin":"0 5px 0 0","lineHeight":"1","fontSize":"13px","color":"#bbb"}'></i>
-                    <span :style='{"color":"#bbb","lineHeight":"1","fontSize":"13px"}'>{{item.storeupnum}}人收藏</span>
-                  </div>
-                </div>
+              <div class="article-card__category-tag">{{item.wenzhangfenlei}}</div>
+            </div>
+            <div class="article-card__content">
+              <h3 class="article-card__title">{{item.wenzhangbiaoti}}</h3>
+              <p class="article-card__desc">{{item.wenzhangjianjie || '暂无简介'}}</p>
+              <div class="article-card__meta">
+                <span class="meta-item">
+                  <i class="el-icon-time"></i>
+                  {{item.addtime}}
+                </span>
+                <span class="meta-item">
+                  <i class="el-icon-star-off"></i>
+                  {{item.storeupnum}}人收藏
+                </span>
+                <span class="meta-item">
+                  <i class="el-icon-eye"></i>
+                  {{item.clicknum || 0}}阅读
+                </span>
               </div>
             </div>
+          </article>
+        </div>
+        
+        <!-- 空状态 -->
+        <div v-if="dataList.length === 0" class="empty-state">
+          <div class="empty-icon">
+            <i class="el-icon-folder-opened"></i>
           </div>
+          <h3>暂无案例</h3>
+          <p>暂无符合条件的助农案例，换个关键词试试吧</p>
         </div>
         
         <!-- 分页 -->
@@ -89,20 +151,20 @@
           prev-text="上一页"
           next-text="下一页"
           :hide-on-single-page="false"
-          :layout='["prev","pager","next"].join()'
+          :layout='["prev","pager","next"]'
           :total="total"
-          :style='{"padding":"0","margin":"40px auto 20px","whiteSpace":"nowrap","color":"#333","textAlign":"center","width":"100%","fontWeight":"500"}'
           @current-change="curChange"
           @size-change="sizeChange"
           @prev-click="prevClick"
           @next-click="nextClick"
         ></el-pagination>
-      </div>
+      </main>
     </div>
-
   </div>
-  <el-dialog title="预览图" :visible.sync="previewVisible" width="50%">
-    <img :src="previewImg" alt="" style="width: 100%;">
+  
+  <!-- 图片预览弹窗 -->
+  <el-dialog title="预览图" :visible.sync="previewVisible" width="60%" class="image-preview-dialog">
+    <img :src="previewImg" alt="" class="preview-image">
   </el-dialog>
 </div>
 </template>
@@ -147,12 +209,19 @@
       if(this.$route.query.centerType){
         this.centerType = true
       }
-      this.baseUrl = this.$config.baseUrl;
+      this.baseUrl = this.$config.resourceUrl;
       this.getFenlei();
       this.getList(1, '全部');
     },
     //方法集合
     methods: {
+      imgError(e) {
+        e.target.style.display = 'none';
+        const placeholder = e.target.parentElement.querySelector('.article-card__placeholder');
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+        }
+      },
       selectClick2(row,index) {
         row.check = index
         if(index == -1){
@@ -246,78 +315,366 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .list-preview .list-form-pv .el-input {
-    width: auto;
-  }
-
-  .breadcrumb-preview .el-breadcrumb ::v-deep .el-breadcrumb__separator {
-    margin: 0 20px;
-    color: #fff;
-    font-weight: 500;
+  
+  /* ========== 搜索区域 ========== */
+  .search-section {
+    margin-bottom: 32px;
   }
   
-  .breadcrumb-preview .el-breadcrumb .item1 ::v-deep .el-breadcrumb__inner a {
-    color: #fff;
-    display: inline-block;
+  .search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px 32px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.08);
   }
   
-  .breadcrumb-preview .el-breadcrumb .item2 ::v-deep .el-breadcrumb__inner a {
-    color: #fff;
-    display: inline-block;
+  .search-input-wrapper {
+    position: relative;
+    width: 360px;
+    max-width: 100%;
   }
   
-  // 分类标签激活状态
-  .category-3 .item.active {
-    color: #fff !important;
-    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%) !important;
-    border-color: transparent !important;
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
-    transform: translateY(-2px);
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #81C784;
+    font-size: 16px;
+    pointer-events: none;
   }
   
-  .category-3 .item:hover {
-    color: #2E7D32 !important;
-    background: rgba(46, 125, 50, 0.06) !important;
-    border-color: #2E7D32 !important;
-    transform: translateY(-2px);
-  }
-  
-  // 搜索框样式优化
-  .list-form-pv ::v-deep .el-input__inner {
-    border: 1px solid #e8e8e8 !important;
-    border-radius: 10px;
-    padding: 0 15px 0 45px !important;
-    height: 46px;
-    line-height: 46px;
-    font-size: 14px;
+  .search-input ::v-deep .el-input__inner {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px 0 48px;
+    border: 2px solid #e8f5e9;
+    border-radius: 12px;
+    font-size: 15px;
+    background: #fafffa;
     transition: all 0.3s ease;
-    background: #f8faf8;
     
     &:focus {
-      border-color: #2E7D32 !important;
+      border-color: #4CAF50;
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1) !important;
+      box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.12);
     }
   }
   
-  .list-form-pv ::v-deep .el-input__prefix {
-    left: 15px;
+  .search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 28px;
+    height: 48px;
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.4);
+    }
+  }
+  
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 28px;
+    height: 48px;
+    background: #fff;
+    border: 2px solid #2E7D32;
+    border-radius: 12px;
+    color: #2E7D32;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: rgba(46, 125, 50, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(46, 125, 50, 0.15);
+    }
+  }
+  
+  /* ========== 主内容布局 ========== */
+  .main-content {
+    display: flex;
+    gap: 32px;
+  }
+  
+  /* ========== 左侧分类侧边栏 ========== */
+  .category-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.06);
+    position: sticky;
+    top: 24px;
+  }
+  
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f5f0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1B5E20;
+  }
+  
+  .category-nav {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .category-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #555;
+    background: #f8fcf8;
+    border: 1px solid transparent;
+    
+    &:hover {
+      background: rgba(46, 125, 50, 0.08);
+      color: #2E7D32;
+      transform: translateX(4px);
+    }
+    
+    &.active {
+      background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+      transform: translateX(4px);
+    }
+  }
+  
+  .category-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  /* 分类统计 */
+  .category-stats {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f5f0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-num {
+    font-size: 28px;
+    font-weight: 800;
     color: #2E7D32;
   }
   
-  // 分页样式优化
-  #pagination.el-pagination ::v-deep .btn-prev,
-  #pagination.el-pagination ::v-deep .btn-next {
+  .stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+  
+  /* ========== 右侧内容区域 ========== */
+  .content-area {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* ========== 文章网格列表 ========== */
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+  
+  .article-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.06);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(46, 125, 50, 0.15);
+    }
+  }
+  
+  .article-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .article-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    
+    &:hover {
+      transform: scale(1.08);
+    }
+  }
+  
+  .article-card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f5f0 0%, #e8f5e9 100%);
+    
+    i {
+      font-size: 48px;
+      color: #81C784;
+    }
+  }
+  
+  .article-card__category-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    background: rgba(46, 125, 50, 0.9);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  .article-card__content {
+    padding: 20px;
+  }
+  
+  .article-card__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .article-card__desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #888;
+  }
+  
+  .article-card__meta {
+    display: flex;
+    gap: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f5f0;
+  }
+  
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #999;
+    
+    i {
+      font-size: 13px;
+    }
+  }
+  
+  /* ========== 空状态 ========== */
+  .empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.06);
+  }
+  
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f5f0 0%, #e8f5e9 100%);
+    border-radius: 50%;
+    
+    i {
+      font-size: 40px;
+      color: #81C784;
+    }
+  }
+  
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .empty-state p {
+    font-size: 14px;
+    color: #999;
+  }
+  
+  /* ========== 分页样式 ========== */
+  #pagination {
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  #pagination ::v-deep .btn-prev,
+  #pagination ::v-deep .btn-next {
     border: 1px solid #e8e8e8;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 0 24px;
     margin: 0 8px;
     color: #666;
     background: #fff;
     font-size: 14px;
-    line-height: 40px;
+    line-height: 44px;
     min-width: auto;
-    height: 40px;
+    height: 44px;
     transition: all 0.3s ease;
     font-weight: 500;
     
@@ -326,23 +683,23 @@
       border-color: #2E7D32;
       background: rgba(46, 125, 50, 0.06);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+      box-shadow: 0 6px 16px rgba(46, 125, 50, 0.15);
     }
   }
   
-  #pagination.el-pagination ::v-deep .el-pager .number {
+  #pagination ::v-deep .el-pager .number {
     cursor: pointer;
-    padding: 0 16px;
+    padding: 0 18px;
     margin: 0 6px;
     color: #666;
     font-size: 14px;
-    line-height: 40px;
-    border-radius: 10px;
+    line-height: 44px;
+    border-radius: 12px;
     background: #fff;
     border: 1px solid #e8e8e8;
     text-align: center;
     min-width: auto;
-    height: 40px;
+    height: 44px;
     transition: all 0.3s ease;
     font-weight: 500;
     
@@ -359,6 +716,48 @@
       border-color: transparent;
       box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
       transform: translateY(-2px);
+    }
+  }
+  
+  /* ========== 图片预览弹窗 ========== */
+  .image-preview-dialog ::v-deep .el-dialog__body {
+    padding: 0;
+    background: #1a1a1a;
+  }
+  
+  .preview-image {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+  
+  /* ========== 响应式适配 ========== */
+  @media (max-width: 900px) {
+    .main-content {
+      flex-direction: column;
+    }
+    
+    .category-sidebar {
+      width: 100%;
+      position: static;
+    }
+    
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .search-form {
+      flex-wrap: wrap;
+    }
+    
+    .search-input-wrapper {
+      width: 100%;
+    }
+    
+    .page-title__main {
+      font-size: 32px;
     }
   }
 </style>
