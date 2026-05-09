@@ -1,19 +1,19 @@
-/* 管理端全局样式 - 浅色清爽风格 */
+﻿/* 管理端全局样式 - 深蓝金贵主题 */
 
 :root {
   --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #f5f7fa;
+  --admin-bg-secondary: #f0f4f8;
   --admin-bg-card: #ffffff;
-  --admin-border: #e4e7ed;
-  --admin-text-primary: #303133;
-  --admin-text-secondary: #606266;
-  --admin-text-placeholder: #909399;
-  --admin-blue-500: #409eff;
+  --admin-border: #e2e8f0;
+  --admin-text-primary: #1e293b;
+  --admin-text-secondary: #475569;
+  --admin-text-placeholder: #94a3b8;
+  --admin-blue-500: #ffd700;
   --admin-green-500: #67c23a;
-  --admin-radius: 12px;
-  --admin-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  --admin-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
-  --admin-transition: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --admin-radius: 16px;
+  --admin-shadow: 0 4px 16px rgba(30, 41, 59, 0.06), 0 1px 4px rgba(0,0,0,.03);
+  --admin-shadow-hover: 0 12px 32px rgba(30, 41, 59, 0.12), 0 2px 8px rgba(0,0,0,.05);
+  --admin-transition: 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 全局背景 - 高优先级 */
@@ -130,20 +130,11 @@ html, body {
 .echarts3,
 .echarts4,
 .echarts5 {
-  border-radius: var(--admin-radius) !important;
-  border: 1px solid var(--admin-border) !important;
-  background: var(--admin-bg-card) !important;
-  box-shadow: var(--admin-shadow) !important;
+  border-radius: 20px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
   transition: all var(--admin-transition) !important;
-}
-
-.echarts1:hover,
-.echarts2:hover,
-.echarts3:hover,
-.echarts4:hover,
-.echarts5:hover {
-  box-shadow: var(--admin-shadow-hover) !important;
-  border-color: var(--admin-blue-500) !important;
 }
 
 /* 减少动画 - 可访问性 */

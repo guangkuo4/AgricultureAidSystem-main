@@ -1,0 +1,425 @@
+0000	70 61 63 6b 61 67 65 20  63 6f 6d 2e 63 6f 6e 74   package com.cont
+0010	72 6f 6c 6c 65 72 3b 0d  0a 0d 0a 69 6d 70 6f 72   roller;....impor
+0020	74 20 6a 61 76 61 2e 6d  61 74 68 2e 42 69 67 44   t java.math.BigD
+0030	65 63 69 6d 61 6c 3b 0d  0a 69 6d 70 6f 72 74 20   ecimal;..import 
+0040	6a 61 76 61 2e 74 65 78  74 2e 53 69 6d 70 6c 65   java.text.Simple
+0050	44 61 74 65 46 6f 72 6d  61 74 3b 0d 0a 69 6d 70   DateFormat;..imp
+0060	6f 72 74 20 6a 61 76 61  2e 74 65 78 74 2e 50 61   ort java.text.Pa
+0070	72 73 65 45 78 63 65 70  74 69 6f 6e 3b 0d 0a 69   rseException;..i
+0080	6d 70 6f 72 74 20 6a 61  76 61 2e 75 74 69 6c 2e   mport java.util.
+0090	41 72 72 61 79 4c 69 73  74 3b 0d 0a 69 6d 70 6f   ArrayList;..impo
+00a0	72 74 20 6a 61 76 61 2e  75 74 69 6c 2e 41 72 72   rt java.util.Arr
+00b0	61 79 73 3b 0d 0a 69 6d  70 6f 72 74 20 6a 61 76   ays;..import jav
+00c0	61 2e 75 74 69 6c 2e 43  61 6c 65 6e 64 61 72 3b   a.util.Calendar;
+00d0	0d 0a 69 6d 70 6f 72 74  20 6a 61 76 61 2e 75 74   ..import java.ut
+00e0	69 6c 2e 4d 61 70 3b 0d  0a 69 6d 70 6f 72 74 20   il.Map;..import 
+00f0	6a 61 76 61 2e 75 74 69  6c 2e 48 61 73 68 4d 61   java.util.HashMa
+0100	70 3b 0d 0a 69 6d 70 6f  72 74 20 6a 61 76 61 2e   p;..import java.
+0110	75 74 69 6c 2e 49 74 65  72 61 74 6f 72 3b 0d 0a   util.Iterator;..
+0120	69 6d 70 6f 72 74 20 6a  61 76 61 2e 75 74 69 6c   import java.util
+0130	2e 44 61 74 65 3b 0d 0a  69 6d 70 6f 72 74 20 6a   .Date;..import j
+0140	61 76 61 2e 75 74 69 6c  2e 4c 69 73 74 3b 0d 0a   ava.util.List;..
+0150	69 6d 70 6f 72 74 20 6a  61 76 61 78 2e 73 65 72   import javax.ser
+0160	76 6c 65 74 2e 68 74 74  70 2e 48 74 74 70 53 65   vlet.http.HttpSe
+0170	72 76 6c 65 74 52 65 71  75 65 73 74 3b 0d 0a 0d   rvletRequest;...
+0180	0a 69 6d 70 6f 72 74 20  63 6f 6d 2e 75 74 69 6c   .import com.util
+0190	73 2e 56 61 6c 69 64 61  74 6f 72 55 74 69 6c 73   s.ValidatorUtils
+01a0	3b 0d 0a 69 6d 70 6f 72  74 20 6f 72 67 2e 61 70   ;..import org.ap
+01b0	61 63 68 65 2e 63 6f 6d  6d 6f 6e 73 2e 6c 61 6e   ache.commons.lan
+01c0	67 33 2e 53 74 72 69 6e  67 55 74 69 6c 73 3b 0d   g3.StringUtils;.
+01d0	0a 69 6d 70 6f 72 74 20  6f 72 67 2e 73 70 72 69   .import org.spri
+01e0	6e 67 66 72 61 6d 65 77  6f 72 6b 2e 62 65 61 6e   ngframework.bean
+01f0	73 2e 66 61 63 74 6f 72  79 2e 61 6e 6e 6f 74 61   s.factory.annota
+0200	74 69 6f 6e 2e 41 75 74  6f 77 69 72 65 64 3b 0d   tion.Autowired;.
+0210	0a 69 6d 70 6f 72 74 20  6f 72 67 2e 73 70 72 69   .import org.spri
+0220	6e 67 66 72 61 6d 65 77  6f 72 6b 2e 74 72 61 6e   ngframework.tran
+0230	73 61 63 74 69 6f 6e 2e  61 6e 6e 6f 74 61 74 69   saction.annotati
+0240	6f 6e 2e 54 72 61 6e 73  61 63 74 69 6f 6e 61 6c   on.Transactional
+0250	3b 0d 0a 69 6d 70 6f 72  74 20 6f 72 67 2e 73 70   ;..import org.sp
+0260	72 69 6e 67 66 72 61 6d  65 77 6f 72 6b 2e 66 6f   ringframework.fo
+0270	72 6d 61 74 2e 61 6e 6e  6f 74 61 74 69 6f 6e 2e   rmat.annotation.
+0280	44 61 74 65 54 69 6d 65  46 6f 72 6d 61 74 3b 0d   DateTimeFormat;.
+0290	0a 69 6d 70 6f 72 74 20  6f 72 67 2e 73 70 72 69   .import org.spri
+02a0	6e 67 66 72 61 6d 65 77  6f 72 6b 2e 77 65 62 2e   ngframework.web.
+02b0	62 69 6e 64 2e 61 6e 6e  6f 74 61 74 69 6f 6e 2e   bind.annotation.
+02c0	50 61 74 68 56 61 72 69  61 62 6c 65 3b 0d 0a 69   PathVariable;..i
+02d0	6d 70 6f 72 74 20 6f 72  67 2e 73 70 72 69 6e 67   mport org.spring
+02e0	66 72 61 6d 65 77 6f 72  6b 2e 77 65 62 2e 62 69   framework.web.bi
+02f0	6e 64 2e 61 6e 6e 6f 74  61 74 69 6f 6e 2e 52 65   nd.annotation.Re
+0300	71 75 65 73 74 42 6f 64  79 3b 0d 0a 69 6d 70 6f   questBody;..impo
+0310	72 74 20 6f 72 67 2e 73  70 72 69 6e 67 66 72 61   rt org.springfra
+0320	6d 65 77 6f 72 6b 2e 77  65 62 2e 62 69 6e 64 2e   mework.web.bind.
+0330	61 6e 6e 6f 74 61 74 69  6f 6e 2e 52 65 71 75 65   annotation.Reque
+0340	73 74 4d 61 70 70 69 6e  67 3b 0d 0a 69 6d 70 6f   stMapping;..impo
+0350	72 74 20 6f 72 67 2e 73  70 72 69 6e 67 66 72 61   rt org.springfra
+0360	6d 65 77 6f 72 6b 2e 77  65 62 2e 62 69 6e 64 2e   mework.web.bind.
+0370	61 6e 6e 6f 74 61 74 69  6f 6e 2e 52 65 71 75 65   annotation.Reque
+0380	73 74 50 61 72 61 6d 3b  0d 0a 69 6d 70 6f 72 74   stParam;..import
+0390	20 6f 72 67 2e 73 70 72  69 6e 67 66 72 61 6d 65    org.springframe
+03a0	77 6f 72 6b 2e 77 65 62  2e 62 69 6e 64 2e 61 6e   work.web.bind.an
+03b0	6e 6f 74 61 74 69 6f 6e  2e 52 65 73 74 43 6f 6e   notation.RestCon
+03c0	74 72 6f 6c 6c 65 72 3b  0d 0a 69 6d 70 6f 72 74   troller;..import
+03d0	20 63 6f 6d 2e 62 61 6f  6d 69 64 6f 75 2e 6d 79    com.baomidou.my
+03e0	62 61 74 69 73 70 6c 75  73 2e 6d 61 70 70 65 72   batisplus.mapper
+03f0	2e 45 6e 74 69 74 79 57  72 61 70 70 65 72 3b 0d   .EntityWrapper;.
+0400	0a 69 6d 70 6f 72 74 20  63 6f 6d 2e 62 61 6f 6d   .import com.baom
+0410	69 64 6f 75 2e 6d 79 62  61 74 69 73 70 6c 75 73   idou.mybatisplus
+0420	2e 6d 61 70 70 65 72 2e  57 72 61 70 70 65 72 3b   .mapper.Wrapper;
+0430	0d 0a 69 6d 70 6f 72 74  20 63 6f 6d 2e 61 6e 6e   ..import com.ann
+0440	6f 74 61 74 69 6f 6e 2e  49 67 6e 6f 72 65 41 75   otation.IgnoreAu
+0450	74 68 3b 0d 0a 0d 0a 69  6d 70 6f 72 74 20 63 6f   th;....import co
+0460	6d 2e 65 6e 74 69 74 79  2e 42 61 6e 67 66 75 78   m.entity.Bangfux
+0470	69 61 6e 67 6d 75 45 6e  74 69 74 79 3b 0d 0a 69   iangmuEntity;..i
+0480	6d 70 6f 72 74 20 63 6f  6d 2e 65 6e 74 69 74 79   mport com.entity
+0490	2e 76 69 65 77 2e 42 61  6e 67 66 75 78 69 61 6e   .view.Bangfuxian
+04a0	67 6d 75 56 69 65 77 3b  0d 0a 0d 0a 69 6d 70 6f   gmuView;....impo
+04b0	72 74 20 63 6f 6d 2e 73  65 72 76 69 63 65 2e 42   rt com.service.B
+04c0	61 6e 67 66 75 78 69 61  6e 67 6d 75 53 65 72 76   angfuxiangmuServ
+04d0	69 63 65 3b 0d 0a 69 6d  70 6f 72 74 20 63 6f 6d   ice;..import com
+04e0	2e 73 65 72 76 69 63 65  2e 54 6f 6b 65 6e 53 65   .service.TokenSe
+04f0	72 76 69 63 65 3b 0d 0a  69 6d 70 6f 72 74 20 63   rvice;..import c
+0500	6f 6d 2e 75 74 69 6c 73  2e 50 61 67 65 55 74 69   om.utils.PageUti
+0510	6c 73 3b 0d 0a 69 6d 70  6f 72 74 20 63 6f 6d 2e   ls;..import com.
+0520	75 74 69 6c 73 2e 52 3b  0d 0a 69 6d 70 6f 72 74   utils.R;..import
+0530	20 63 6f 6d 2e 75 74 69  6c 73 2e 4d 50 55 74 69    com.utils.MPUti
+0540	6c 3b 0d 0a 69 6d 70 6f  72 74 20 63 6f 6d 2e 75   l;..import com.u
+0550	74 69 6c 73 2e 4d 61 70  55 74 69 6c 73 3b 0d 0a   tils.MapUtils;..
+0560	69 6d 70 6f 72 74 20 63  6f 6d 2e 75 74 69 6c 73   import com.utils
+0570	2e 43 6f 6d 6d 6f 6e 55  74 69 6c 3b 0d 0a 69 6d   .CommonUtil;..im
+0580	70 6f 72 74 20 6a 61 76  61 2e 69 6f 2e 49 4f 45   port java.io.IOE
+0590	78 63 65 70 74 69 6f 6e  3b 0d 0a 0d 0a 2f 2a 2a   xception;..../**
+05a0	0d 0a 20 2a 20 e7 94 af  ee 86 bd e5 a3 8e e6 a4   .. * ...........
+05b0	a4 e5 9c ad e6 b4 b0 0d  0a 20 2a 20 e9 8d 9a e5   ......... * ....
+05c0	ba a3 ee 81 ac e9 8e ba  e3 83 a5 e5 bd 9b 0d 0a   ................
+05d0	20 2a 20 40 61 75 74 68  6f 72 20 0d 0a 20 2a 20    * @author .. * 
+05e0	40 65 6d 61 69 6c 20 0d  0a 20 2a 20 40 64 61 74   @email .. * @dat
+05f0	65 20 32 30 32 36 2d 30  34 2d 33 30 20 30 30 3a   e 2026-04-30 00:
+0600	30 30 3a 30 30 0d 0a 20  2a 2f 0d 0a 40 52 65 73   00:00.. */..@Res
+0610	74 43 6f 6e 74 72 6f 6c  6c 65 72 0d 0a 40 52 65   tController..@Re
+0620	71 75 65 73 74 4d 61 70  70 69 6e 67 28 22 2f 62   questMapping("/b
+0630	61 6e 67 66 75 78 69 61  6e 67 6d 75 22 29 0d 0a   angfuxiangmu")..
+0640	70 75 62 6c 69 63 20 63  6c 61 73 73 20 42 61 6e   public class Ban
+0650	67 66 75 78 69 61 6e 67  6d 75 43 6f 6e 74 72 6f   gfuxiangmuContro
+0660	6c 6c 65 72 20 7b 0d 0a  20 20 20 20 40 41 75 74   ller {..    @Aut
+0670	6f 77 69 72 65 64 0d 0a  20 20 20 20 70 72 69 76   owired..    priv
+0680	61 74 65 20 42 61 6e 67  66 75 78 69 61 6e 67 6d   ate Bangfuxiangm
+0690	75 53 65 72 76 69 63 65  20 62 61 6e 67 66 75 78   uService bangfux
+06a0	69 61 6e 67 6d 75 53 65  72 76 69 63 65 3b 0d 0a   iangmuService;..
+06b0	0d 0a 0d 0a 0d 0a 20 20  20 20 2f 2a 2a 0d 0a 20   ......    /**.. 
+06c0	20 20 20 20 2a 20 e9 8d  9a e5 ba a3 ee 81 ac e9       * ..........
+06d0	8d 92 e6 a5 84 e3 80 83  0d 0a 20 20 20 20 20 2a   ..........     *
+06e0	2f 0d 0a 20 20 20 20 40  52 65 71 75 65 73 74 4d   /..    @RequestM
+06f0	61 70 70 69 6e 67 28 22  2f 70 61 67 65 22 29 0d   apping("/page").
+0700	0a 20 20 20 20 70 75 62  6c 69 63 20 52 20 70 61   .    public R pa
+0710	67 65 28 40 52 65 71 75  65 73 74 50 61 72 61 6d   ge(@RequestParam
+0720	20 4d 61 70 3c 53 74 72  69 6e 67 2c 20 4f 62 6a    Map<String, Obj
+0730	65 63 74 3e 20 70 61 72  61 6d 73 2c 42 61 6e 67   ect> params,Bang
+0740	66 75 78 69 61 6e 67 6d  75 45 6e 74 69 74 79 20   fuxiangmuEntity 
+0750	62 61 6e 67 66 75 78 69  61 6e 67 6d 75 2c 0d 0a   bangfuxiangmu,..
+0760	09 09 48 74 74 70 53 65  72 76 6c 65 74 52 65 71   ..HttpServletReq
+0770	75 65 73 74 20 72 65 71  75 65 73 74 29 7b 0d 0a   uest request){..
+0780	20 20 20 20 20 20 20 20  45 6e 74 69 74 79 57 72           EntityWr
+0790	61 70 70 65 72 3c 42 61  6e 67 66 75 78 69 61 6e   apper<Bangfuxian
+07a0	67 6d 75 45 6e 74 69 74  79 3e 20 65 77 20 3d 20   gmuEntity> ew = 
+07b0	6e 65 77 20 45 6e 74 69  74 79 57 72 61 70 70 65   new EntityWrappe
+07c0	72 3c 42 61 6e 67 66 75  78 69 61 6e 67 6d 75 45   r<BangfuxiangmuE
+07d0	6e 74 69 74 79 3e 28 29  3b 0d 0a 0d 0a 09 09 50   ntity>();......P
+07e0	61 67 65 55 74 69 6c 73  20 70 61 67 65 20 3d 20   ageUtils page = 
+07f0	62 61 6e 67 66 75 78 69  61 6e 67 6d 75 53 65 72   bangfuxiangmuSer
+0800	76 69 63 65 2e 71 75 65  72 79 50 61 67 65 28 70   vice.queryPage(p
+0810	61 72 61 6d 73 2c 20 4d  50 55 74 69 6c 2e 73 6f   arams, MPUtil.so
+0820	72 74 28 4d 50 55 74 69  6c 2e 62 65 74 77 65 65   rt(MPUtil.betwee
+0830	6e 28 4d 50 55 74 69 6c  2e 6c 69 6b 65 4f 72 45   n(MPUtil.likeOrE
+0840	71 28 65 77 2c 20 62 61  6e 67 66 75 78 69 61 6e   q(ew, bangfuxian
+0850	67 6d 75 29 2c 20 70 61  72 61 6d 73 29 2c 20 70   gmu), params), p
+0860	61 72 61 6d 73 29 29 3b  0d 0a 0d 0a 20 20 20 20   arams));....    
+0870	20 20 20 20 72 65 74 75  72 6e 20 52 2e 6f 6b 28       return R.ok(
+0880	29 2e 70 75 74 28 22 64  61 74 61 22 2c 20 70 61   ).put("data", pa
+0890	67 65 29 3b 0d 0a 20 20  20 20 7d 0d 0a 20 20 20   ge);..    }..   
+08a0	20 0d 0a 20 20 20 20 2f  2a 2a 0d 0a 20 20 20 20    ..    /**..    
+08b0	20 2a 20 e9 8d 93 e5 b6  87 ee 81 ac e9 8d 92 e6    * .............
+08c0	a5 84 e3 80 83 0d 0a 20  20 20 20 20 2a 2f 0d 0a   .......     */..
+08d0	09 40 49 67 6e 6f 72 65  41 75 74 68 0d 0a 20 20   .@IgnoreAuth..  
+08e0	20 20 40 52 65 71 75 65  73 74 4d 61 70 70 69 6e     @RequestMappin
+08f0	67 28 22 2f 6c 69 73 74  22 29 0d 0a 20 20 20 20   g("/list")..    
+0900	70 75 62 6c 69 63 20 52  20 6c 69 73 74 28 40 52   public R list(@R
+0910	65 71 75 65 73 74 50 61  72 61 6d 20 4d 61 70 3c   equestParam Map<
+0920	53 74 72 69 6e 67 2c 20  4f 62 6a 65 63 74 3e 20   String, Object> 
+0930	70 61 72 61 6d 73 2c 42  61 6e 67 66 75 78 69 61   params,Bangfuxia
+0940	6e 67 6d 75 45 6e 74 69  74 79 20 62 61 6e 67 66   ngmuEntity bangf
+0950	75 78 69 61 6e 67 6d 75  2c 20 0d 0a 09 09 48 74   uxiangmu, ....Ht
+0960	74 70 53 65 72 76 6c 65  74 52 65 71 75 65 73 74   tpServletRequest
+0970	20 72 65 71 75 65 73 74  29 7b 0d 0a 20 20 20 20    request){..    
+0980	20 20 20 20 45 6e 74 69  74 79 57 72 61 70 70 65       EntityWrappe
+0990	72 3c 42 61 6e 67 66 75  78 69 61 6e 67 6d 75 45   r<BangfuxiangmuE
+09a0	6e 74 69 74 79 3e 20 65  77 20 3d 20 6e 65 77 20   ntity> ew = new 
+09b0	45 6e 74 69 74 79 57 72  61 70 70 65 72 3c 42 61   EntityWrapper<Ba
+09c0	6e 67 66 75 78 69 61 6e  67 6d 75 45 6e 74 69 74   ngfuxiangmuEntit
+09d0	79 3e 28 29 3b 0d 0a 0d  0a 09 09 50 61 67 65 55   y>();......PageU
+09e0	74 69 6c 73 20 70 61 67  65 20 3d 20 62 61 6e 67   tils page = bang
+09f0	66 75 78 69 61 6e 67 6d  75 53 65 72 76 69 63 65   fuxiangmuService
+0a00	2e 71 75 65 72 79 50 61  67 65 28 70 61 72 61 6d   .queryPage(param
+0a10	73 2c 20 4d 50 55 74 69  6c 2e 73 6f 72 74 28 4d   s, MPUtil.sort(M
+0a20	50 55 74 69 6c 2e 62 65  74 77 65 65 6e 28 4d 50   PUtil.between(MP
+0a30	55 74 69 6c 2e 6c 69 6b  65 4f 72 45 71 28 65 77   Util.likeOrEq(ew
+0a40	2c 20 62 61 6e 67 66 75  78 69 61 6e 67 6d 75 29   , bangfuxiangmu)
+0a50	2c 20 70 61 72 61 6d 73  29 2c 20 70 61 72 61 6d   , params), param
+0a60	73 29 29 3b 0d 0a 20 20  20 20 20 20 20 20 72 65   s));..        re
+0a70	74 75 72 6e 20 52 2e 6f  6b 28 29 2e 70 75 74 28   turn R.ok().put(
+0a80	22 64 61 74 61 22 2c 20  70 61 67 65 29 3b 0d 0a   "data", page);..
+0a90	20 20 20 20 7d 0d 0a 0d  0a 0d 0a 0d 0a 09 2f 2a       }........./*
+0aa0	2a 0d 0a 20 20 20 20 20  2a 20 e9 8d 92 e6 a5 84   *..     * ......
+0ab0	e3 80 83 0d 0a 20 20 20  20 20 2a 2f 0d 0a 20 20   .....     */..  
+0ac0	20 20 40 52 65 71 75 65  73 74 4d 61 70 70 69 6e     @RequestMappin
+0ad0	67 28 22 2f 6c 69 73 74  73 22 29 0d 0a 20 20 20   g("/lists")..   
+0ae0	20 70 75 62 6c 69 63 20  52 20 6c 69 73 74 28 20    public R list( 
+0af0	42 61 6e 67 66 75 78 69  61 6e 67 6d 75 45 6e 74   BangfuxiangmuEnt
+0b00	69 74 79 20 62 61 6e 67  66 75 78 69 61 6e 67 6d   ity bangfuxiangm
+0b10	75 29 7b 0d 0a 20 20 20  20 20 20 20 20 09 45 6e   u){..        .En
+0b20	74 69 74 79 57 72 61 70  70 65 72 3c 42 61 6e 67   tityWrapper<Bang
+0b30	66 75 78 69 61 6e 67 6d  75 45 6e 74 69 74 79 3e   fuxiangmuEntity>
+0b40	20 65 77 20 3d 20 6e 65  77 20 45 6e 74 69 74 79    ew = new Entity
+0b50	57 72 61 70 70 65 72 3c  42 61 6e 67 66 75 78 69   Wrapper<Bangfuxi
+0b60	61 6e 67 6d 75 45 6e 74  69 74 79 3e 28 29 3b 0d   angmuEntity>();.
+0b70	0a 20 20 20 20 20 20 20  09 65 77 2e 61 6c 6c 45   .       .ew.allE
+0b80	71 28 4d 50 55 74 69 6c  2e 61 6c 6c 45 51 4d 61   q(MPUtil.allEQMa
+0b90	70 50 72 65 28 20 62 61  6e 67 66 75 78 69 61 6e   pPre( bangfuxian
+0ba0	67 6d 75 2c 20 22 62 61  6e 67 66 75 78 69 61 6e   gmu, "bangfuxian
+0bb0	67 6d 75 22 29 29 3b 20  0d 0a 20 20 20 20 20 20   gmu")); ..      
+0bc0	20 20 72 65 74 75 72 6e  20 52 2e 6f 6b 28 29 2e     return R.ok().
+0bd0	70 75 74 28 22 64 61 74  61 22 2c 20 62 61 6e 67   put("data", bang
+0be0	66 75 78 69 61 6e 67 6d  75 53 65 72 76 69 63 65   fuxiangmuService
+0bf0	2e 73 65 6c 65 63 74 4c  69 73 74 56 69 65 77 28   .selectListView(
+0c00	65 77 29 29 3b 0d 0a 20  20 20 20 7d 0d 0a 0d 0a   ew));..    }....
+0c10	09 20 2f 2a 2a 0d 0a 20  20 20 20 20 2a 20 e9 8f   . /**..     * ..
+0c20	8c e3 83 a8 ee 87 97 0d  0a 20 20 20 20 20 2a 2f   .........     */
+0c30	0d 0a 20 20 20 20 40 52  65 71 75 65 73 74 4d 61   ..    @RequestMa
+0c40	70 70 69 6e 67 28 22 2f  71 75 65 72 79 22 29 0d   pping("/query").
+0c50	0a 20 20 20 20 70 75 62  6c 69 63 20 52 20 71 75   .    public R qu
+0c60	65 72 79 28 42 61 6e 67  66 75 78 69 61 6e 67 6d   ery(Bangfuxiangm
+0c70	75 45 6e 74 69 74 79 20  62 61 6e 67 66 75 78 69   uEntity bangfuxi
+0c80	61 6e 67 6d 75 29 7b 0d  0a 20 20 20 20 20 20 20   angmu){..       
+0c90	20 45 6e 74 69 74 79 57  72 61 70 70 65 72 3c 20    EntityWrapper< 
+0ca0	42 61 6e 67 66 75 78 69  61 6e 67 6d 75 45 6e 74   BangfuxiangmuEnt
+0cb0	69 74 79 3e 20 65 77 20  3d 20 6e 65 77 20 45 6e   ity> ew = new En
+0cc0	74 69 74 79 57 72 61 70  70 65 72 3c 20 42 61 6e   tityWrapper< Ban
+0cd0	67 66 75 78 69 61 6e 67  6d 75 45 6e 74 69 74 79   gfuxiangmuEntity
+0ce0	3e 28 29 3b 0d 0a 09 09  65 77 2e 61 6c 6c 45 71   >();....ew.allEq
+0cf0	28 4d 50 55 74 69 6c 2e  61 6c 6c 45 51 4d 61 70   (MPUtil.allEQMap
+0d00	50 72 65 28 20 62 61 6e  67 66 75 78 69 61 6e 67   Pre( bangfuxiang
+0d10	6d 75 2c 20 22 62 61 6e  67 66 75 78 69 61 6e 67   mu, "bangfuxiang
+0d20	6d 75 22 29 29 3b 20 0d  0a 09 09 42 61 6e 67 66   mu")); ....Bangf
+0d30	75 78 69 61 6e 67 6d 75  56 69 65 77 20 62 61 6e   uxiangmuView ban
+0d40	67 66 75 78 69 61 6e 67  6d 75 56 69 65 77 20 3d   gfuxiangmuView =
+0d50	20 20 62 61 6e 67 66 75  78 69 61 6e 67 6d 75 53     bangfuxiangmuS
+0d60	65 72 76 69 63 65 2e 73  65 6c 65 63 74 56 69 65   ervice.selectVie
+0d70	77 28 65 77 29 3b 0d 0a  09 09 72 65 74 75 72 6e   w(ew);....return
+0d80	20 52 2e 6f 6b 28 22 e9  8f 8c e3 83 a8 ee 87 97    R.ok(".........
+0d90	e7 94 af ee 86 bd e5 a3  8e e6 a4 a4 e5 9c ad e6   ................
+0da0	b4 b0 e9 8e b4 e6 84 ac  e5 a7 9b 22 29 2e 70 75   ...........").pu
+0db0	74 28 22 64 61 74 61 22  2c 20 62 61 6e 67 66 75   t("data", bangfu
+0dc0	78 69 61 6e 67 6d 75 56  69 65 77 29 3b 0d 0a 20   xiangmuView);.. 
+0dd0	20 20 20 7d 0d 0a 09 0d  0a 20 20 20 20 2f 2a 2a      }.....    /**
+0de0	0d 0a 20 20 20 20 20 2a  20 e9 8d 9a e5 ba a3 ee   ..     * .......
+0df0	81 ac e7 92 87 ef b8 bd  e5 84 8f 0d 0a 20 20 20   .............   
+0e00	20 20 2a 2f 0d 0a 20 20  20 20 40 52 65 71 75 65     */..    @Reque
+0e10	73 74 4d 61 70 70 69 6e  67 28 22 2f 69 6e 66 6f   stMapping("/info
+0e20	2f 7b 69 64 7d 22 29 0d  0a 20 20 20 20 70 75 62   /{id}")..    pub
+0e30	6c 69 63 20 52 20 69 6e  66 6f 28 40 50 61 74 68   lic R info(@Path
+0e40	56 61 72 69 61 62 6c 65  28 22 69 64 22 29 20 4c   Variable("id") L
+0e50	6f 6e 67 20 69 64 29 7b  0d 0a 20 20 20 20 20 20   ong id){..      
+0e60	20 20 42 61 6e 67 66 75  78 69 61 6e 67 6d 75 45     BangfuxiangmuE
+0e70	6e 74 69 74 79 20 62 61  6e 67 66 75 78 69 61 6e   ntity bangfuxian
+0e80	67 6d 75 20 3d 20 62 61  6e 67 66 75 78 69 61 6e   gmu = bangfuxian
+0e90	67 6d 75 53 65 72 76 69  63 65 2e 73 65 6c 65 63   gmuService.selec
+0ea0	74 42 79 49 64 28 69 64  29 3b 0d 0a 20 20 20 20   tById(id);..    
+0eb0	20 20 20 20 72 65 74 75  72 6e 20 52 2e 6f 6b 28       return R.ok(
+0ec0	29 2e 70 75 74 28 22 64  61 74 61 22 2c 20 62 61   ).put("data", ba
+0ed0	6e 67 66 75 78 69 61 6e  67 6d 75 29 3b 0d 0a 20   ngfuxiangmu);.. 
+0ee0	20 20 20 7d 0d 0a 0d 0a  20 20 20 20 2f 2a 2a 0d      }....    /**.
+0ef0	0a 20 20 20 20 20 2a 20  e9 8d 93 e5 b6 87 ee 81   .     * ........
+0f00	ac e7 92 87 ef b8 bd e5  84 8f 0d 0a 20 20 20 20   ............    
+0f10	20 2a 2f 0d 0a 09 40 49  67 6e 6f 72 65 41 75 74    */...@IgnoreAut
+0f20	68 0d 0a 20 20 20 20 40  52 65 71 75 65 73 74 4d   h..    @RequestM
+0f30	61 70 70 69 6e 67 28 22  2f 64 65 74 61 69 6c 2f   apping("/detail/
+0f40	7b 69 64 7d 22 29 0d 0a  20 20 20 20 70 75 62 6c   {id}")..    publ
+0f50	69 63 20 52 20 64 65 74  61 69 6c 28 40 50 61 74   ic R detail(@Pat
+0f60	68 56 61 72 69 61 62 6c  65 28 22 69 64 22 29 20   hVariable("id") 
+0f70	4c 6f 6e 67 20 69 64 29  7b 0d 0a 20 20 20 20 20   Long id){..     
+0f80	20 20 20 42 61 6e 67 66  75 78 69 61 6e 67 6d 75      Bangfuxiangmu
+0f90	45 6e 74 69 74 79 20 62  61 6e 67 66 75 78 69 61   Entity bangfuxia
+0fa0	6e 67 6d 75 20 3d 20 62  61 6e 67 66 75 78 69 61   ngmu = bangfuxia
+0fb0	6e 67 6d 75 53 65 72 76  69 63 65 2e 73 65 6c 65   ngmuService.sele
+0fc0	63 74 42 79 49 64 28 69  64 29 3b 0d 0a 20 20 20   ctById(id);..   
+0fd0	20 20 20 20 20 72 65 74  75 72 6e 20 52 2e 6f 6b        return R.ok
+0fe0	28 29 2e 70 75 74 28 22  64 61 74 61 22 2c 20 62   ().put("data", b
+0ff0	61 6e 67 66 75 78 69 61  6e 67 6d 75 29 3b 0d 0a   angfuxiangmu);..
+1000	20 20 20 20 7d 0d 0a 20  20 20 20 0d 0a 0d 0a 0d       }..    .....
+1010	0a 20 20 20 20 2f 2a 2a  0d 0a 20 20 20 20 20 2a   .    /**..     *
+1020	20 e9 8d 9a e5 ba a3 ee  81 ac e6 b7 87 e6 bf 86    ...............
+1030	e7 93 a8 0d 0a 20 20 20  20 20 2a 2f 0d 0a 20 20   .....     */..  
+1040	20 20 40 52 65 71 75 65  73 74 4d 61 70 70 69 6e     @RequestMappin
+1050	67 28 22 2f 73 61 76 65  22 29 0d 0a 20 20 20 20   g("/save")..    
+1060	70 75 62 6c 69 63 20 52  20 73 61 76 65 28 40 52   public R save(@R
+1070	65 71 75 65 73 74 42 6f  64 79 20 42 61 6e 67 66   equestBody Bangf
+1080	75 78 69 61 6e 67 6d 75  45 6e 74 69 74 79 20 62   uxiangmuEntity b
+1090	61 6e 67 66 75 78 69 61  6e 67 6d 75 2c 20 48 74   angfuxiangmu, Ht
+10a0	74 70 53 65 72 76 6c 65  74 52 65 71 75 65 73 74   tpServletRequest
+10b0	20 72 65 71 75 65 73 74  29 7b 0d 0a 20 20 20 20    request){..    
+10c0	20 20 20 20 69 66 28 62  61 6e 67 66 75 78 69 61       if(bangfuxia
+10d0	6e 67 6d 75 53 65 72 76  69 63 65 2e 73 65 6c 65   ngmuService.sele
+10e0	63 74 43 6f 75 6e 74 28  6e 65 77 20 45 6e 74 69   ctCount(new Enti
+10f0	74 79 57 72 61 70 70 65  72 3c 42 61 6e 67 66 75   tyWrapper<Bangfu
+1100	78 69 61 6e 67 6d 75 45  6e 74 69 74 79 3e 28 29   xiangmuEntity>()
+1110	2e 65 71 28 22 78 69 61  6e 67 6d 75 62 69 61 6e   .eq("xiangmubian
+1120	68 61 6f 22 2c 20 62 61  6e 67 66 75 78 69 61 6e   hao", bangfuxian
+1130	67 6d 75 2e 67 65 74 58  69 61 6e 67 6d 75 62 69   gmu.getXiangmubi
+1140	61 6e 68 61 6f 28 29 29  29 3e 30 29 20 7b 0d 0a   anhao()))>0) {..
+1150	20 20 20 20 20 20 20 20  20 20 20 20 72 65 74 75               retu
+1160	72 6e 20 52 2e 65 72 72  6f 72 28 22 e6 a4 a4 e5   rn R.error("....
+1170	9c ad e6 b4 b0 e7 bc 82  e6 a0 a7 e5 bd bf e5 ae   ................
+1180	b8 e6 8f 92 e7 93 a8 e9  8d a6 3f 29 3b 0d 0a 20   ..........?);.. 
+1190	20 20 20 20 20 20 20 7d  0d 0a 20 20 20 20 09 62          }..    .b
+11a0	61 6e 67 66 75 78 69 61  6e 67 6d 75 2e 73 65 74   angfuxiangmu.set
+11b0	49 64 28 6e 65 77 20 44  61 74 65 28 29 2e 67 65   Id(new Date().ge
+11c0	74 54 69 6d 65 28 29 2b  6e 65 77 20 44 6f 75 62   tTime()+new Doub
+11d0	6c 65 28 4d 61 74 68 2e  66 6c 6f 6f 72 28 4d 61   le(Math.floor(Ma
+11e0	74 68 2e 72 61 6e 64 6f  6d 28 29 2a 31 30 30 30   th.random()*1000
+11f0	29 29 2e 6c 6f 6e 67 56  61 6c 75 65 28 29 29 3b   )).longValue());
+1200	0d 0a 20 20 20 20 09 2f  2f 56 61 6c 69 64 61 74   ..    .//Validat
+1210	6f 72 55 74 69 6c 73 2e  76 61 6c 69 64 61 74 65   orUtils.validate
+1220	45 6e 74 69 74 79 28 62  61 6e 67 66 75 78 69 61   Entity(bangfuxia
+1230	6e 67 6d 75 29 3b 0d 0a  20 20 20 20 09 42 61 6e   ngmu);..    .Ban
+1240	67 66 75 78 69 61 6e 67  6d 75 45 6e 74 69 74 79   gfuxiangmuEntity
+1250	20 75 20 3d 20 62 61 6e  67 66 75 78 69 61 6e 67    u = bangfuxiang
+1260	6d 75 53 65 72 76 69 63  65 2e 73 65 6c 65 63 74   muService.select
+1270	4f 6e 65 28 6e 65 77 20  45 6e 74 69 74 79 57 72   One(new EntityWr
+1280	61 70 70 65 72 3c 42 61  6e 67 66 75 78 69 61 6e   apper<Bangfuxian
+1290	67 6d 75 45 6e 74 69 74  79 3e 28 29 2e 65 71 28   gmuEntity>().eq(
+12a0	22 78 69 61 6e 67 6d 75  62 69 61 6e 68 61 6f 22   "xiangmubianhao"
+12b0	2c 20 62 61 6e 67 66 75  78 69 61 6e 67 6d 75 2e   , bangfuxiangmu.
+12c0	67 65 74 58 69 61 6e 67  6d 75 62 69 61 6e 68 61   getXiangmubianha
+12d0	6f 28 29 29 29 3b 0d 0a  09 09 69 66 28 75 21 3d   o()));....if(u!=
+12e0	6e 75 6c 6c 29 20 7b 0d  0a 09 09 09 72 65 74 75   null) {.....retu
+12f0	72 6e 20 52 2e 65 72 72  6f 72 28 22 e9 90 a2 e3   rn R.error("....
+1300	84 a6 e5 9f 9b e5 ae b8  e6 8f 92 e7 93 a8 e9 8d   ................
+1310	a6 3f 29 3b 0d 0a 09 09  7d 0d 0a 09 09 62 61 6e   .?);....}....ban
+1320	67 66 75 78 69 61 6e 67  6d 75 2e 73 65 74 49 64   gfuxiangmu.setId
+1330	28 6e 65 77 20 44 61 74  65 28 29 2e 67 65 74 54   (new Date().getT
+1340	69 6d 65 28 29 29 3b 0d  0a 20 20 20 20 20 20 20   ime());..       
+1350	20 62 61 6e 67 66 75 78  69 61 6e 67 6d 75 53 65    bangfuxiangmuSe
+1360	72 76 69 63 65 2e 69 6e  73 65 72 74 28 62 61 6e   rvice.insert(ban
+1370	67 66 75 78 69 61 6e 67  6d 75 29 3b 0d 0a 20 20   gfuxiangmu);..  
+1380	20 20 20 20 20 20 72 65  74 75 72 6e 20 52 2e 6f         return R.o
+1390	6b 28 29 3b 0d 0a 20 20  20 20 7d 0d 0a 20 20 20   k();..    }..   
+13a0	20 0d 0a 20 20 20 20 2f  2a 2a 0d 0a 20 20 20 20    ..    /**..    
+13b0	20 2a 20 e9 8d 93 e5 b6  87 ee 81 ac e6 b7 87 e6    * .............
+13c0	bf 86 e7 93 a8 0d 0a 20  20 20 20 20 2a 2f 0d 0a   .......     */..
+13d0	20 20 20 20 40 52 65 71  75 65 73 74 4d 61 70 70       @RequestMapp
+13e0	69 6e 67 28 22 2f 61 64  64 22 29 0d 0a 20 20 20   ing("/add")..   
+13f0	20 70 75 62 6c 69 63 20  52 20 61 64 64 28 40 52    public R add(@R
+1400	65 71 75 65 73 74 42 6f  64 79 20 42 61 6e 67 66   equestBody Bangf
+1410	75 78 69 61 6e 67 6d 75  45 6e 74 69 74 79 20 62   uxiangmuEntity b
+1420	61 6e 67 66 75 78 69 61  6e 67 6d 75 2c 20 48 74   angfuxiangmu, Ht
+1430	74 70 53 65 72 76 6c 65  74 52 65 71 75 65 73 74   tpServletRequest
+1440	20 72 65 71 75 65 73 74  29 7b 0d 0a 20 20 20 20    request){..    
+1450	20 20 20 20 69 66 28 62  61 6e 67 66 75 78 69 61       if(bangfuxia
+1460	6e 67 6d 75 53 65 72 76  69 63 65 2e 73 65 6c 65   ngmuService.sele
+1470	63 74 43 6f 75 6e 74 28  6e 65 77 20 45 6e 74 69   ctCount(new Enti
+1480	74 79 57 72 61 70 70 65  72 3c 42 61 6e 67 66 75   tyWrapper<Bangfu
+1490	78 69 61 6e 67 6d 75 45  6e 74 69 74 79 3e 28 29   xiangmuEntity>()
+14a0	2e 65 71 28 22 78 69 61  6e 67 6d 75 62 69 61 6e   .eq("xiangmubian
+14b0	68 61 6f 22 2c 20 62 61  6e 67 66 75 78 69 61 6e   hao", bangfuxian
+14c0	67 6d 75 2e 67 65 74 58  69 61 6e 67 6d 75 62 69   gmu.getXiangmubi
+14d0	61 6e 68 61 6f 28 29 29  29 3e 30 29 20 7b 0d 0a   anhao()))>0) {..
+14e0	20 20 20 20 20 20 20 20  20 20 20 20 72 65 74 75               retu
+14f0	72 6e 20 52 2e 65 72 72  6f 72 28 22 e6 a4 a4 e5   rn R.error("....
+1500	9c ad e6 b4 b0 e7 bc 82  e6 a0 a7 e5 bd bf e5 ae   ................
+1510	b8 e6 8f 92 e7 93 a8 e9  8d a6 3f 29 3b 0d 0a 20   ..........?);.. 
+1520	20 20 20 20 20 20 20 7d  0d 0a 20 20 20 20 09 62          }..    .b
+1530	61 6e 67 66 75 78 69 61  6e 67 6d 75 2e 73 65 74   angfuxiangmu.set
+1540	49 64 28 6e 65 77 20 44  61 74 65 28 29 2e 67 65   Id(new Date().ge
+1550	74 54 69 6d 65 28 29 2b  6e 65 77 20 44 6f 75 62   tTime()+new Doub
+1560	6c 65 28 4d 61 74 68 2e  66 6c 6f 6f 72 28 4d 61   le(Math.floor(Ma
+1570	74 68 2e 72 61 6e 64 6f  6d 28 29 2a 31 30 30 30   th.random()*1000
+1580	29 29 2e 6c 6f 6e 67 56  61 6c 75 65 28 29 29 3b   )).longValue());
+1590	0d 0a 20 20 20 20 09 2f  2f 56 61 6c 69 64 61 74   ..    .//Validat
+15a0	6f 72 55 74 69 6c 73 2e  76 61 6c 69 64 61 74 65   orUtils.validate
+15b0	45 6e 74 69 74 79 28 62  61 6e 67 66 75 78 69 61   Entity(bangfuxia
+15c0	6e 67 6d 75 29 3b 0d 0a  20 20 20 20 09 42 61 6e   ngmu);..    .Ban
+15d0	67 66 75 78 69 61 6e 67  6d 75 45 6e 74 69 74 79   gfuxiangmuEntity
+15e0	20 75 20 3d 20 62 61 6e  67 66 75 78 69 61 6e 67    u = bangfuxiang
+15f0	6d 75 53 65 72 76 69 63  65 2e 73 65 6c 65 63 74   muService.select
+1600	4f 6e 65 28 6e 65 77 20  45 6e 74 69 74 79 57 72   One(new EntityWr
+1610	61 70 70 65 72 3c 42 61  6e 67 66 75 78 69 61 6e   apper<Bangfuxian
+1620	67 6d 75 45 6e 74 69 74  79 3e 28 29 2e 65 71 28   gmuEntity>().eq(
+1630	22 78 69 61 6e 67 6d 75  62 69 61 6e 68 61 6f 22   "xiangmubianhao"
+1640	2c 20 62 61 6e 67 66 75  78 69 61 6e 67 6d 75 2e   , bangfuxiangmu.
+1650	67 65 74 58 69 61 6e 67  6d 75 62 69 61 6e 68 61   getXiangmubianha
+1660	6f 28 29 29 29 3b 0d 0a  09 09 69 66 28 75 21 3d   o()));....if(u!=
+1670	6e 75 6c 6c 29 20 7b 0d  0a 09 09 09 72 65 74 75   null) {.....retu
+1680	72 6e 20 52 2e 65 72 72  6f 72 28 22 e9 90 a2 e3   rn R.error("....
+1690	84 a6 e5 9f 9b e5 ae b8  e6 8f 92 e7 93 a8 e9 8d   ................
+16a0	a6 3f 29 3b 0d 0a 09 09  7d 0d 0a 09 09 62 61 6e   .?);....}....ban
+16b0	67 66 75 78 69 61 6e 67  6d 75 2e 73 65 74 49 64   gfuxiangmu.setId
+16c0	28 6e 65 77 20 44 61 74  65 28 29 2e 67 65 74 54   (new Date().getT
+16d0	69 6d 65 28 29 29 3b 0d  0a 20 20 20 20 20 20 20   ime());..       
+16e0	20 62 61 6e 67 66 75 78  69 61 6e 67 6d 75 53 65    bangfuxiangmuSe
+16f0	72 76 69 63 65 2e 69 6e  73 65 72 74 28 62 61 6e   rvice.insert(ban
+1700	67 66 75 78 69 61 6e 67  6d 75 29 3b 0d 0a 20 20   gfuxiangmu);..  
+1710	20 20 20 20 20 20 72 65  74 75 72 6e 20 52 2e 6f         return R.o
+1720	6b 28 29 3b 0d 0a 20 20  20 20 7d 0d 0a 0d 0a 0d   k();..    }.....
+1730	0a 0d 0a 0d 0a 0d 0a 20  20 20 20 2f 2a 2a 0d 0a   .......    /**..
+1740	20 20 20 20 20 2a 20 e6  b7 87 ee 86 bd e6 95 bc        * .........
+1750	0d 0a 20 20 20 20 20 2a  2f 0d 0a 20 20 20 20 40   ..     */..    @
+1760	52 65 71 75 65 73 74 4d  61 70 70 69 6e 67 28 22   RequestMapping("
+1770	2f 75 70 64 61 74 65 22  29 0d 0a 20 20 20 20 40   /update")..    @
+1780	54 72 61 6e 73 61 63 74  69 6f 6e 61 6c 0d 0a 20   Transactional.. 
+1790	20 20 20 70 75 62 6c 69  63 20 52 20 75 70 64 61      public R upda
+17a0	74 65 28 40 52 65 71 75  65 73 74 42 6f 64 79 20   te(@RequestBody 
+17b0	42 61 6e 67 66 75 78 69  61 6e 67 6d 75 45 6e 74   BangfuxiangmuEnt
+17c0	69 74 79 20 62 61 6e 67  66 75 78 69 61 6e 67 6d   ity bangfuxiangm
+17d0	75 2c 20 48 74 74 70 53  65 72 76 6c 65 74 52 65   u, HttpServletRe
+17e0	71 75 65 73 74 20 72 65  71 75 65 73 74 29 7b 0d   quest request){.
+17f0	0a 20 20 20 20 20 20 20  20 2f 2f 56 61 6c 69 64   .        //Valid
+1800	61 74 6f 72 55 74 69 6c  73 2e 76 61 6c 69 64 61   atorUtils.valida
+1810	74 65 45 6e 74 69 74 79  28 62 61 6e 67 66 75 78   teEntity(bangfux
+1820	69 61 6e 67 6d 75 29 3b  0d 0a 20 20 20 20 20 20   iangmu);..      
+1830	20 20 69 66 28 62 61 6e  67 66 75 78 69 61 6e 67     if(bangfuxiang
+1840	6d 75 53 65 72 76 69 63  65 2e 73 65 6c 65 63 74   muService.select
+1850	43 6f 75 6e 74 28 6e 65  77 20 45 6e 74 69 74 79   Count(new Entity
+1860	57 72 61 70 70 65 72 3c  42 61 6e 67 66 75 78 69   Wrapper<Bangfuxi
+1870	61 6e 67 6d 75 45 6e 74  69 74 79 3e 28 29 2e 6e   angmuEntity>().n
+1880	65 28 22 69 64 22 2c 20  62 61 6e 67 66 75 78 69   e("id", bangfuxi
+1890	61 6e 67 6d 75 2e 67 65  74 49 64 28 29 29 2e 65   angmu.getId()).e
+18a0	71 28 22 78 69 61 6e 67  6d 75 62 69 61 6e 68 61   q("xiangmubianha
+18b0	6f 22 2c 20 62 61 6e 67  66 75 78 69 61 6e 67 6d   o", bangfuxiangm
+18c0	75 2e 67 65 74 58 69 61  6e 67 6d 75 62 69 61 6e   u.getXiangmubian
+18d0	68 61 6f 28 29 29 29 3e  30 29 20 7b 0d 0a 20 20   hao()))>0) {..  
+18e0	20 20 20 20 20 20 20 20  20 20 72 65 74 75 72 6e             return
+18f0	20 52 2e 65 72 72 6f 72  28 22 e6 a4 a4 e5 9c ad    R.error("......
+1900	e6 b4 b0 e7 bc 82 e6 a0  a7 e5 bd bf e5 ae b8 e6   ................
+1910	8f 92 e7 93 a8 e9 8d a6  3f 29 3b 0d 0a 20 20 20   ........?);..   
+1920	20 20 20 20 20 7d 0d 0a  20 20 20 20 20 20 20 20        }..        
+1930	62 61 6e 67 66 75 78 69  61 6e 67 6d 75 53 65 72   bangfuxiangmuSer
+1940	76 69 63 65 2e 75 70 64  61 74 65 42 79 49 64 28   vice.updateById(
+1950	62 61 6e 67 66 75 78 69  61 6e 67 6d 75 29 3b 2f   bangfuxiangmu);/
+1960	2f e9 8d 8f e3 84 a9 e5  84 b4 e9 8f 87 e5 ad 98   /...............
+1970	e6 9f 8a 0d 0a 20 20 20  20 20 20 20 20 72 65 74   .....        ret
+1980	75 72 6e 20 52 2e 6f 6b  28 29 3b 0d 0a 20 20 20   urn R.ok();..   
+1990	20 7d 0d 0a 0d 0a 0d 0a  0d 0a 0d 0a 0d 0a 20 20    }............  
+19a0	20 20 2f 2a 2a 0d 0a 20  20 20 20 20 2a 20 e9 8d     /**..     * ..
+19b0	92 e7 8a bb e6 ab 8e 0d  0a 20 20 20 20 20 2a 2f   .........     */
+19c0	0d 0a 20 20 20 20 40 52  65 71 75 65 73 74 4d 61   ..    @RequestMa
+19d0	70 70 69 6e 67 28 22 2f  64 65 6c 65 74 65 22 29   pping("/delete")
+19e0	0d 0a 20 20 20 20 70 75  62 6c 69 63 20 52 20 64   ..    public R d
+19f0	65 6c 65 74 65 28 40 52  65 71 75 65 73 74 42 6f   elete(@RequestBo
+1a00	64 79 20 4c 6f 6e 67 5b  5d 20 69 64 73 29 7b 0d   dy Long[] ids){.
+1a10	0a 20 20 20 20 20 20 20  20 62 61 6e 67 66 75 78   .        bangfux
+1a20	69 61 6e 67 6d 75 53 65  72 76 69 63 65 2e 64 65   iangmuService.de
+1a30	6c 65 74 65 42 61 74 63  68 49 64 73 28 41 72 72   leteBatchIds(Arr
+1a40	61 79 73 2e 61 73 4c 69  73 74 28 69 64 73 29 29   ays.asList(ids))
+1a50	3b 0d 0a 20 20 20 20 20  20 20 20 72 65 74 75 72   ;..        retur
+1a60	6e 20 52 2e 6f 6b 28 29  3b 0d 0a 20 20 20 20 7d   n R.ok();..    }
+1a70	0d 0a 20 20 20 20 0d 0a  09 0d 0a 0d 0a 0d 0a 0d   ..    ..........
+1a80	0a 0d 0a 0d 0a 0d 0a 7d  0d 0a                     .......}..

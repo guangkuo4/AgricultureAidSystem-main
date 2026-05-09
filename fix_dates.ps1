@@ -1,0 +1,25 @@
+$content = Get-Content 'd:\AgricultureAidSystem\AgricultureAidSystem-main\4.MysqlDatabase\springboot2855f2n2.sql' -Raw
+$content = $content -replace "'2024-03-16 17:41:02'", "'2026-04-30 17:41:02'"
+$content = $content -replace "'2024-03-16 17:36:24'", "'2026-04-30 17:36:24'"
+$content = $content -replace "'2024-03-16 17:40:44'", "'2026-04-30 17:40:44'"
+$content = $content -replace "'2024-03-16 17:42:24'", "'2026-04-30 17:42:24'"
+$content = $content -replace "'2024-03-16 17:42:54'", "'2026-04-30 17:42:54'"
+$content = $content -replace "'2024-03-16 17:43:55'", "'2026-04-30 17:43:55'"
+$content = $content -replace "'2024-03-16 17:45:53'", "'2026-04-30 17:45:53'"
+$content = $content -replace "'2024-03-16 17:42:01'", "'2026-04-30 17:42:01'"
+$content = $content -replace "'2024-03-16 17:46:12'", "'2026-04-30 17:46:12'"
+$content = $content -replace "'2024-03-16 17:46:28'", "'2026-04-30 17:46:28'"
+$content = $content -replace "'2024-03-16 17:39:55'", "'2026-04-30 17:39:55'"
+$content = $content -replace "'2024-03-16 17:36:02'", "'2026-04-30 17:36:02'"
+$content = $content -replace "'2024-03-16 17:34:58'", "'2026-04-30 17:34:58'"
+$content = $content -replace "'2024-03-16 17:39:29'", "'2026-04-30 17:39:29'"
+$content = $content -replace "'2024-03-16 17:40:18'", "'2026-04-30 17:40:18'"
+# faburiqi date fields
+$content = $content -replace "'2024-03-16'", "'2026-04-30'" -replace "'2024-02-09'", "'2026-04-30'"
+# token table secondary timestamps
+$content = $content -replace "'2024-03-16 18:46:08'", "'2026-04-30 18:46:08'"
+$content = $content -replace "'2024-03-16 18:44:08'", "'2026-04-30 18:44:08'"
+$content = $content -replace "'2024-03-16 18:44:38'", "'2026-04-30 18:44:38'"
+$content = $content -replace "'2024-03-16 18:45:31'", "'2026-04-30 18:45:31'"
+[System.IO.File]::WriteAllText('d:\AgricultureAidSystem\AgricultureAidSystem-main\4.MysqlDatabase\springboot2855f2n2.sql', $content, [System.Text.Encoding]::UTF8)
+Write-Host "Done"

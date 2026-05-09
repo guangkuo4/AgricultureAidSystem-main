@@ -1,5 +1,5 @@
 <template>
-	<div id="tags-view-container" class="tags-view-container" :style='{"padding":"6px 10px 0","margin":"0px auto 20px","borderColor":"#344f60","overflow":"hidden","borderRadius":"0","background":"#fff","borderWidth":"0 0 0px","display":"block","width":"calc(100% - 60px)","fontSize":"14px","borderStyle":"solid","height":"auto"}'>
+	<div id="tags-view-container" class="tags-view-container" :style='{"padding":"6px 10px 0","margin":"0px auto 20px","borderColor":"#e8f5e9","overflow":"hidden","borderRadius":"0","background":"#fff","borderWidth":"0 0 0px","display":"block","width":"calc(100% - 60px)","fontSize":"14px","borderStyle":"solid","height":"auto"}'>
 		<scroll-pane ref="scrollPane" class="tags-view-wrapper">
 			<div class="tags-view-box" :style='{"width":"auto","whiteSpace":"nowrap","position":"relative","background":"none"}'>
 				<router-link v-for="tag in visitedViews" ref="tag" :key="tag.path" :class="isActive(tag)?'active':''"
@@ -263,7 +263,7 @@
 			border-radius: 4px;
 			font-size: 12px;
 			font-weight: 400;
-			color: #333;
+			color: #2e7d32;
 			box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
 
 			li {
@@ -282,34 +282,34 @@
 				cursor: pointer;
 				padding: 0px 12px;
 				margin: 0 5px 0px 0;
-				color: #000;
+				color: #555;
 				display: inline-block;
-				font-size: inherit;
-				border-color: #f1f9ff;
+				font-size: 12px;
+				border-color: #e8f5e9;
 				line-height: 30px;
-				border-radius: 0px;
+				border-radius: 6px;
 				background: none;
 				width: auto;
-				border-width: 0px 0px 0 0px;
+				border-width: 1px;
 				border-style: solid;
 				height: 30px;
 			}
-	
+
 	.tags-view-container .tags-view-wrapper .tags-view-item:hover {
-				border-radius: 8px 8px 0 0;
-				color: #333;
-				background: #ececec;
-				border-color: #bff5ff;
-				border-width: 0px 0px 0 0px;
+				border-radius: 6px;
+				color: #2e7d32;
+				background: #e8f5e9;
+				border-color: #a5d6a7;
+				border-width: 1px;
 				border-style: solid;
 			}
 	
 	.tags-view-container .tags-view-wrapper .tags-view-item.active {
-				border-radius: 8px 8px 0 0;
-				color: #333;
-				background: #ececec;
-				border-color: #bff5ff;
-				border-width: 0px 0px 0 0px;
+				border-radius: 6px;
+				color: #fff;
+				background: #2e7d32;
+				border-color: #2e7d32;
+				border-width: 1px;
 				border-style: solid;
 			}
 	

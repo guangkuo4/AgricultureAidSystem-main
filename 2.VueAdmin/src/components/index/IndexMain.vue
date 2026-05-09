@@ -2,7 +2,7 @@
 	<div style="height: 100%;">
 		<el-main :style='"vertical" == "vertical" ? (2 == 1 ? {"minHeight":"100%","padding":"0","margin":"0 0 0 210px","position":"relative","display":"block"} : (2 == 2 ? (isCollapse ? {"minHeight":"100%","padding":"0 0 0 64px","margin":"0","position":"relative","background":"#f3f3f3","display":"block"} : {"minHeight":"100%","padding":"0 0 0 250px","margin":"0","position":"relative","background":"#ececec","display":"block"}) : "")) : {"minHeight":"100%","margin":"0","position":"relative"}'>
 			<!-- top -->
-			<index-header :style='{"padding":"0px 50px 0px 20px","margin":"0 auto","borderColor":"rgba(126, 96, 16, .2)","alignItems":"center","color":"#fff","display":"flex","justifyContent":"flex-end","top":"0","left":"0","background":"#62779c","borderWidth":"0 0 0px","width":"calc(100% - 0px)","fontSize":"14px","position":"fixed","borderStyle":"solid","zIndex":"1002","height":"80px"}'></index-header>
+			<index-header :style='{"padding":"0px 50px 0px 20px","margin":"0 auto","borderColor":"rgba(255,255,255,.06)","alignItems":"center","color":"#fff","display":"flex","justifyContent":"flex-end","top":"0","left":"0","background":"linear-gradient(90deg, #0d1b2a 0%, #1a3a5c 50%, #0d2d4a 100%)","borderWidth":"0 0 1px","width":"calc(100% - 0px)","fontSize":"14px","position":"fixed","borderStyle":"solid","zIndex":"1002","height":"70px","boxShadow":"0 1px 12px rgba(0,0,0,.2)"}'></index-header>
 			
 			<!-- menu -->
 			<template v-if="'vertical' == 'vertical'">
@@ -10,7 +10,7 @@
 				<index-aside :style='{"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"hidden","top":"0","left":"0","background":"#304156","bottom":"0","width":"210px","fontSize":"0px","position":"fixed","height":"100%","zIndex":"1001"}'></index-aside>
 			  </template>
 			  <template v-if="2 == 2">
-				<index-aside :is-collapse="isCollapse" @oncollapsechange="collapseChange" :style='isCollapse ? {"boxShadow":"0px 0 0px rgba(255,205,155,1)","padding":"0px 0 0","borderColor":"rgba(126, 96, 16, .2)","bottom":"0","transition":"width 0.3s","overflow":"hidden","top":"0","left":"0","background":"#000","borderWidth":"0 0px 0 0","width":"64px","fontSize":"0px","position":"fixed","borderStyle":"solid","height":"100%","zIndex":"1001"} : {"boxShadow":"0px 0 0px rgba(255,205,155,1)","padding":"90px 0 10px","borderColor":"rgba(126, 96, 16, .2)","bottom":"0","transition":"width 0.3s","overflow":"hidden","top":"0","left":"0","background":"#66779d","borderWidth":"0 0px 0 0","width":"250px","fontSize":"14px","position":"fixed","borderStyle":"solid","height":"100%","zIndex":"1001"}'></index-aside>
+				<index-aside :is-collapse="isCollapse" @oncollapsechange="collapseChange" :style='isCollapse ? {"boxShadow":"2px 0 20px rgba(0,0,0,.25)","padding":"0px 0 0","borderColor":"rgba(255,255,255,.06)","bottom":"0","transition":"width 0.35s cubic-bezier(0.4, 0, 0.2, 1)","overflow":"hidden","top":"0","left":"0","background":"linear-gradient(180deg, #0d1b2a 0%, #1a2f4a 40%, #0f2240 100%)","borderWidth":"0 1px 0 0","width":"64px","fontSize":"0px","position":"fixed","borderStyle":"solid","height":"100%","zIndex":"1001"} : {"boxShadow":"2px 0 20px rgba(0,0,0,.25)","padding":"90px 0 10px","borderColor":"rgba(255,255,255,.06)","bottom":"0","transition":"width 0.35s cubic-bezier(0.4, 0, 0.2, 1)","overflow":"hidden","top":"0","left":"0","background":"linear-gradient(180deg, #0d1b2a 0%, #1a2f4a 40%, #0f2240 100%)","borderWidth":"0 1px 0 0","width":"250px","fontSize":"14px","position":"fixed","borderStyle":"solid","height":"100%","zIndex":"1001"}'></index-aside>
 			  </template>
 			</template>
 			<template v-if="'vertical' == 'horizontal'">
@@ -23,7 +23,7 @@
 			</template>
 			
 			<!-- breadcrumb -->
-			<bread-crumbs :title="title" :style='{"padding":"16px 30px","margin":"80px auto 0","borderColor":"#eee","borderWidth":"0 0 0px 0","width":"auto","fontSize":"14px","borderStyle":"solid"}' class="bread-crumbs"></bread-crumbs>
+			<bread-crumbs :title="title" :style='{"padding":"16px 30px","margin":"70px auto 0","borderColor":"#eee","borderWidth":"0 0 0px 0","width":"auto","fontSize":"14px","borderStyle":"solid"}' class="bread-crumbs"></bread-crumbs>
 			
 			<!-- TagsView -->
 			<tags-view />
@@ -116,7 +116,7 @@
 	}
 
 	a:hover {
-		background: #00c292;
+		background: #ffd700;
 	}
 	
 	.el-main {
