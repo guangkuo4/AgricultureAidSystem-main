@@ -53,7 +53,12 @@
             @click="goToDetail(project.id)"
           >
             <div class="project-image">
-              <img :src="imgUrl(project.tupian)" alt="项目图片" />
+              <div v-if="project.tupian" class="image-wrapper">
+                <img :src="imgUrl(project.tupian)" alt="项目图片" @error="handleImageError($event, project)" />
+              </div>
+              <div v-else class="image-placeholder" :class="getPlaceholderClass(project.xiangmuleixing)">
+                <span>{{ getPlaceholderText(project.xiangmuleixing) }}</span>
+              </div>
             </div>
             <div class="project-info">
               <h3 class="project-title">{{ project.xiangmumingcheng }}</h3>
@@ -64,10 +69,11 @@
               <p class="project-desc">{{ truncate(project.xiangmuxiangqing, 50) }}</p>
               <div class="project-contact">
                 <span class="contact-person"><i class="el-icon-user"></i> {{ project.lianxiren }}</span>
-                <span class="contact-phone"><i class="el-icon-phone"></i> {{ project.lianxidianhua }}</span>
+                <span class="contact-location"><i class="el-icon-location"></i> {{ project.suozaidiqu || '未填写' }}</span>
               </div>
-              <div class="project-stats">
+              <div class="project-footer">
                 <span class="view-count"><i class="el-icon-view"></i> {{ project.clicknum || 0 }} 次浏览</span>
+                <button class="apply-btn" @click.stop="applyProject(project)">申请对接</button>
               </div>
             </div>
           </div>
@@ -210,21 +216,34 @@
 
       <!-- 我的需求 -->
       <div v-if="activeTab === 'myNeeds'" class="tab-panel">
+        <!-- 批量操作栏 -->
+        <div class="batch-actions" v-if="myNeeds.length > 0">
+          <el-checkbox v-model="selectAllNeeds" @change="handleSelectAll">全选</el-checkbox>
+          <el-button v-if="selectedNeedIds.length > 0" type="danger" icon="el-icon-delete" @click="batchDeleteNeed">
+            批量删除 ({{ selectedNeedIds.length }})
+          </el-button>
+        </div>
+        
         <div class="needs-list">
           <div v-for="need in myNeeds" :key="need.id" class="need-card">
-            <div class="need-header">
-              <h3>{{ need.xuqiubianhao }}</h3>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+              <el-checkbox v-model="selectedNeedIds" :label="need.id"></el-checkbox>
+              <h3 style="margin: 0; flex: 1;">{{ need.xuqiubianhao }}</h3>
               <span :class="['need-status', getStatusClass(need.sfsh)]">{{ need.sfsh }}</span>
             </div>
-            <div class="need-body">
+            <div class="need-body" style="margin-bottom: 15px;">
+              <p><strong>需求名称：</strong>{{ need.xuqiumingcheng || '-' }}</p>
               <p><strong>需求类型：</strong>{{ need.xuqiuleixing }}</p>
               <p><strong>需求描述：</strong>{{ need.xuqiumiaoshu }}</p>
               <p><strong>紧急程度：</strong>{{ need.xuqiujinji }}</p>
-              <p><strong>期望时间：</strong>{{ need.qiwangshijian }}</p>
+              <p><strong>期望时间：</strong>{{ need.qiwangshijian || '-' }}</p>
               <p><strong>申请日期：</strong>{{ need.shenqingridi }}</p>
             </div>
-            <div class="need-footer" v-if="need.shhf">
+            <div v-if="need.shhf" style="margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
               <p><strong>审核回复：</strong>{{ need.shhf }}</p>
+            </div>
+            <div style="text-align: right;">
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteNeed(need.id)">删除</el-button>
             </div>
           </div>
         </div>
@@ -241,6 +260,12 @@
         <div class="form-container">
           <h2 class="form-title">发布帮扶需求</h2>
           <el-form :model="needForm" :rules="needRules" ref="needForm" label-width="120px">
+            <el-form-item label="需求名称" prop="xuqiumingcheng" required>
+              <el-input v-model="needForm.xuqiumingcheng" placeholder="请输入需求名称" style="width: 400px;"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式" prop="lianxidianhua" required>
+              <el-input v-model="needForm.lianxidianhua" placeholder="请输入联系电话" style="width: 400px;"></el-input>
+            </el-form-item>
             <el-form-item label="需求类型" prop="xuqiuleixing">
               <el-select v-model="needForm.xuqiuleixing" placeholder="请选择需求类型">
                 <el-option label="技术帮扶" value="技术帮扶"></el-option>
@@ -274,8 +299,46 @@
             <el-form-item label="期望帮扶时间">
               <el-date-picker v-model="needForm.qiwangshijian" type="date" placeholder="选择日期"></el-date-picker>
             </el-form-item>
+            <el-form-item label="所在省份" prop="suozaidiqu">
+              <el-select v-model="needForm.suozaidiqu" placeholder="请选择所在省份">
+                <el-option label="北京市" value="北京市"></el-option>
+                <el-option label="天津市" value="天津市"></el-option>
+                <el-option label="河北省" value="河北省"></el-option>
+                <el-option label="山西省" value="山西省"></el-option>
+                <el-option label="内蒙古自治区" value="内蒙古自治区"></el-option>
+                <el-option label="辽宁省" value="辽宁省"></el-option>
+                <el-option label="吉林省" value="吉林省"></el-option>
+                <el-option label="黑龙江省" value="黑龙江省"></el-option>
+                <el-option label="上海市" value="上海市"></el-option>
+                <el-option label="江苏省" value="江苏省"></el-option>
+                <el-option label="浙江省" value="浙江省"></el-option>
+                <el-option label="安徽省" value="安徽省"></el-option>
+                <el-option label="福建省" value="福建省"></el-option>
+                <el-option label="江西省" value="江西省"></el-option>
+                <el-option label="山东省" value="山东省"></el-option>
+                <el-option label="河南省" value="河南省"></el-option>
+                <el-option label="湖北省" value="湖北省"></el-option>
+                <el-option label="湖南省" value="湖南省"></el-option>
+                <el-option label="广东省" value="广东省"></el-option>
+                <el-option label="广西壮族自治区" value="广西壮族自治区"></el-option>
+                <el-option label="海南省" value="海南省"></el-option>
+                <el-option label="重庆市" value="重庆市"></el-option>
+                <el-option label="四川省" value="四川省"></el-option>
+                <el-option label="贵州省" value="贵州省"></el-option>
+                <el-option label="云南省" value="云南省"></el-option>
+                <el-option label="西藏自治区" value="西藏自治区"></el-option>
+                <el-option label="陕西省" value="陕西省"></el-option>
+                <el-option label="甘肃省" value="甘肃省"></el-option>
+                <el-option label="青海省" value="青海省"></el-option>
+                <el-option label="宁夏回族自治区" value="宁夏回族自治区"></el-option>
+                <el-option label="新疆维吾尔自治区" value="新疆维吾尔自治区"></el-option>
+                <el-option label="香港特别行政区" value="香港特别行政区"></el-option>
+                <el-option label="澳门特别行政区" value="澳门特别行政区"></el-option>
+                <el-option label="台湾省" value="台湾省"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="具体地址">
-              <el-input v-model="needForm.jutidizhi" placeholder="请输入具体地址（精确到村/组）"></el-input>
+              <el-input v-model="needForm.jutidizhi" placeholder="请输入具体地址（精确到村/组，选填）"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitNeed">提交需求</el-button>
@@ -285,89 +348,130 @@
         </div>
       </div>
 
-      <!-- 对接管理 -->
-      <div v-if="activeTab === 'management'" class="tab-panel">
-        <div class="management-tabs">
-          <el-tabs type="border-card">
-            <el-tab-pane label="待审核资源">
-              <el-table :data="pendingResources" style="width: 100%">
-                <el-table-column prop="ziyuanbianhao" label="资源编号"></el-table-column>
-                <el-table-column prop="bangfufangming" label="帮扶方名称"></el-table-column>
-                <el-table-column prop="bangfuleixing" label="帮扶类型"></el-table-column>
-                <el-table-column prop="suozaidiqu" label="所在地区"></el-table-column>
-                <el-table-column label="操作" width="200">
-                  <template slot-scope="scope">
-                    <el-button size="mini" @click="viewResourceDetail(scope.row)">查看</el-button>
-                    <el-button size="mini" type="success" @click="approveResource(scope.row)">通过</el-button>
-                    <el-button size="mini" type="danger" @click="rejectResource(scope.row)">拒绝</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="待审核需求">
-              <el-table :data="pendingNeeds" style="width: 100%">
-                <el-table-column prop="xuqiubianhao" label="需求编号"></el-table-column>
-                <el-table-column prop="shenqingrenxingming" label="申请人"></el-table-column>
-                <el-table-column prop="xuqiuleixing" label="需求类型"></el-table-column>
-                <el-table-column prop="xuqiujinji" label="紧急程度"></el-table-column>
-                <el-table-column label="操作" width="200">
-                  <template slot-scope="scope">
-                    <el-button size="mini" @click="viewNeedDetail(scope.row)">查看</el-button>
-                    <el-button size="mini" type="success" @click="approveNeed(scope.row)">通过</el-button>
-                    <el-button size="mini" type="danger" @click="rejectNeed(scope.row)">拒绝</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="对接实施">
-              <el-table :data="implementations" style="width: 100%">
-                <el-table-column prop="shishibianhao" label="实施编号"></el-table-column>
-                <el-table-column prop="xuqiubianhao" label="需求编号"></el-table-column>
-                <el-table-column prop="bangfuleixing" label="帮扶类型"></el-table-column>
-                <el-table-column prop="bangfuzhuangtai" label="帮扶状态"></el-table-column>
-                <el-table-column label="操作" width="150">
-                  <template slot-scope="scope">
-                    <el-button size="mini" @click="viewImplementation(scope.row)">查看</el-button>
-                    <el-button size="mini" type="primary" @click="updateProgress(scope.row)">更新进度</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-      </div>
+      <!-- 我的对接 -->
+      <div v-if="activeTab === 'myDocking'" class="tab-panel">
+        <div class="form-container">
+          <h2 class="form-title">我的对接</h2>
+          
+          <div v-if="dockingLoading" class="loading">
+            <i class="el-icon-loading" style="font-size: 24px;"></i>
+            <p>加载中...</p>
+          </div>
 
-      <!-- 我的评价 -->
-      <div v-if="activeTab === 'myReviews'" class="tab-panel">
-        <div class="review-list">
-          <div v-for="review in myReviews" :key="review.id" class="review-card">
-            <div class="review-header">
-              <h3>评价编号：{{ review.pingjiabianhao }}</h3>
-              <span class="review-score">综合评分：{{ review.zonghepingfen }}分</span>
-            </div>
-            <div class="review-body">
-              <div class="score-detail">
-                <span>服务态度：{{ review.fuwutaidu }}星</span>
-                <span>帮扶效果：{{ review.bangfuxiaoguo }}星</span>
-                <span>响应速度：{{ review.xiangyingsudu }}星</span>
+          <div v-else-if="myDockings.length === 0" class="empty">
+            <i class="el-icon-link" style="font-size: 48px; color: #ccc;"></i>
+            <p>暂无对接项目</p>
+            <button class="publish-btn" @click="activeTab = 'projects'">去申请对接</button>
+          </div>
+
+          <div v-else class="docking-list">
+            <div v-for="docking in myDockings" :key="docking.id" class="docking-card">
+              <div class="docking-header">
+                <h3>{{ docking.xiangmumingcheng }}</h3>
+                <span :class="['docking-status', getDockingStatusClass(docking.sfsh)]">{{ docking.sfsh }}</span>
               </div>
-              <p class="review-content">{{ review.pingjias }}</p>
-            </div>
-            <div class="review-footer">
-              <span>评价时间：{{ review.addtime }}</span>
-              <span :class="['archive-status', review.shifouguidang === '是' ? 'archived' : '']">
-                {{ review.shifouguidang === '是' ? '已归档' : '未归档' }}
-              </span>
+              <div class="docking-body">
+                <p><strong>项目类型：</strong>{{ docking.xiangmuleixing }}</p>
+                <p><strong>项目编号：</strong>{{ docking.xiangmubianhao }}</p>
+                <p><strong>申请日期：</strong>{{ docking.shenqingriqi }}</p>
+                <p><strong>对接说明：</strong>{{ docking.shenqingshuoming }}</p>
+                <div v-if="docking.sfsh === '已通过'" class="contact-info">
+                  <h4>对接联系方式</h4>
+                  <p><strong>需求方名称：</strong>{{ docking.xuqiumingcheng }}</p>
+                  <p><strong>联系人：</strong>{{ docking.shenqingrenxingming }}</p>
+                  <p><strong>联系电话：</strong><a :href="'tel:' + docking.lianxidianhua" class="phone-link">{{ docking.lianxidianhua }}</a></p>
+                  <p><strong>所在省份：</strong>{{ docking.suozaidiqu }}</p>
+                  <p><strong>具体地址：</strong>{{ docking.jutidizhi || '未填写' }}</p>
+                </div>
+                <div v-if="docking.bangfujindu" class="progress-info">
+                  <p><strong>当前进度：</strong>{{ docking.bangfujindu }}</p>
+                </div>
+              </div>
+              <div v-if="docking.shhf" class="docking-feedback">
+                <p><strong>审核回复：</strong>{{ docking.shhf }}</p>
+              </div>
+              <div class="docking-actions">
+                <el-button v-if="docking.sfsh === '待审核'" type="danger" size="mini" icon="el-icon-delete" @click="deleteDocking(docking.id)">删除申请</el-button>
+                <el-button v-if="docking.sfsh === '已通过'" type="primary" size="mini" icon="el-icon-edit" @click="showUpdateProgress(docking)">更新进度</el-button>
+                <el-button v-if="docking.sfsh === '已通过'" type="success" size="mini" icon="el-icon-check" @click="confirmComplete(docking)">确认完成</el-button>
+              </div>
             </div>
           </div>
         </div>
-
-        <div v-if="myReviews.length === 0" class="empty">
-          <i class="el-icon-star-off" style="font-size: 48px; color: #ccc;"></i>
-          <p>暂无评价记录</p>
-        </div>
       </div>
-    </div>
+
+      </div>
+
+      <!-- 删除确认弹窗 -->
+      <el-dialog title="提示" :visible.sync="deleteConfirmVisible" width="400px" :close-on-click-modal="false">
+        <div style="text-align: center; padding: 20px;">
+          <i class="el-icon-warning" style="font-size: 48px; color: #E6A23C; margin-bottom: 15px;"></i>
+          <p style="font-size: 14px; color: #666;">{{ deleteMessage }}</p>
+        </div>
+        <div slot="footer" style="text-align: center;">
+          <el-button @click="deleteConfirmVisible = false">取消</el-button>
+          <el-button type="danger" @click="confirmDelete">确定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- 申请对接弹窗 -->
+      <el-dialog title="申请对接" :visible.sync="applyDialogVisible" width="600px" :close-on-click-modal="false">
+        <el-form :model="applyForm" label-width="130px">
+          <el-form-item label="机构 / 个人名称" required>
+            <el-input v-model="applyForm.jigoumingcheng" placeholder="企业填公司全称、个人/专家填姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" required>
+            <el-input v-model="applyForm.lianxidianhua" placeholder="请输入需求方可直接联系的手机号"></el-input>
+          </el-form-item>
+          <el-form-item label="对接说明" required>
+            <el-input type="textarea" v-model="applyForm.duijieshuoming" :rows="5" placeholder="至少10字，说明自身优势、为什么能做好这个帮扶"></el-input>
+            <span class="word-count">已输入 {{ applyForm.duijieshuoming ? applyForm.duijieshuoming.length : 0 }} 字</span>
+          </el-form-item>
+          <el-form-item label="附件上传">
+            <el-upload
+              :action="uploadUrl"
+              :headers="uploadHeaders"
+              name="file"
+              list-type="picture-card"
+              :on-success="handleApplyImageSuccess"
+              :file-list="applyImageList"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <div class="upload-tip">可选上传：资质证书、过往案例证明、营业执照等，增强可信度</div>
+          </el-form-item>
+          <el-form-item label="服务承诺" required>
+            <el-checkbox v-model="applyForm.fuwuchengnuo">
+              承诺提供信息真实有效，遵守平台帮扶规则
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitApply" :disabled="!applyForm.fuwuchengnuo">提交申请</el-button>
+            <el-button @click="applyDialogVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
+      <!-- 更新进度弹窗 -->
+      <el-dialog title="更新对接进度" :visible.sync="updateProgressVisible" width="500px" :close-on-click-modal="false">
+        <el-form :model="progressForm" label-width="100px">
+          <el-form-item label="帮扶状态">
+            <el-select v-model="progressForm.bangfuzhuangtai" placeholder="请选择状态">
+              <el-option label="待分配" value="待分配"></el-option>
+              <el-option label="进行中" value="进行中"></el-option>
+              <el-option label="已完成" value="已完成"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="进度说明">
+            <el-input type="textarea" :rows="4" v-model="progressForm.bangfujindu" placeholder="请输入最新进度说明"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer">
+          <el-button @click="updateProgressVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitProgress">保存</el-button>
+        </span>
+      </el-dialog>
+
   </div>
 </template>
 
@@ -380,11 +484,10 @@ export default {
       tabs: [
         { key: 'projects', label: '帮扶项目', icon: 'el-icon-suitcase' },
         { key: 'resources', label: '帮扶资源池', icon: 'el-icon-collection' },
+        { key: 'publishNeed', label: '发布需求', icon: 'el-icon-edit' },
         { key: 'publishResource', label: '发布资源', icon: 'el-icon-plus' },
         { key: 'myNeeds', label: '我的需求', icon: 'el-icon-document' },
-        { key: 'publishNeed', label: '发布需求', icon: 'el-icon-edit' },
-        { key: 'management', label: '对接管理', icon: 'el-icon-s-management' },
-        { key: 'myReviews', label: '我的评价', icon: 'el-icon-star-on' }
+        { key: 'myDocking', label: '我的对接', icon: 'el-icon-link' }
       ],
 
       // 项目列表数据
@@ -432,29 +535,54 @@ export default {
 
       // 我的需求
       myNeeds: [],
+      selectedNeedIds: [],
+      selectAllNeeds: false,
+      deleteConfirmVisible: false,
+      deleteId: null,
+      deleteType: 'single',
+      deleteMessage: '',
 
       // 发布需求表单
       needForm: {
+        xuqiumingcheng: '',
         xuqiuleixing: '',
         xuqiumiaoshu: '',
         xuqiutupian: '',
         xuqiujinji: '普通',
         qiwangshijian: '',
-        jutidizhi: ''
+        suozaidiqu: '',
+        jutidizhi: '',
+        lianxidianhua: ''
       },
       needRules: {
+        xuqiumingcheng: [{ required: true, message: '请输入需求名称', trigger: 'blur' }],
         xuqiuleixing: [{ required: true, message: '请选择需求类型', trigger: 'change' }],
-        xuqiumiaoshu: [{ required: true, message: '请输入需求描述', trigger: 'blur' }]
+        xuqiumiaoshu: [{ required: true, message: '请输入需求描述', trigger: 'blur' }],
+        suozaidiqu: [{ required: true, message: '请选择所在省份', trigger: 'change' }],
+        lianxidianhua: [{ required: true, message: '请输入联系方式', trigger: 'blur' }]
       },
       needImageList: [],
 
-      // 对接管理
-      pendingResources: [],
-      pendingNeeds: [],
-      implementations: [],
+      // 我的对接
+      myDockings: [],
+      dockingLoading: false,
 
-      // 我的评价
-      myReviews: []
+      // 申请对接弹窗
+      applyDialogVisible: false,
+      applyForm: {
+        xiangmuid: '',
+        xiangmumingcheng: '',
+        lianxidianhua: '',
+        jigoumingcheng: '',
+        duijieshuoming: '',
+        fujian: '',
+        fuwuchengnuo: false
+      },
+      applyImageList: [],
+
+      // 更新进度弹窗
+      updateProgressVisible: false,
+      progressForm: { id: null, bangfuzhuangtai: '', bangfujindu: '' }
     }
   },
   computed: {
@@ -475,16 +603,14 @@ export default {
     this.loadProjects()
     this.loadResources()
     this.loadMyNeeds()
-    this.loadReviews()
-    this.loadManagementData()
+    this.loadMyDockings()
   },
   watch: {
     activeTab(val) {
       if (val === 'projects') this.loadProjects()
       if (val === 'resources') this.loadResources()
       if (val === 'myNeeds') this.loadMyNeeds()
-      if (val === 'myReviews') this.loadReviews()
-      if (val === 'management') this.loadManagementData()
+      if (val === 'myDocking') this.loadMyDockings()
     }
   },
   methods: {
@@ -492,34 +618,78 @@ export default {
     loadProjects() {
       console.log('正在加载帮扶项目...')
       this.loading = true
-      this.$http.get('/bangfuxiangmu/list', {
-        params: {
-          page: this.page,
-          limit: this.limit,
-          xiangmumingcheng: this.searchValue,
-          xiangmuleixing: this.selectedType,
-          sort: this.sortBy === 'newest' ? 'faburiqi' : 'faburiqi',
-          order: this.sortBy === 'newest' ? 'desc' : 'asc'
-        }
-      }).then(res => {
-        console.log('项目列表响应:', res)
-        console.log('响应数据:', res.data)
-        if (res.data.code === 0) {
-          this.projects = res.data.data.list || []
-          this.total = res.data.data.total || 0
-          console.log('项目列表:', this.projects)
-          if (this.projects.length === 0) {
-            console.log('项目列表为空，请检查数据库是否有数据')
+      
+      // 同时加载帮扶项目和审核通过的需求
+      Promise.all([
+        this.$http.get('/bangfuxiangmu/list', {
+          params: {
+            page: this.page,
+            limit: this.limit,
+            xiangmumingcheng: this.searchValue,
+            xiangmuleixing: this.selectedType,
+            sort: this.sortBy === 'newest' ? 'faburiqi' : 'faburiqi',
+            order: this.sortBy === 'newest' ? 'desc' : 'asc'
           }
-        } else {
-          console.warn('API 返回错误:', res.data.msg)
-          this.$message.warning(res.data.msg || '获取项目失败')
+        }),
+        this.$http.get('/bangfuxuqiu/list', {
+          params: {
+            sfsh: '已通过',
+            page: 1,
+            limit: 100
+          }
+        })
+      ]).then(([projectRes, needRes]) => {
+        console.log('项目列表响应:', projectRes)
+        console.log('需求列表响应:', needRes)
+        
+        let projects = []
+        let total = 0
+        
+        // 处理帮扶项目数据
+        if (projectRes.data && projectRes.data.code === 0) {
+          projects = projectRes.data.data.list || []
+          total = projectRes.data.data.total || 0
         }
+        
+        // 处理审核通过的需求数据，转换为项目格式
+        if (needRes.data && needRes.data.code === 0) {
+          const needs = needRes.data.data.list || []
+          const convertedNeeds = needs.map(need => ({
+            id: need.id,
+            xiangmubianhao: need.xuqiubianhao,
+            xiangmumingcheng: need.xuqiuleixing + '需求',
+            xiangmuleixing: need.xuqiuleixing,
+            faburiqi: need.shenqingridi,
+            lianxiren: need.shenqingrenxingming,
+            lianxidianhua: '',
+            xiangmuxiangqing: need.xuqiumiaoshu,
+            tupian: need.xuqiutupian,
+            clicknum: 0,
+            isNeed: true // 标记为需求转换的项目
+          }))
+          projects = [...projects, ...convertedNeeds]
+          total += needs.length
+        }
+        
+        // 按发布日期排序
+        projects.sort((a, b) => {
+          const dateA = new Date(a.faburiqi || a.shenqingridi || '1970-01-01')
+          const dateB = new Date(b.faburiqi || b.shenqingridi || '1970-01-01')
+          return this.sortBy === 'newest' ? dateB - dateA : dateA - dateB
+        })
+        
+        this.projects = projects
+        this.total = total
+        
+        console.log('合并后的项目列表:', this.projects)
+        if (this.projects.length === 0) {
+          console.log('项目列表为空，请检查数据库是否有数据')
+        }
+        
         this.loading = false
       }).catch(err => {
         console.error('加载项目失败:', err)
         this.loading = false
-        // 进入页面时的列表请求失败不打断用户；空列表 + 控制台日志即可排查
       })
     },
     searchProjects() {
@@ -539,7 +709,86 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$router.push(`/index/bangfuxiangmuDetail?id=${id}`)
+      this.$router.push(`/index/bangfuxiangmuDetail/${id}`)
+    },
+    applyProject(project) {
+      const uid = this.sessionUserId()
+      if (!uid) {
+        this.$message.warning('请先登录')
+        return
+      }
+      this.applyForm = {
+        xiangmuid: project.id,
+        xiangmumingcheng: project.xiangmumingcheng,
+        lianxiren: '',
+        lianxidianhua: '',
+        jigoumingcheng: '',
+        duijieshuoming: '',
+        fujian: '',
+        fuwuchengnuo: false
+      }
+      this.applyImageList = []
+      this.applyDialogVisible = true
+    },
+    handleApplyImageSuccess(res) {
+      if (res.code === 0) {
+        this.applyForm.fujian = res.data ? res.data.url : ''
+        this.$message.success('上传成功')
+      } else {
+        this.$message.error('上传失败')
+      }
+    },
+    submitApply() {
+      if (!this.applyForm.jigoumingcheng) {
+        this.$message.warning('请输入机构/个人名称')
+        return
+      }
+      if (!this.applyForm.lianxidianhua) {
+        this.$message.warning('请输入联系电话')
+        return
+      }
+      if (!this.applyForm.duijieshuoming) {
+        this.$message.warning('请输入对接说明')
+        return
+      }
+      if (this.applyForm.duijieshuoming.length < 10) {
+        this.$message.warning('对接说明需要至少10字')
+        return
+      }
+      if (!this.applyForm.fuwuchengnuo) {
+        this.$message.warning('请勾选服务承诺')
+        return
+      }
+      
+      const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
+      const submitData = {
+        shenqingbianhao: 'DJ' + Date.now(),
+        xiangmuid: this.applyForm.xiangmuid,
+        xiangmumingcheng: this.applyForm.xiangmumingcheng,
+        shenqingrenzhanghao: userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || '游客',
+        shenqingrenxingming: userInfo.yonghuxingming || userInfo.nonghuxingming || '游客',
+        shenqingriqi: new Date().toISOString().split('T')[0],
+        shenqingshuoming: this.applyForm.duijieshuoming,
+        jigoumingcheng: this.applyForm.jigoumingcheng,
+        lianxidianhua: this.applyForm.lianxidianhua,
+        fujian: this.applyForm.fujian,
+        fuwuchengnuo: this.applyForm.fuwuchengnuo,
+        sfsh: '待审核',
+        userid: userInfo.id,
+        duijieshuoming: this.applyForm.duijieshuoming
+      }
+      console.log('提交的数据:', submitData)
+      this.$http.post('/duijieshenqing/add', submitData).then(res => {
+        if (res.data.code === 0) {
+          this.$message.success('申请提交成功，等待审核')
+          this.applyDialogVisible = false
+        } else {
+          this.$message.error(res.data.msg || '申请失败')
+        }
+      }).catch(err => {
+        console.error('申请失败:', err)
+        this.$message.error('申请失败')
+      })
     },
 
     // 资源池方法
@@ -655,6 +904,8 @@ export default {
       }).then(res => {
         if (res.data.code === 0) {
           this.myNeeds = (res.data.data && res.data.data.list) || []
+          this.selectAllNeeds = false
+          this.selectedNeedIds = []
         }
       }).catch(err => {
         console.error('加载需求失败:', err)
@@ -666,7 +917,48 @@ export default {
         '已通过': 'status-approved',
         '已拒绝': 'status-rejected'
       }
-      return statusMap[status] || ''
+      return statusMap[status] || 'status-pending'
+    },
+    // 全选需求
+    handleSelectAll(val) {
+      if (val) {
+        this.selectedNeedIds = this.myNeeds.map(item => item.id)
+      } else {
+        this.selectedNeedIds = []
+      }
+    },
+    // 删除单个需求
+    deleteNeed(id) {
+      this.deleteConfirmVisible = true
+      this.deleteId = id
+      this.deleteType = 'single'
+      this.deleteMessage = '确定要删除这个需求吗？'
+    },
+    // 确认删除
+    confirmDelete() {
+      const ids = this.deleteType === 'single' ? [this.deleteId] : [...this.selectedNeedIds]
+      this.$http.post('/bangfuxuqiu/delete', ids).then(res => {
+        if (res.data.code === 0) {
+          this.$message.success('删除成功')
+          this.loadMyNeeds()
+        } else {
+          this.$message.error(res.data.msg || '删除失败')
+        }
+      }).catch(() => {
+        this.$message.error('删除失败')
+      })
+      this.deleteConfirmVisible = false
+    },
+    // 批量删除需求
+    batchDeleteNeed() {
+      if (this.selectedNeedIds.length === 0) {
+        this.$message.warning('请选择要删除的需求')
+        return
+      }
+      this.deleteConfirmVisible = true
+      this.deleteId = null
+      this.deleteType = 'batch'
+      this.deleteMessage = `确定要删除选中的 ${this.selectedNeedIds.length} 个需求吗？`
     },
 
     // 发布需求方法
@@ -678,13 +970,16 @@ export default {
       this.$refs.needForm.validate(valid => {
         if (valid) {
           const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
-          const submitData = { ...this.needForm }
-          submitData.xuqiubianhao = 'XQ' + Date.now()
-          submitData.shenqingrenzhanghao = userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || '游客'
-          submitData.shenqingrenxingming = userInfo.yonghuxingming || userInfo.nonghuxingming || '游客'
-          submitData.shenqingridi = new Date().toISOString().split('T')[0]
-          submitData.sfsh = '待审核'
-          submitData.userid = userInfo.id
+          const submitData = { 
+            ...this.needForm,
+            xuqiubianhao: 'XQ' + Date.now(),
+            shenqingrenzhanghao: userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || '游客',
+            shenqingrenxingming: userInfo.yonghuxingming || userInfo.nonghuxingming || '游客',
+            shenqingridi: new Date().toISOString().split('T')[0],
+            sfsh: '待审核',
+            userid: userInfo.id,
+            lianxidianhua: this.needForm.lianxidianhua
+          }
           
           // 处理日期格式
           if (submitData.qiwangshijian) {
@@ -713,135 +1008,6 @@ export default {
       this.needImageList = []
     },
 
-    // 对接管理方法
-    loadManagementData() {
-      // 加载待审核资源
-      this.$http.get('/bangfuziyuan/list', { params: { sfsh: '待审核', page: 1, limit: 200 } }).then(res => {
-        if (res.data.code === 0) {
-          this.pendingResources = (res.data.data && res.data.data.list) || []
-        }
-      }).catch(err => {
-        console.error('加载待审核资源失败:', err)
-      })
-      // 加载待审核需求
-      this.$http.get('/bangfuxuqiu/list', { params: { sfsh: '待审核', page: 1, limit: 200 } }).then(res => {
-        if (res.data.code === 0) {
-          this.pendingNeeds = (res.data.data && res.data.data.list) || []
-        }
-      }).catch(err => {
-        console.error('加载待审核需求失败:', err)
-      })
-      // 加载对接实施
-      this.$http.get('/bangfushishi/list', { params: { page: 1, limit: 200 } }).then(res => {
-        if (res.data.code === 0) {
-          this.implementations = (res.data.data && res.data.data.list) || []
-        }
-      }).catch(err => {
-        console.error('加载对接实施失败:', err)
-      })
-    },
-    viewResourceDetail(row) {
-      this.$message.info('查看资源详情：' + row.ziyuanbianhao)
-    },
-    approveResource(row) {
-      const updateData = { ...row, sfsh: '已通过' }
-      this.$http.post('/bangfuziyuan/update', updateData).then(res => {
-        if (res.data.code === 0) {
-          this.$message.success('已通过审核')
-          this.loadManagementData()
-        } else {
-          this.$message.error(res.data.msg || '操作失败')
-        }
-      }).catch(err => {
-        console.error('审核资源失败:', err)
-        this.$message.error('操作失败')
-      })
-    },
-    rejectResource(row) {
-      const updateData = { ...row, sfsh: '已拒绝' }
-      this.$http.post('/bangfuziyuan/update', updateData).then(res => {
-        if (res.data.code === 0) {
-          this.$message.success('已拒绝')
-          this.loadManagementData()
-        } else {
-          this.$message.error(res.data.msg || '操作失败')
-        }
-      }).catch(err => {
-        console.error('拒绝资源失败:', err)
-        this.$message.error('操作失败')
-      })
-    },
-    viewNeedDetail(row) {
-      this.$message.info('查看需求详情：' + row.xuqiubianhao)
-    },
-    approveNeed(row) {
-      const updateData = { ...row, sfsh: '已通过' }
-      this.$http.post('/bangfuxuqiu/update', updateData).then(res => {
-        if (res.data.code === 0) {
-          this.$message.success('已通过审核')
-          this.loadManagementData()
-        } else {
-          this.$message.error(res.data.msg || '操作失败')
-        }
-      }).catch(err => {
-        console.error('审核需求失败:', err)
-        this.$message.error('操作失败')
-      })
-    },
-    rejectNeed(row) {
-      const updateData = { ...row, sfsh: '已拒绝' }
-      this.$http.post('/bangfuxuqiu/update', updateData).then(res => {
-        if (res.data.code === 0) {
-          this.$message.success('已拒绝')
-          this.loadManagementData()
-        } else {
-          this.$message.error(res.data.msg || '操作失败')
-        }
-      }).catch(err => {
-        console.error('拒绝需求失败:', err)
-        this.$message.error('操作失败')
-      })
-    },
-    viewImplementation(row) {
-      this.$message.info('查看实施详情：' + row.shishibianhao)
-    },
-    updateProgress(row) {
-      this.$prompt('请输入最新帮扶进度说明', '更新进度', {
-        confirmButtonText: '保存',
-        cancelButtonText: '取消',
-        inputValue: row.bangfujindu || '',
-        inputType: 'textarea'
-      }).then(({ value }) => {
-        const payload = { ...row, bangfujindu: value, bangfuzhuangtai: row.bangfuzhuangtai || '进行中' }
-        this.$http.post('/bangfushishi/update', payload).then(res => {
-          if (res.data.code === 0) {
-            this.$message.success('进度已更新')
-            this.loadManagementData()
-          } else {
-            this.$message.error(res.data.msg || '保存失败')
-          }
-        }).catch(() => {})
-      }).catch(() => {})
-    },
-
-    // 我的评价方法
-    loadReviews() {
-      const uid = this.sessionUserId()
-      if (!uid) {
-        console.log('用户未登录，跳过加载评价')
-        return
-      }
-      this.$http.get('/bangfupingjia/list', {
-        params: { userid: uid, page: 1, limit: 100 }
-      }).then(res => {
-        if (res.data.code === 0) {
-          this.myReviews = (res.data.data && res.data.data.list) || []
-        }
-      }).catch(err => {
-        console.error('加载评价失败:', err)
-      })
-    },
-
     // 通用方法
     formatDate(date) {
       if (!date) return ''
@@ -857,6 +1023,144 @@ export default {
       if (p.indexOf('http') === 0) return p
       const base = (this.$config && this.$config.baseUrl) ? String(this.$config.baseUrl).replace(/\/?$/, '/') : '/api/'
       return base + p.replace(/^\//, '')
+    },
+    handleImageError(event, project) {
+      project.tupian = null
+    },
+    getPlaceholderClass(type) {
+      const classMap = {
+        '技术帮扶': 'tech',
+        '资金帮扶': 'fund',
+        '产品采购帮扶': 'product',
+        '产品采购帮扶需求': 'product',
+        '农机帮扶': 'machine',
+        '农机帮扶需求': 'machine',
+        '技术': 'tech',
+        '资金': 'fund',
+        '产品采购': 'product'
+      }
+      return classMap[type] || 'default'
+    },
+    getPlaceholderIcon(type) {
+      const iconMap = {
+        '技术帮扶': 'el-icon-science',
+        '资金帮扶': 'el-icon-wallet',
+        '产品采购帮扶': 'el-icon-shopping-bag',
+        '产品采购帮扶需求': 'el-icon-shopping-bag',
+        '农机帮扶': 'el-icon-truck',
+        '农机帮扶需求': 'el-icon-truck',
+        '技术': 'el-icon-science',
+        '资金': 'el-icon-wallet',
+        '产品采购': 'el-icon-shopping-bag'
+      }
+      return iconMap[type] || 'el-icon-heart'
+    },
+    getPlaceholderText(type) {
+      const textMap = {
+        '技术帮扶': '技术帮扶',
+        '资金帮扶': '资金帮扶',
+        '产品采购帮扶': '产品采购',
+        '产品采购帮扶需求': '产品采购',
+        '农机帮扶': '农机帮扶',
+        '农机帮扶需求': '农机帮扶',
+        '技术': '技术帮扶',
+        '资金': '资金帮扶',
+        '产品采购': '产品采购'
+      }
+      return textMap[type] || '帮扶项目'
+    },
+
+    // 我的对接方法
+    loadMyDockings() {
+      const account = this.sessionAccount()
+      if (!account) {
+        console.log('用户未登录，跳过加载对接记录')
+        return
+      }
+      this.dockingLoading = true
+      this.$http.get('/duijieshenqing/list', {
+        params: {
+          shenqingrenzhanghao: account
+        }
+      }).then(res => {
+        if (res.data.code === 0) {
+          this.myDockings = (res.data.data && res.data.data.list) || []
+        }
+        this.dockingLoading = false
+      }).catch(err => {
+        console.error('加载对接记录失败:', err)
+        this.dockingLoading = false
+      })
+    },
+    getDockingStatusClass(status) {
+      const statusMap = {
+        '待审核': 'status-pending',
+        '已通过': 'status-approved',
+        '已拒绝': 'status-rejected'
+      }
+      return statusMap[status] || 'status-pending'
+    },
+    // 删除对接申请
+    deleteDocking(id) {
+      this.$confirm('确定要删除这个对接申请吗？', '删除确认', { type: 'warning' }).then(() => {
+        this.$http.post('/duijieshenqing/delete', [id]).then(res => {
+          if (res.data.code === 0) {
+            this.$message.success('删除成功')
+            this.loadMyDockings()
+          } else {
+            this.$message.error(res.data.msg || '删除失败')
+          }
+        }).catch(() => {
+          this.$message.error('删除失败')
+        })
+      }).catch(() => {})
+    },
+    // 显示更新进度弹窗
+    showUpdateProgress(docking) {
+      this.progressForm = {
+        id: docking.id,
+        bangfuzhuangtai: docking.bangfuzhuangtai || '进行中',
+        bangfujindu: docking.bangfujindu || ''
+      }
+      this.updateProgressVisible = true
+    },
+    // 提交进度更新
+    submitProgress() {
+      if (!this.progressForm.bangfujindu) {
+        this.$message.warning('请输入进度说明')
+        return
+      }
+      this.$http.post('/duijieshenqing/update', this.progressForm).then(res => {
+        if (res.data.code === 0) {
+          this.$message.success('进度已更新')
+          this.updateProgressVisible = false
+          this.loadMyDockings()
+        } else {
+          this.$message.error(res.data.msg || '保存失败')
+        }
+      }).catch(() => {
+        this.$message.error('保存失败')
+      })
+    },
+    // 确认完成对接
+    confirmComplete(docking) {
+      this.$confirm('确定已完成本次对接吗？此操作将标记对接为已完成状态。', '确认完成', { type: 'info' }).then(() => {
+        const updateData = {
+          id: docking.id,
+          bangfuzhuangtai: '已完成',
+          bangfujindu: docking.bangfujindu ? docking.bangfujindu + '（已完成）' : '对接已完成'
+        }
+        this.$http.post('/duijieshenqing/update', updateData).then(res => {
+          if (res.data.code === 0) {
+            this.$message.success('已确认完成对接')
+            this.loadMyDockings()
+          } else {
+            this.$message.error(res.data.msg || '操作失败')
+          }
+        }).catch(() => {
+          this.$message.error('操作失败')
+        })
+      }).catch(() => {})
     }
   }
 }
@@ -1007,6 +1311,11 @@ export default {
   overflow: hidden;
 }
 
+.project-image .image-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
 .project-image img {
   width: 100%;
   height: 100%;
@@ -1018,6 +1327,46 @@ export default {
   transform: scale(1.1);
 }
 
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.3s ease;
+}
+
+.image-placeholder span {
+  opacity: 0.9;
+}
+
+.project-item:hover .image-placeholder {
+  transform: scale(1.02);
+}
+
+.image-placeholder.default {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.image-placeholder.tech {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.image-placeholder.fund {
+  background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+}
+
+.image-placeholder.product {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.image-placeholder.machine {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
 .project-info {
   padding: 20px;
 }
@@ -1027,6 +1376,13 @@ export default {
   font-weight: bold;
   color: #1a1a1a;
   margin-bottom: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.project-title:hover {
+  color: #2E7D32;
+  text-decoration: underline;
 }
 
 .project-meta {
@@ -1063,9 +1419,59 @@ export default {
   color: #555;
 }
 
-.project-stats {
+.contact-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.contact-person {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 13px;
   color: #999;
+  margin-top: 10px;
+}
+
+.apply-btn {
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.apply-btn:active {
+  transform: translateY(0);
+}
+
+.word-count {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.upload-tip {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
 }
 
 /* 资源卡片 */
@@ -1230,78 +1636,6 @@ export default {
   color: #666;
 }
 
-/* 评价卡片 */
-.review-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 25px;
-}
-
-.review-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.review-header h3 {
-  font-size: 16px;
-  color: #1a1a1a;
-}
-
-.review-score {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #fff;
-  padding: 6px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.score-detail {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 15px;
-  font-size: 13px;
-  color: #666;
-}
-
-.review-content {
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-.review-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 15px;
-  border-top: 1px solid #e8e8e8;
-  font-size: 13px;
-  color: #999;
-}
-
-.archive-status {
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 12px;
-  background: #f0f0f0;
-  color: #666;
-}
-
-.archive-status.archived {
-  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-  color: #fff;
-}
-
 /* 空状态 */
 .empty {
   text-align: center;
@@ -1371,11 +1705,106 @@ export default {
   color: #666;
 }
 
-/* 管理标签页 */
-.management-tabs {
+/* 我的对接样式 */
+.docking-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 25px;
+}
+
+.docking-card {
   background: #fff;
   border-radius: 16px;
-  padding: 20px;
+  padding: 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.docking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.docking-header h3 {
+  font-size: 18px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.docking-status {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+}
+
+.docking-body {
+  margin-bottom: 15px;
+}
+
+.docking-body p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.contact-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.05) 0%, rgba(46, 125, 50, 0.1) 100%);
+  border-radius: 10px;
+  border-left: 3px solid #2E7D32;
+}
+
+.contact-info h4 {
+  font-size: 16px;
+  color: #2E7D32;
+  margin: 0 0 10px 0;
+}
+
+.phone-link {
+  color: #2E7D32;
+  text-decoration: none;
+}
+
+.phone-link:hover {
+  text-decoration: underline;
+}
+
+.docking-feedback {
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.docking-feedback p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.docking-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.progress-info {
+  margin-top: 15px;
+  padding: 12px;
+  background: #fff3cd;
+  border-radius: 8px;
+  border-left: 3px solid #ffc107;
+}
+
+.progress-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #856404;
 }
 </style>

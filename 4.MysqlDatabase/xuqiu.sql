@@ -1,0 +1,1 @@
+ALTER TABLE bangfuxuqiu ADD COLUMN xuqiumingcheng VARCHAR(255) COMMENT '需求名称';

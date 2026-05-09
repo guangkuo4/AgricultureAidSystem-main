@@ -131,7 +131,7 @@ export default new VueRouter({
 					component: bangfuxiangmuList
 				},
 				{
-					path: 'bangfuxiangmuDetail',
+					path: 'bangfuxiangmuDetail/:id',
 					component: bangfuxiangmuDetail
 				},
 				{

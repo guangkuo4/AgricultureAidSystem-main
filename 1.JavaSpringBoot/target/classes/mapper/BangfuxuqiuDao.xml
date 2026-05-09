@@ -6,6 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.entity.BangfuxuqiuEntity" id="bangfuxuqiuMap">
         <result property="xuqiubianhao" column="xuqiubianhao"/>
+        <result property="xuqiumingcheng" column="xuqiumingcheng"/>
         <result property="xuqiuleixing" column="xuqiuleixing"/>
         <result property="xuqiumiaoshu" column="xuqiumiaoshu"/>
         <result property="xuqiutupian" column="xuqiutupian"/>

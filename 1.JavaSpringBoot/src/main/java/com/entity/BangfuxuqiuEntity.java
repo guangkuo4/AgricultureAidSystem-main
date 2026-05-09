@@ -57,6 +57,12 @@ public class BangfuxuqiuEntity<T> implements Serializable {
 	private String xuqiubianhao;
 	
 	/**
+	 * 需求名称
+	 */
+					
+	private String xuqiumingcheng;
+	
+	/**
 	 * 需求类型
 	 */
 					
@@ -89,10 +95,22 @@ public class BangfuxuqiuEntity<T> implements Serializable {
 	private Date qiwangshijian;
 	
 	/**
+	 * 所在省份
+	 */
+					
+	private String suozaidiqu;
+	
+	/**
 	 * 具体地址
 	 */
 					
 	private String jutidizhi;
+	
+	/**
+	 * 联系方式
+	 */
+					
+	private String lianxidianhua;
 	
 	/**
 	 * 申请人账号
@@ -164,6 +182,18 @@ public class BangfuxuqiuEntity<T> implements Serializable {
 		return xuqiubianhao;
 	}
 	/**
+	 * 设置：需求名称
+	 */
+	public void setXuqiumingcheng(String xuqiumingcheng) {
+		this.xuqiumingcheng = xuqiumingcheng;
+	}
+	/**
+	 * 获取：需求名称
+	 */
+	public String getXuqiumingcheng() {
+		return xuqiumingcheng;
+	}
+	/**
 	 * 设置：需求类型
 	 */
 	public void setXuqiuleixing(String xuqiuleixing) {
@@ -224,6 +254,18 @@ public class BangfuxuqiuEntity<T> implements Serializable {
 		return qiwangshijian;
 	}
 	/**
+	 * 设置：所在省份
+	 */
+	public void setSuozaidiqu(String suozaidiqu) {
+		this.suozaidiqu = suozaidiqu;
+	}
+	/**
+	 * 获取：所在省份
+	 */
+	public String getSuozaidiqu() {
+		return suozaidiqu;
+	}
+	/**
 	 * 设置：具体地址
 	 */
 	public void setJutidizhi(String jutidizhi) {
@@ -234,6 +276,18 @@ public class BangfuxuqiuEntity<T> implements Serializable {
 	 */
 	public String getJutidizhi() {
 		return jutidizhi;
+	}
+	/**
+	 * 设置：联系方式
+	 */
+	public void setLianxidianhua(String lianxidianhua) {
+		this.lianxidianhua = lianxidianhua;
+	}
+	/**
+	 * 获取：联系方式
+	 */
+	public String getLianxidianhua() {
+		return lianxidianhua;
 	}
 	/**
 	 * 设置：申请人账号

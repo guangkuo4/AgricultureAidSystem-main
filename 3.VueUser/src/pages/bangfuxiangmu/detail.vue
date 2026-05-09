@@ -1,689 +1,459 @@
 <template>
-  <div class="page">
-    <!-- 顶部导航栏 -->
-    <div class="nav-bar">
-      <button class="back-btn" @click="goBack">&larr; 返回</button>
-      <h2>项目详情</h2>
-      <div class="nav-actions">
-        <button class="share-btn" @click="share">分享</button>
-      </div>
+  <div class="detail-page">
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb-wrapper">
+      <el-breadcrumb :separator="'>'" class="breadcrumb">
+        <el-breadcrumb-item to="/"><a>首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item to="/index/bangfuxiangmu"><a>帮扶对接</a></el-breadcrumb-item>
+        <el-breadcrumb-item>{{ projectDetail.xiangmumingcheng || '项目详情' }}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
-    
-    <div class="project-detail">
-      <!-- 项目图片 -->
-      <div class="project-image">
-        <img :src="project.tupian || 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=agriculture%20project%20detail&image_size=landscape_16_9'" alt="项目图片" />
-      </div>
-      
-      <!-- 项目基本信息 -->
-      <div class="project-header">
-        <h1 class="project-title">{{ project.xiangmumingcheng }}</h1>
-        <div class="project-meta">
-          <span class="project-type">{{ project.xiangmuleixing }}</span>
-          <span class="project-date">{{ formatDate(project.faburiqi) }}</span>
-          <span class="view-count">👁 {{ project.clicknum || 0 }} 次浏览</span>
-        </div>
-      </div>
-      
-      <!-- 项目详情内容 -->
-      <div class="project-content">
-        <section class="content-section">
-          <h3 class="section-title">项目详情</h3>
-          <div class="content-text">{{ project.xiangmuxiangqing || '暂无详细信息' }}</div>
-        </section>
-        
-        <section class="content-section">
-          <h3 class="section-title">联系方式</h3>
-          <div class="contact-info">
-            <div class="contact-item">
-              <span class="contact-label">联系人：</span>
-              <span class="contact-value">{{ project.lianxiren || '暂无' }}</span>
-            </div>
-            <div class="contact-item">
-              <span class="contact-label">联系电话：</span>
-              <span class="contact-value">{{ project.lianxidianhua || '暂无' }}</span>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-      <!-- 操作按钮 -->
-      <div class="action-buttons">
-        <button class="contact-btn" @click="contact" :disabled="!project.lianxidianhua">
-          📞 联系我们
-        </button>
-        <button class="apply-btn" @click="showApplyDialog">
-          📋 发起对接
-        </button>
-      </div>
-    </div>
-    
-    <!-- 对接申请弹窗 -->
-    <div class="dialog" v-if="showApply">
-      <div class="dialog-content">
-        <div class="dialog-header">
-          <h3>发起对接申请</h3>
-          <button class="close-btn" @click="showApply = false">&times;</button>
-        </div>
-        <div class="form-group">
-          <label>项目名称</label>
-          <input type="text" v-model="project.xiangmumingcheng" disabled />
-        </div>
-        <div class="form-group">
-          <label>申请说明 <span class="required">*</span></label>
-          <textarea 
-            v-model="applyForm.shenqingshuoming" 
-            placeholder="请详细描述您的对接需求和合作意向..." 
-            rows="4"
-            :class="{ 'error': !applyForm.shenqingshuoming && submitAttempted }"
-          ></textarea>
-          <span v-if="!applyForm.shenqingshuoming && submitAttempted" class="error-message">请输入申请说明</span>
-        </div>
-        <div class="form-group">
-          <label>联系方式</label>
-          <input 
-            type="text" 
-            v-model="applyForm.contactPhone" 
-            placeholder="请留下您的联系电话"
-          />
-        </div>
-        <div class="dialog-buttons">
-          <button class="cancel-btn" @click="showApply = false">取消</button>
-          <button class="submit-btn" @click="submitApply" :disabled="submitting">
-            {{ submitting ? '提交中...' : '提交申请' }}
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 加载状态 -->
-    <div class="loading" v-if="loading">
-      <div class="loading-spinner"></div>
+
+    <!-- 加载中 -->
+    <div v-if="loading" class="loading">
+      <el-spinner type="ring" size="large"></el-spinner>
       <p>加载中...</p>
     </div>
+
+    <!-- 项目详情 -->
+    <div v-else class="content">
+      <!-- 项目图片 -->
+      <div class="project-images">
+        <div v-if="projectDetail.tupian" class="main-image">
+          <img :src="baseUrl + 'upload/' + projectDetail.tupian" alt="项目图片" />
+        </div>
+        <div v-else class="image-placeholder" :class="getPlaceholderClass(projectDetail.xiangmuleixing)">
+          <span>{{ getPlaceholderText(projectDetail.xiangmuleixing) }}</span>
+        </div>
+      </div>
+
+      <!-- 项目信息 -->
+      <div class="project-info">
+        <div class="project-header">
+          <h1 class="project-title">{{ projectDetail.xiangmumingcheng }}</h1>
+          <span class="project-type">{{ projectDetail.xiangmuleixing }}</span>
+        </div>
+
+        <div class="meta-info">
+          <span class="meta-item">
+            <i class="el-icon-user"></i>
+            {{ projectDetail.lianxiren || projectDetail.shenqingrenxingming || '未填写' }}
+          </span>
+          <span class="meta-item">
+            <i class="el-icon-location"></i>
+            {{ projectDetail.suozaidiqu || '未填写' }}
+          </span>
+          <span v-if="projectDetail.jutidizhi" class="meta-item">
+            <i class="el-icon-map-marker"></i>
+            {{ projectDetail.jutidizhi }}
+          </span>
+          <span class="meta-item">
+            <i class="el-icon-calendar"></i>
+            {{ projectDetail.faburiqi || projectDetail.shenqingriqi }}
+          </span>
+          <span class="meta-item">
+            <i class="el-icon-view"></i>
+            {{ projectDetail.clicknum || 0 }} 次浏览
+          </span>
+        </div>
+
+        <div class="project-desc">
+          <h3>项目描述</h3>
+          <p>{{ projectDetail.xiangmuxiangqing || projectDetail.xuqiumiaoshu || projectDetail.shenqingshuoming || '暂无描述' }}</p>
+        </div>
+
+        <!-- 申请对接按钮 -->
+        <div class="action-area">
+          <button class="apply-btn" @click="applyProject">申请对接</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 申请对接弹窗 -->
+    <el-dialog title="申请对接" :visible.sync="applyDialogVisible" width="600px" :close-on-click-modal="false">
+      <el-form :model="applyForm" label-width="130px">
+        <el-form-item label="机构 / 个人名称" required>
+          <el-input v-model="applyForm.jigoumingcheng" placeholder="企业填公司全称、个人/专家填姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" required>
+          <el-input v-model="applyForm.lianxidianhua" placeholder="请输入需求方可直接联系的手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="对接说明" required>
+          <el-input type="textarea" v-model="applyForm.duijieshuoming" :rows="5" placeholder="至少10字，说明自身优势、为什么能做好这个帮扶"></el-input>
+          <span class="word-count">已输入 {{ applyForm.duijieshuoming ? applyForm.duijieshuoming.length : 0 }} 字</span>
+        </el-form-item>
+        <el-form-item label="附件上传">
+          <el-upload
+            :action="uploadUrl"
+            :headers="uploadHeaders"
+            name="file"
+            list-type="picture-card"
+            :on-success="handleApplyImageSuccess"
+            :file-list="applyImageList"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <div class="upload-tip">可选上传：资质证书、过往案例证明、营业执照等，增强可信度</div>
+        </el-form-item>
+        <el-form-item label="服务承诺" required>
+          <el-checkbox v-model="applyForm.fuwuchengnuo">
+            承诺提供信息真实有效，遵守平台帮扶规则
+          </el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitApply" :disabled="!applyForm.fuwuchengnuo">提交申请</el-button>
+          <el-button @click="applyDialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import config from '@/config/config'
+
 export default {
+  name: 'BangfuDetail',
   data() {
     return {
-      project: {},
-      loading: false,
-      showApply: false,
-      submitting: false,
-      submitAttempted: false,
+      baseUrl: config.baseUrl,
+      loading: true,
+      projectDetail: {},
+      applyDialogVisible: false,
       applyForm: {
-        shenqingshuoming: '',
-        contactPhone: ''
+        xiangmuid: '',
+        xiangmumingcheng: '',
+        lianxidianhua: '',
+        jigoumingcheng: '',
+        duijieshuoming: '',
+        fujian: '',
+        fuwuchengnuo: false
+      },
+      applyImageList: [],
+      uploadUrl: config.baseUrl + 'file/upload',
+      uploadHeaders: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
   },
-  mounted() {
+  created() {
     this.loadProjectDetail()
   },
   methods: {
     loadProjectDetail() {
-      const id = this.$route.query.id || this.$route.params.id
+      const id = this.$route.params.id
       if (!id) {
-        alert('项目ID不存在')
-        this.goBack()
+        this.$message.error('项目ID不存在')
+        this.loading = false
         return
       }
-      
       this.loading = true
-      this.$http.get(`/bangfuxiangmu/detail/${id}`).then(res => {
-        if (res.data.code === 0) {
-          this.project = res.data.data
-          // 增加点击次数
-          this.incrementViewCount(id)
+      this.projectDetail = {}
+      this.$http.get('bangfuxiangmu/detail/' + id).then(res => {
+        if (res.data.code === 0 && res.data.data) {
+          this.projectDetail = res.data.data
         } else {
-          alert('项目不存在')
-          this.goBack()
+          return this.$http.get('bangfuxuqiu/detail/' + id)
         }
-        this.loading = false
-      }).catch(() => {
-        alert('网络错误，请稍后重试')
+      }).then(res => {
+        if (res && res.data && res.data.code === 0 && res.data.data) {
+          this.projectDetail = res.data.data
+        }
+      }).catch(err => {
+        console.error('加载项目详情失败:', err)
+      }).finally(() => {
         this.loading = false
       })
     },
-    incrementViewCount(id) {
-      this.$http.get(`/bangfuxiangmu/updateClick/${id}`).catch(() => {
-        // 忽略错误
-      })
+    getPlaceholderClass(type) {
+      if (!type) return 'other'
+      if (type.includes('技术')) return 'tech'
+      if (type.includes('资金')) return 'fund'
+      if (type.includes('采购')) return 'procurement'
+      if (type.includes('农机')) return 'machine'
+      return 'other'
     },
-    showApplyDialog() {
-      // 检查用户是否登录
-      const userInfo = localStorage.getItem('userInfo')
-      if (!userInfo) {
-        this.$router.push('/login')
+    getPlaceholderText(type) {
+      if (!type) return '帮扶项目'
+      if (type.includes('技术')) return '技术帮扶'
+      if (type.includes('资金')) return '资金帮扶'
+      if (type.includes('采购')) return '产品采购'
+      if (type.includes('农机')) return '农机帮扶'
+      return type
+    },
+    applyProject() {
+      const uid = localStorage.getItem('frontUserid') || localStorage.getItem('sessionUserId')
+      if (!uid) {
+        this.$message.warning('请先登录')
         return
       }
-      
-      // 初始化表单
       this.applyForm = {
-        shenqingshuoming: '',
-        contactPhone: ''
+        xiangmuid: this.projectDetail.id,
+        xiangmumingcheng: this.projectDetail.xiangmumingcheng,
+        lianxidianhua: '',
+        jigoumingcheng: '',
+        duijieshuoming: '',
+        fujian: '',
+        fuwuchengnuo: false
       }
-      this.submitAttempted = false
-      this.showApply = true
+      this.applyImageList = []
+      this.applyDialogVisible = true
+    },
+    handleApplyImageSuccess(res) {
+      if (res.code === 0) {
+        this.applyForm.fujian = res.data ? res.data.url : ''
+        this.$message.success('上传成功')
+      } else {
+        this.$message.error('上传失败')
+      }
     },
     submitApply() {
-      this.submitAttempted = true
-      
-      if (!this.applyForm.shenqingshuoming) {
+      if (!this.applyForm.jigoumingcheng) {
+        this.$message.warning('请输入机构/个人名称')
         return
       }
-      
-      this.submitting = true
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      
-      this.$http.post('/duijieshenqing/add', {
-        xiangmubianhao: this.project.xiangmubianhao || '项目编号',
-        xiangmumingcheng: this.project.xiangmumingcheng,
-        shenqingrenzhanghao: userInfo.username,
-        shenqingrenxingming: userInfo.nickname,
-        shenqingshuoming: this.applyForm.shenqingshuoming,
-        lianxidianhua: this.applyForm.contactPhone || userInfo.phone || '',
-        shenqingriqi: new Date(),
+      if (!this.applyForm.lianxidianhua) {
+        this.$message.warning('请输入联系电话')
+        return
+      }
+      if (!this.applyForm.duijieshuoming) {
+        this.$message.warning('请输入对接说明')
+        return
+      }
+      if (this.applyForm.duijieshuoming.length < 10) {
+        this.$message.warning('对接说明需要至少10字')
+        return
+      }
+      if (!this.applyForm.fuwuchengnuo) {
+        this.$message.warning('请勾选服务承诺')
+        return
+      }
+
+      const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
+      const submitData = {
+        shenqingbianhao: 'DJ' + Date.now(),
+        xiangmuid: this.applyForm.xiangmuid,
+        xiangmumingcheng: this.applyForm.xiangmumingcheng,
+        shenqingrenzhanghao: userInfo.yonghuzhanghao || userInfo.nonghuzhanghao || localStorage.getItem('username') || '游客',
+        shenqingrenxingming: userInfo.yonghuxingming || userInfo.nonghuxingming || '游客',
+        shenqingriqi: new Date().toISOString().split('T')[0],
+        shenqingshuoming: this.applyForm.duijieshuoming,
+        jigoumingcheng: this.applyForm.jigoumingcheng,
+        lianxidianhua: this.applyForm.lianxidianhua,
+        fujian: this.applyForm.fujian,
+        fuwuchengnuo: this.applyForm.fuwuchengnuo,
+        sfsh: '待审核',
         userid: userInfo.id
-      }).then(res => {
+      }
+
+      this.$http.post('/duijieshenqing/add', submitData).then(res => {
         if (res.data.code === 0) {
-          alert('申请提交成功！我们会尽快与您联系。')
-          this.showApply = false
-          // 跳转到我的对接申请页面
-          setTimeout(() => {
-            this.$router.push('/index/duijieshenqing')
-          }, 1000)
+          this.$message.success('申请提交成功，等待审核')
+          this.applyDialogVisible = false
         } else {
-          alert('申请提交失败：' + res.data.msg)
+          this.$message.error(res.data.msg || '申请失败')
         }
-        this.submitting = false
-      }).catch(() => {
-        alert('网络错误，请稍后重试')
-        this.submitting = false
+      }).catch(err => {
+        console.error('申请失败:', err)
+        this.$message.error('申请失败')
       })
-    },
-    contact() {
-      if (this.project.lianxidianhua) {
-        if (confirm(`是否拨打 ${this.project.lianxidianhua}？`)) {
-          window.location.href = `tel:${this.project.lianxidianhua}`
-        }
-      }
-    },
-    goBack() {
-      if (window.history.length > 1) {
-        window.history.back()
-      } else {
-        this.$router.push('/index/bangfuxiangmu')
-      }
-    },
-    share() {
-      if (navigator.share) {
-        navigator.share({
-          title: this.project.xiangmumingcheng,
-          text: '查看这个帮扶项目',
-          url: window.location.href
-        }).catch(() => {
-          // 分享失败
-        })
-      } else {
-        // 复制链接
-        const url = window.location.href
-        navigator.clipboard.writeText(url).then(() => {
-          alert('链接已复制到剪贴板')
-        }).catch(() => {
-          alert('复制失败，请手动复制链接')
-        })
-      }
-    },
-    formatDate(date) {
-      if (!date) return ''
-      return new Date(date).toLocaleDateString()
     }
   }
 }
 </script>
 
 <style scoped>
-.page {
-  background-color: #f5f5f5;
+.detail-page {
   min-height: 100vh;
-  padding-top: 60px;
+  background: #f5f7fa;
+  padding-bottom: 60px;
 }
 
-/* 导航栏 */
-.nav-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  z-index: 100;
+.breadcrumb-wrapper {
+  padding: 20px 30px;
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  color: #fff;
 }
 
-.nav-bar h2 {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 5px 10px;
-  color: #333;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.back-btn:hover {
-  background-color: #f0f0f0;
-}
-
-.share-btn {
-  background: none;
-  border: none;
+.breadcrumb {
   font-size: 14px;
-  cursor: pointer;
-  padding: 5px 10px;
-  color: #4CAF50;
-  border-radius: 4px;
-  transition: background-color 0.3s;
 }
 
-.share-btn:hover {
-  background-color: #e8f5e8;
+.breadcrumb a {
+  color: rgba(255, 255, 255, 0.8);
 }
 
-/* 项目详情 */
-.project-detail {
-  background-color: #fff;
-  border-radius: 8px;
+.breadcrumb a:hover {
+  color: #fff;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0;
+}
+
+.loading p {
+  margin-top: 20px;
+  color: #999;
+}
+
+.content {
+  width: 90%;
+  max-width: 900px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin: 15px;
 }
 
-.project-image {
+.project-images {
   width: 100%;
-  height: 250px;
+  height: 400px;
   position: relative;
 }
 
-.project-image img {
+.main-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.image-placeholder.tech {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.image-placeholder.fund {
+  background: linear-gradient(135deg, #fc4a1a, #f7b733);
+}
+
+.image-placeholder.procurement {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.image-placeholder.machine {
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+}
+
+.image-placeholder.other {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.project-info {
+  padding: 30px;
+}
+
 .project-header {
-  padding: 20px;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .project-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0 0 12px 0;
-  color: #333;
-  line-height: 1.3;
-}
-
-.project-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 0;
-  font-size: 12px;
-  color: #666;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
 }
 
 .project-type {
-  background-color: #e8f5e8;
-  color: #2e7d32;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-
-.view-count {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.project-content {
-  padding: 20px;
-}
-
-.content-section {
-  margin-bottom: 25px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0 0 12px 0;
-  color: #333;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.content-text {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #666;
-  white-space: pre-wrap;
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.contact-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.contact-label {
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
-  min-width: 80px;
+  flex-shrink: 0;
 }
 
-.contact-value {
-  font-size: 14px;
-  color: #666;
-  flex: 1;
-}
-
-/* 操作按钮 */
-.action-buttons {
+.meta-info {
   display: flex;
-  padding: 20px;
-  border-top: 1px solid #eee;
-  gap: 10px;
-  background-color: #fafafa;
-}
-
-.contact-btn,
-.apply-btn {
-  flex: 1;
-  padding: 14px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.contact-btn {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.contact-btn:hover:not(:disabled) {
-  background-color: #e0e0e0;
-}
-
-.contact-btn:disabled {
-  background-color: #f5f5f5;
-  color: #ccc;
-  cursor: not-allowed;
-  border-color: #eee;
-}
-
-.apply-btn {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.apply-btn:hover {
-  background-color: #45a049;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
-}
-
-/* 弹窗样式 */
-.dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.dialog-content {
-  background-color: #fff;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.dialog-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
   border-bottom: 1px solid #eee;
 }
 
-.dialog-header h3 {
-  margin: 0;
-  color: #333;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 24px;
-  height: 24px;
+.meta-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.close-btn:hover {
-  background-color: #f0f0f0;
+  gap: 5px;
+  font-size: 14px;
   color: #666;
 }
 
-.form-group {
-  padding: 0 20px 20px;
+.meta-item i {
+  color: #2E7D32;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 500;
+.project-desc h3 {
+  font-size: 18px;
+  font-weight: 600;
   color: #333;
-}
-
-.required {
-  color: #f44336;
-  font-size: 12px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.form-group input:disabled {
-  background-color: #f5f5f5;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.form-group input.error,
-.form-group textarea.error {
-  border-color: #f44336;
-}
-
-.error-message {
-  color: #f44336;
-  font-size: 12px;
-  margin-top: 4px;
-  display: block;
-}
-
-.dialog-buttons {
-  display: flex;
-  gap: 10px;
-  padding: 0 20px 20px;
-}
-
-.cancel-btn,
-.submit-btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.cancel-btn {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.cancel-btn:hover {
-  background-color: #e0e0e0;
-}
-
-.submit-btn {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.submit-btn:hover:not(:disabled) {
-  background-color: #45a049;
-  transform: translateY(-1px);
-}
-
-.submit-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* 加载状态 */
-.loading {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255,255,255,0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #4CAF50;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
   margin-bottom: 15px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading p {
-  color: #666;
+.project-desc p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
   margin: 0;
-  font-size: 14px;
+  white-space: pre-wrap;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .project-image {
-    height: 200px;
-  }
-  
-  .project-header,
-  .project-content {
-    padding: 15px;
-  }
-  
-  .action-buttons {
-    padding: 15px;
-    flex-direction: column;
-  }
-  
-  .contact-btn,
-  .apply-btn {
-    width: 100%;
-  }
-  
-  .project-meta {
-    flex-direction: column;
-    gap: 5px;
-  }
+.action-area {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.apply-btn {
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  color: #fff;
+  border: none;
+  padding: 15px 50px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(46, 125, 50, 0.35);
+}
+
+.apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.45);
+}
+
+.word-count {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.upload-tip {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
 }
 </style>

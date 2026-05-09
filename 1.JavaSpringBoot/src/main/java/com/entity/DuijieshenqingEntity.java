@@ -87,6 +87,30 @@ public class DuijieshenqingEntity<T> implements Serializable {
 	private String shenqingshuoming;
 	
 	/**
+	 * 机构/个人名称
+	 */
+					
+	private String jigoumingcheng;
+	
+	/**
+	 * 联系电话
+	 */
+					
+	private String lianxidianhua;
+	
+	/**
+	 * 附件
+	 */
+					
+	private String fujian;
+	
+	/**
+	 * 服务承诺
+	 */
+					
+	private Boolean fuwuchengnuo;
+	
+	/**
 	 * 申请日期
 	 */
 				
@@ -202,6 +226,54 @@ public class DuijieshenqingEntity<T> implements Serializable {
 	 */
 	public String getShenqingshuoming() {
 		return shenqingshuoming;
+	}
+	/**
+	 * 设置：机构/个人名称
+	 */
+	public void setJigoumingcheng(String jigoumingcheng) {
+		this.jigoumingcheng = jigoumingcheng;
+	}
+	/**
+	 * 获取：机构/个人名称
+	 */
+	public String getJigoumingcheng() {
+		return jigoumingcheng;
+	}
+	/**
+	 * 设置：联系电话
+	 */
+	public void setLianxidianhua(String lianxidianhua) {
+		this.lianxidianhua = lianxidianhua;
+	}
+	/**
+	 * 获取：联系电话
+	 */
+	public String getLianxidianhua() {
+		return lianxidianhua;
+	}
+	/**
+	 * 设置：附件
+	 */
+	public void setFujian(String fujian) {
+		this.fujian = fujian;
+	}
+	/**
+	 * 获取：附件
+	 */
+	public String getFujian() {
+		return fujian;
+	}
+	/**
+	 * 设置：服务承诺
+	 */
+	public void setFuwuchengnuo(Boolean fuwuchengnuo) {
+		this.fuwuchengnuo = fuwuchengnuo;
+	}
+	/**
+	 * 获取：服务承诺
+	 */
+	public Boolean getFuwuchengnuo() {
+		return fuwuchengnuo;
 	}
 	/**
 	 * 设置：申请日期

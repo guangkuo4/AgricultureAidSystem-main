@@ -11,6 +11,10 @@
         <result property="shenqingrenzhanghao" column="shenqingrenzhanghao"/>
         <result property="shenqingrenxingming" column="shenqingrenxingming"/>
         <result property="shenqingshuoming" column="shenqingshuoming"/>
+        <result property="jigoumingcheng" column="jigoumingcheng"/>
+        <result property="lianxidianhua" column="lianxidianhua"/>
+        <result property="fujian" column="fujian"/>
+        <result property="fuwuchengnuo" column="fuwuchengnuo"/>
         <result property="shenqingriqi" column="shenqingriqi"/>
         <result property="sfsh" column="sfsh"/>
         <result property="shhf" column="shhf"/>

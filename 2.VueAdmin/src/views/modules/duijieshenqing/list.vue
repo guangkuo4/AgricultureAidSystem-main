@@ -17,6 +17,7 @@
           </el-select>
         </div>
         <el-button class="search" type="success" icon="el-icon-search" @click="search()">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="getDataList()">刷新</el-button>
       </el-row>
     </el-form>
 
@@ -43,12 +44,14 @@
             <el-tag v-else type="warning" size="small">待审核</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="240" fixed="right">
+        <el-table-column label="操作" width="260" fixed="right">
           <template slot-scope="scope">
-            <el-button type="info" size="mini" icon="el-icon-view" @click="viewHandler(scope.row)">查看</el-button>
-            <el-button type="warning" size="mini" icon="el-icon-refresh" @click="auditHandler(scope.row)" v-if="scope.row.sfsh!=='通过' && scope.row.sfsh!=='驳回'">审核</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-edit" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteHandle(scope.row.id)">删除</el-button>
+            <div class="btn-group">
+              <el-button type="info" size="mini" icon="el-icon-view" @click="viewHandler(scope.row)">查看</el-button>
+              <el-button type="warning" size="mini" icon="el-icon-refresh" @click="auditHandler(scope.row)" v-if="scope.row.sfsh!=='通过' && scope.row.sfsh!=='驳回'">审核</el-button>
+              <el-button type="primary" size="mini" icon="el-icon-edit" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteHandle(scope.row.id)">删除</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -76,17 +79,29 @@
     <!-- 详情弹窗 -->
     <el-dialog title="对接申请详情" :visible.sync="viewVisible" width="720px" :close-on-click-modal="false">
       <el-descriptions :column="2" border size="small">
-        <el-descriptions-item label="申请编号">{{ detailRow.shenqingbianhao }}</el-descriptions-item>
-        <el-descriptions-item label="帮扶项目">{{ detailRow.xiangmumingcheng }}</el-descriptions-item>
-        <el-descriptions-item label="申请人账号">{{ detailRow.shenqingrenzhanghao }}</el-descriptions-item>
-        <el-descriptions-item label="申请人姓名">{{ detailRow.shenqingrenxingming }}</el-descriptions-item>
-        <el-descriptions-item label="申请日期">{{ detailRow.shenqingriqi }}</el-descriptions-item>
+        <el-descriptions-item label="申请编号">{{ detailRow.shenqingbianhao || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="帮扶项目">{{ detailRow.xiangmumingcheng || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="申请人账号">{{ detailRow.shenqingrenzhanghao || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="申请人姓名">{{ detailRow.shenqingrenxingming || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="申请日期">{{ detailRow.shenqingriqi || '无' }}</el-descriptions-item>
         <el-descriptions-item label="审核状态">
           <el-tag v-if="detailRow.sfsh === '通过'" type="success" size="small">通过</el-tag>
           <el-tag v-else-if="detailRow.sfsh === '驳回'" type="danger" size="small">驳回</el-tag>
           <el-tag v-else type="warning" size="small">待审核</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="申请说明" :span="2">{{ detailRow.shenqingshuoming || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="机构/个人名称">{{ detailRow.jigoumingcheng || detailRow.shenqingrenxingming || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="联系电话">{{ detailRow.lianxidianhua || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="对接说明" :span="2">{{ detailRow.shenqingshuoming || detailRow.duijieshuoming || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="附件">
+          <template v-if="detailRow.fujian">
+            <a :href="detailRow.fujian" target="_blank">查看附件</a>
+          </template>
+          <template v-else>无</template>
+        </el-descriptions-item>
+        <el-descriptions-item label="服务承诺">
+          <el-tag v-if="detailRow.fuwuchengnuo === true || detailRow.fuwuchengnuo === 'true'" type="success" size="small">已承诺</el-tag>
+          <el-tag v-else type="warning" size="small">未承诺</el-tag>
+        </el-descriptions-item>
         <el-descriptions-item label="审核回复" :span="2">{{ detailRow.shhf || '无' }}</el-descriptions-item>
       </el-descriptions>
       <span slot="footer"><el-button type="primary" @click="viewVisible=false">关闭</el-button></span>
@@ -114,6 +129,24 @@
     </el-dialog>
   </div>
 </template>
+
+<style scoped>
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.btn-group .el-button--mini {
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  height: auto;
+  line-height: 1.4;
+}
+</style>
 
 <script>
 import AddOrUpdate from './add-or-update'
@@ -159,7 +192,15 @@ export default {
       this.addOrUpdateVisible = true
       this.$nextTick(() => { this.$refs.addOrUpdate.init(id) })
     },
-    viewHandler(row) { this.detailRow = row || {}; this.viewVisible = true },
+    viewHandler(row) {
+      // 调用详情接口获取完整数据
+      this.$http({ url: 'duijieshenqing/info/' + row.id, method: 'get' }).then(({ data }) => {
+        if (data && data.code === 0) {
+          this.detailRow = data.data || {}
+          this.viewVisible = true
+        }
+      })
+    },
     auditHandler(row) {
       this.auditForm = { id: row.id, shenqingbianhao: row.shenqingbianhao, xiangmumingcheng: row.xiangmumingcheng, sfsh: '通过', shhf: '' }
       this.auditVisible = true

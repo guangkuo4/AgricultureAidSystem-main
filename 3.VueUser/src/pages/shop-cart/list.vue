@@ -135,9 +135,10 @@
           <el-button 
             @click="buyClick"
             :disabled="selRows.length == 0"
-            :style='{"border":"0","padding":"15px 50px","borderRadius":"8px","background":"linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)","color":"#fff","fontSize":"18px","fontWeight":"600","boxShadow":"0 4px 16px rgba(46, 125, 50, 0.4)","transition":"all 0.3s ease","&:hover":{"transform":"translateY(-2px)","boxShadow":"0 6px 20px rgba(46, 125, 50, 0.5)"},"&:disabled":{"background":"#ccc","boxShadow":"none","cursor":"not-allowed"}}'
+            class="checkout-btn"
+            :class="{ 'checkout-btn--disabled': selRows.length == 0 }"
           >
-            <i class="el-icon-shopping-cart-2" style="margin-right: 8px;"></i>去结算
+            <i class="el-icon-shopping-cart-2"></i>去结算
           </el-button>
         </div>
       </div>
@@ -700,25 +701,61 @@
   border: none;
   padding: 16px 56px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%) !important;
   color: #fff;
   font-size: 18px;
   font-weight: 700;
-  box-shadow: 0 8px 28px rgba(46, 125, 50, 0.4);
+  box-shadow: 0 8px 28px rgba(46, 125, 50, 0.45);
   transition: all 0.3s ease;
 
-  i { margin-right: 8px; }
+  i { 
+    margin-right: 8px; 
+    font-size: 18px;
+  }
 
   &:hover:not(:disabled) {
     transform: translateY(-3px);
-    box-shadow: 0 12px 36px rgba(46, 125, 50, 0.5);
+    box-shadow: 0 12px 36px rgba(46, 125, 50, 0.55);
+    background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%) !important;
   }
 
   &:disabled {
-    background: #ccc !important;
+    background: #ddd !important;
     box-shadow: none;
     cursor: not-allowed;
+    opacity: 0.6;
   }
+}
+
+/* 去结算按钮（使用class方式） */
+.checkout-btn {
+  border: none;
+  padding: 16px 50px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%) !important;
+  color: #fff !important;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(46, 125, 50, 0.4);
+  transition: all 0.3s ease;
+
+  i { 
+    margin-right: 8px; 
+    font-size: 16px;
+  }
+
+  &:hover:not(.checkout-btn--disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.5);
+    background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%) !important;
+  }
+}
+
+.checkout-btn--disabled {
+  background: #ccc !important;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* 数字输入框样式 */
