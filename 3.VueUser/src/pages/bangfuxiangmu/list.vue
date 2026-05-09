@@ -447,13 +447,8 @@
             </el-upload>
             <div class="upload-tip">可选上传：资质证书、过往案例证明、营业执照等，增强可信度</div>
           </el-form-item>
-          <el-form-item label="服务承诺" required>
-            <el-checkbox v-model="applyForm.fuwuchengnuo">
-              承诺提供信息真实有效，遵守平台帮扶规则
-            </el-checkbox>
-          </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitApply" :disabled="!applyForm.fuwuchengnuo">提交申请</el-button>
+            <el-button type="primary" @click="submitApply">提交申请</el-button>
             <el-button @click="applyDialogVisible = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -631,8 +626,7 @@ export default {
         lianxidianhua: '',
         jigoumingcheng: '',
         duijieshuoming: '',
-        fujian: '',
-        fuwuchengnuo: false
+        fujian: ''
       },
       applyImageList: [],
 
@@ -781,8 +775,7 @@ export default {
         lianxidianhua: '',
         jigoumingcheng: '',
         duijieshuoming: '',
-        fujian: '',
-        fuwuchengnuo: false
+        fujian: ''
       }
       this.applyImageList = []
       this.applyDialogVisible = true
@@ -812,10 +805,6 @@ export default {
         this.$message.warning('对接说明需要至少10字')
         return
       }
-      if (!this.applyForm.fuwuchengnuo) {
-        this.$message.warning('请勾选服务承诺')
-        return
-      }
       
       const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
       const submitData = {
@@ -829,7 +818,6 @@ export default {
         jigoumingcheng: this.applyForm.jigoumingcheng,
         lianxidianhua: this.applyForm.lianxidianhua,
         fujian: this.applyForm.fujian,
-        fuwuchengnuo: this.applyForm.fuwuchengnuo,
         sfsh: '待审核',
         userid: userInfo.id,
         duijieshuoming: this.applyForm.duijieshuoming

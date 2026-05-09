@@ -93,16 +93,12 @@
         <el-descriptions-item label="联系电话">{{ detailRow.lianxidianhua || '无' }}</el-descriptions-item>
         <el-descriptions-item label="对接说明" :span="2">{{ detailRow.shenqingshuoming || detailRow.duijieshuoming || '无' }}</el-descriptions-item>
         <el-descriptions-item label="附件">
-          <template v-if="detailRow.fujian">
-            <a :href="detailRow.fujian" target="_blank">查看附件</a>
-          </template>
-          <template v-else>无</template>
-        </el-descriptions-item>
-        <el-descriptions-item label="服务承诺">
-          <el-tag v-if="detailRow.fuwuchengnuo === true || detailRow.fuwuchengnuo === 'true'" type="success" size="small">已承诺</el-tag>
-          <el-tag v-else type="warning" size="small">未承诺</el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="审核回复" :span="2">{{ detailRow.shhf || '无' }}</el-descriptions-item>
+            <template v-if="detailRow.fujian">
+              <a :href="detailRow.fujian" target="_blank">查看附件</a>
+            </template>
+            <template v-else>无</template>
+          </el-descriptions-item>
+          <el-descriptions-item label="审核回复" :span="2">{{ detailRow.shhf || '无' }}</el-descriptions-item>
       </el-descriptions>
       <span slot="footer"><el-button type="primary" @click="viewVisible=false">关闭</el-button></span>
     </el-dialog>
