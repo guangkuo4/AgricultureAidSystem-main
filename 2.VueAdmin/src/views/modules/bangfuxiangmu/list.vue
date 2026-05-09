@@ -57,12 +57,11 @@
           <el-table-column prop="lianxiren" label="联系人" width="100"></el-table-column>
           <el-table-column prop="lianxidianhua" label="联系电话" width="130"></el-table-column>
           <el-table-column prop="clicknum" label="浏览次数" width="100"></el-table-column>
-          <el-table-column label="操作" width="220" fixed="right">
+          <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <div class="btn-group">
                 <el-button type="info" size="mini" icon="el-icon-view" @click="viewDetail(scope.row)">查看</el-button>
-                <el-button type="primary" size="mini" icon="el-icon-edit" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-                <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteHandle(scope.row.id)">删除</el-button>
+                <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteHandle(scope.row)">删除</el-button>
               </div>
             </template>
           </el-table-column>
@@ -116,6 +115,36 @@
       <div v-if="pendingResources.length === 0 && !resourcesLoading" class="empty">暂无待审核资源</div>
     </div>
 
+    <!-- 帮扶资源池 -->
+    <div v-if="activeTab === 'resourcePool'" class="tab-panel">
+      <div :style='{"border":"0px solid #eee","width":"100%","padding":"0","margin":"0px 0 0","borderRadius":"12px","background":"rgba(255,255,255,.9)"}'>
+        <el-table class="tables"
+                  :stripe='false'
+                  :border='true'
+                  :data="resourcePool"
+                  v-loading="resourcePoolLoading"
+                  :style='{"padding":"0","borderColor":"#edf7ff","color":"inherit","borderRadius":"12px","borderWidth":"0px 0px 0 0px","background":"none","width":"100%","fontSize":"inherit"}'>
+          <el-table-column prop="ziyuanbianhao" label="资源编号" width="150"></el-table-column>
+          <el-table-column prop="bangfufangming" label="帮扶方名称" min-width="180"></el-table-column>
+          <el-table-column prop="bangfuleixing" label="帮扶类型" width="120"></el-table-column>
+          <el-table-column prop="suozaidiqu" label="所在地区" width="120"></el-table-column>
+          <el-table-column prop="shanchanglingyu" label="擅长领域" width="150"></el-table-column>
+          <el-table-column prop="lianxiren" label="联系人" width="100"></el-table-column>
+          <el-table-column prop="lianxidianhua" label="联系电话" width="130"></el-table-column>
+          <el-table-column prop="faburiqi" label="发布日期" width="120"></el-table-column>
+          <el-table-column label="操作" width="150" fixed="right">
+            <template slot-scope="scope">
+              <div class="btn-group">
+                <el-button type="info" size="mini" icon="el-icon-view" @click="viewResourceDetail(scope.row)">查看</el-button>
+                <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteResource(scope.row)">删除</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-if="resourcePool.length === 0 && !resourcePoolLoading" class="empty">暂无帮扶资源</div>
+    </div>
+
     <!-- 待审核需求 -->
     <div v-if="activeTab === 'pendingNeeds'" class="tab-panel">
       <div :style='{"border":"0px solid #eee","width":"100%","padding":"0","margin":"0px 0 0","borderRadius":"12px","background":"rgba(255,255,255,.9)"}'>
@@ -155,21 +184,20 @@
                   :data="implementations"
                   v-loading="implementationsLoading"
                   :style='{"padding":"0","borderColor":"#edf7ff","color":"inherit","borderRadius":"12px","borderWidth":"0px 0px 0 0px","background":"none","width":"100%","fontSize":"inherit"}'>
-          <el-table-column prop="shishibianhao" label="实施编号" width="150"></el-table-column>
-          <el-table-column prop="xuqiubianhao" label="需求编号" width="150"></el-table-column>
-          <el-table-column prop="bangfuleixing" label="帮扶类型" width="120"></el-table-column>
+          <el-table-column prop="shenqingbianhao" label="申请编号" width="150"></el-table-column>
+          <el-table-column prop="xiangmumingcheng" label="项目名称" min-width="180"></el-table-column>
+          <el-table-column prop="xiangmuleixing" label="项目类型" width="120"></el-table-column>
           <el-table-column prop="bangfuzhuangtai" label="帮扶状态" width="120">
             <template slot-scope="scope">
-              <el-tag :type="getStatusType(scope.row.bangfuzhuangtai)">{{ scope.row.bangfuzhuangtai }}</el-tag>
+              <el-tag :type="getStatusType(scope.row.bangfuzhuangtai)">{{ scope.row.bangfuzhuangtai || '待分配' }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="bangfujindu" label="帮扶进度" min-width="200"></el-table-column>
-          <el-table-column prop="addtime" label="创建时间" width="150"></el-table-column>
-          <el-table-column label="操作" width="200" fixed="right">
+          <el-table-column prop="shenqingriqi" label="申请日期" width="120"></el-table-column>
+          <el-table-column label="操作" width="120" fixed="right">
             <template slot-scope="scope">
               <div class="btn-group">
                 <el-button type="info" size="mini" icon="el-icon-view" @click="viewImplementation(scope.row)">查看</el-button>
-                <el-button type="primary" size="mini" icon="el-icon-edit" @click="updateProgress(scope.row)">更新进度</el-button>
               </div>
             </template>
           </el-table-column>
@@ -250,24 +278,31 @@
       <span slot="footer"><el-button type="primary" @click="needDetailVisible=false">关闭</el-button></span>
     </el-dialog>
 
-    <!-- 更新进度弹窗 -->
-    <el-dialog title="更新帮扶进度" :visible.sync="updateProgressVisible" width="500px" :close-on-click-modal="false">
-      <el-form :model="progressForm" label-width="100px">
-        <el-form-item label="帮扶状态">
-          <el-select v-model="progressForm.bangfuzhuangtai" placeholder="请选择状态">
-            <el-option label="待分配" value="待分配"></el-option>
-            <el-option label="进行中" value="进行中"></el-option>
-            <el-option label="已完成" value="已完成"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="进度说明">
-          <el-input type="textarea" :rows="4" v-model="progressForm.bangfujindu" placeholder="请输入最新进度说明"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="updateProgressVisible=false">取消</el-button>
-        <el-button type="primary" @click="submitProgress">保存</el-button>
-      </span>
+    <!-- 对接实施详情弹窗 -->
+    <el-dialog title="对接实施详情" :visible.sync="implementationDetailVisible" width="720px" :close-on-click-modal="false">
+      <el-descriptions :column="2" border size="small" v-if="selectedImplementation">
+        <el-descriptions-item label="申请编号">{{ selectedImplementation.shenqingbianhao }}</el-descriptions-item>
+        <el-descriptions-item label="项目名称">{{ selectedImplementation.xiangmumingcheng }}</el-descriptions-item>
+        <el-descriptions-item label="项目类型">{{ selectedImplementation.xiangmuleixing }}</el-descriptions-item>
+        <el-descriptions-item label="申请人账号">{{ selectedImplementation.shenqingrenzhanghao }}</el-descriptions-item>
+        <el-descriptions-item label="申请人姓名">{{ selectedImplementation.shenqingrenxingming }}</el-descriptions-item>
+        <el-descriptions-item label="申请日期">{{ selectedImplementation.shenqingriqi }}</el-descriptions-item>
+        <el-descriptions-item label="审核状态">
+          <el-tag :type="selectedImplementation.sfsh === '通过' ? 'success' : 'warning'">{{ selectedImplementation.sfsh }}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="机构/个人名称">{{ selectedImplementation.jigoumingcheng }}</el-descriptions-item>
+        <el-descriptions-item label="联系电话">{{ selectedImplementation.lianxidianhua || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="帮扶状态">
+          <el-tag :type="getStatusType(selectedImplementation.bangfuzhuangtai)">{{ selectedImplementation.bangfuzhuangtai || '待分配' }}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="帮扶进度" :span="2">
+          <div v-if="selectedImplementation.bangfujindu" class="progress-content">{{ selectedImplementation.bangfujindu }}</div>
+          <span v-else>暂无进度</span>
+        </el-descriptions-item>
+        <el-descriptions-item label="对接说明" :span="2">{{ selectedImplementation.shenqingshuoming }}</el-descriptions-item>
+        <el-descriptions-item label="审核回复" :span="2">{{ selectedImplementation.shhf || '暂无' }}</el-descriptions-item>
+      </el-descriptions>
+      <span slot="footer"><el-button type="primary" @click="implementationDetailVisible=false">关闭</el-button></span>
     </el-dialog>
   </div>
 </template>
@@ -281,9 +316,10 @@ export default {
       activeTab: 'projects',
       tabs: [
         { key: 'projects', label: '帮扶项目', icon: 'el-icon-suitcase' },
-        { key: 'pendingResources', label: '待审核资源', icon: 'el-icon-collection' },
         { key: 'pendingNeeds', label: '待审核需求', icon: 'el-icon-document' },
-        { key: 'implementations', label: '对接实施', icon: 'el-icon-s-management' }
+        { key: 'implementations', label: '对接实施', icon: 'el-icon-s-management' },
+        { key: 'resourcePool', label: '帮扶资源池', icon: 'el-icon-bank-card' },
+        { key: 'pendingResources', label: '待审核资源', icon: 'el-icon-collection' }
       ],
       searchForm: { xiangmumingcheng: '', xiangmuleixing: '' },
       dataList: [],
@@ -301,6 +337,10 @@ export default {
       pendingResources: [],
       resourcesLoading: false,
 
+      // 帮扶资源池
+      resourcePool: [],
+      resourcePoolLoading: false,
+
       // 待审核需求
       pendingNeeds: [],
       needsLoading: false,
@@ -315,9 +355,9 @@ export default {
       needDetailVisible: false,
       selectedNeed: {},
 
-      // 更新进度表单
-      updateProgressVisible: false,
-      progressForm: { id: null, bangfuzhuangtai: '', bangfujindu: '' }
+      // 对接实施详情
+      implementationDetailVisible: false,
+      selectedImplementation: {}
     }
   },
   created() {
@@ -327,6 +367,7 @@ export default {
     activeTab(val) {
       if (val === 'projects') this.getDataList()
       if (val === 'pendingResources') this.loadPendingResources()
+      if (val === 'resourcePool') this.loadResourcePool()
       if (val === 'pendingNeeds') this.loadPendingNeeds()
       if (val === 'implementations') this.loadImplementations()
     }
@@ -433,15 +474,20 @@ export default {
       this.detailRow = row || {}
       this.viewVisible = true
     },
-    deleteHandle(id) {
+    deleteHandle(row) {
       this.$confirm('确定删除该项目吗？删除后不可恢复！', '删除确认', { type: 'warning' }).then(() => {
-        this.$http({ url: 'bangfuxiangmu/delete', method: 'post', data: [id] }).then(({ data }) => {
+        const isNeedData = row.xiangmubianhao && row.xiangmubianhao.startsWith('XQ')
+        const url = isNeedData ? 'bangfuxuqiu/delete' : 'bangfuxiangmu/delete'
+        
+        this.$http({ url: url, method: 'post', data: [row.id] }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message.success('删除成功')
             this.getDataList()
           } else {
             this.$message.error((data && data.msg) || '删除失败')
           }
+        }).catch(() => {
+          this.$message.error('删除失败')
         })
       }).catch(() => {})
     },
@@ -457,6 +503,34 @@ export default {
       }).catch(() => {
         this.resourcesLoading = false
       })
+    },
+
+    // 帮扶资源池方法
+    loadResourcePool() {
+      this.resourcePoolLoading = true
+      this.$http.get('/bangfuziyuan/list', { params: { sfsh: '已通过', page: 1, limit: 200 } }).then(res => {
+        if (res.data.code === 0) {
+          this.resourcePool = (res.data.data && res.data.data.list) || []
+        }
+        this.resourcePoolLoading = false
+      }).catch(() => {
+        this.resourcePoolLoading = false
+      })
+    },
+
+    deleteResource(row) {
+      this.$confirm('确定删除该资源吗？删除后不可恢复！', '删除确认', { type: 'warning' }).then(() => {
+        this.$http({ url: 'bangfuziyuan/delete', method: 'post', data: [row.id] }).then(({ data }) => {
+          if (data && data.code === 0) {
+            this.$message.success('删除成功')
+            this.loadResourcePool()
+          } else {
+            this.$message.error((data && data.msg) || '删除失败')
+          }
+        }).catch(() => {
+          this.$message.error('删除失败')
+        })
+      }).catch(() => {})
     },
     viewResourceDetail(row) {
       this.selectedResource = row
@@ -535,7 +609,7 @@ export default {
     // 对接实施方法
     loadImplementations() {
       this.implementationsLoading = true
-      this.$http.get('/bangfushishi/list', { params: { page: 1, limit: 200 } }).then(res => {
+      this.$http.get('/duijieshenqing/list', { params: { sfsh: '通过', page: 1, limit: 200 } }).then(res => {
         if (res.data.code === 0) {
           this.implementations = (res.data.data && res.data.data.list) || []
         }
@@ -545,28 +619,8 @@ export default {
       })
     },
     viewImplementation(row) {
-      this.$message.info('查看实施详情：' + row.shishibianhao)
-    },
-    updateProgress(row) {
-      this.progressForm = {
-        id: row.id,
-        bangfuzhuangtai: row.bangfuzhuangtai || '进行中',
-        bangfujindu: row.bangfujindu || ''
-      }
-      this.updateProgressVisible = true
-    },
-    submitProgress() {
-      this.$http.post('/bangfushishi/update', this.progressForm).then(res => {
-        if (res.data.code === 0) {
-          this.$message.success('进度已更新')
-          this.updateProgressVisible = false
-          this.loadImplementations()
-        } else {
-          this.$message.error(res.data.msg || '保存失败')
-        }
-      }).catch(() => {
-        this.$message.error('保存失败')
-      })
+      this.selectedImplementation = row
+      this.implementationDetailVisible = true
     },
     getStatusType(status) {
       const typeMap = {

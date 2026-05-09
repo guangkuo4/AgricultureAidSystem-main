@@ -111,6 +111,18 @@ public class DuijieshenqingEntity<T> implements Serializable {
 	private Boolean fuwuchengnuo;
 	
 	/**
+	 * 帮扶状态
+	 */
+					
+	private String bangfuzhuangtai;
+	
+	/**
+	 * 帮扶进度
+	 */
+					
+	private String bangfujindu;
+	
+	/**
 	 * 申请日期
 	 */
 				
@@ -129,11 +141,10 @@ public class DuijieshenqingEntity<T> implements Serializable {
 	 */
 					
 	private String shhf;
-	
+
 	/**
 	 * 用户id
 	 */
-					
 	private Long userid;
 	
 	
@@ -274,6 +285,30 @@ public class DuijieshenqingEntity<T> implements Serializable {
 	 */
 	public Boolean getFuwuchengnuo() {
 		return fuwuchengnuo;
+	}
+	/**
+	 * 设置：帮扶状态
+	 */
+	public void setBangfuzhuangtai(String bangfuzhuangtai) {
+		this.bangfuzhuangtai = bangfuzhuangtai;
+	}
+	/**
+	 * 获取：帮扶状态
+	 */
+	public String getBangfuzhuangtai() {
+		return bangfuzhuangtai;
+	}
+	/**
+	 * 设置：帮扶进度
+	 */
+	public void setBangfujindu(String bangfujindu) {
+		this.bangfujindu = bangfujindu;
+	}
+	/**
+	 * 获取：帮扶进度
+	 */
+	public String getBangfujindu() {
+		return bangfujindu;
 	}
 	/**
 	 * 设置：申请日期

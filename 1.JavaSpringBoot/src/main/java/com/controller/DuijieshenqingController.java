@@ -28,9 +28,11 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.annotation.IgnoreAuth;
 
 import com.entity.DuijieshenqingEntity;
+import com.entity.BangfushishiEntity;
 import com.entity.view.DuijieshenqingView;
 
 import com.service.DuijieshenqingService;
+import com.service.BangfushishiService;
 import com.service.TokenService;
 import com.service.MessageService;
 import com.service.YonghuService;
@@ -55,7 +57,10 @@ public class DuijieshenqingController {
     @Autowired
     private DuijieshenqingService duijieshenqingService;
     @Autowired
+    private BangfushishiService bangfushishiService;
+    @Autowired
     private MessageService messageService;
+
 
 
 
@@ -84,6 +89,7 @@ public class DuijieshenqingController {
 		PageUtils page = duijieshenqingService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, duijieshenqing), params), params));
         return R.ok().put("data", page);
     }
+
 
 
 
@@ -129,6 +135,7 @@ public class DuijieshenqingController {
     
 
 
+
     /**
      * 后端保存
      */
@@ -170,6 +177,7 @@ public class DuijieshenqingController {
 
 
 
+    
 
     /**
      * 修改
@@ -187,16 +195,33 @@ public class DuijieshenqingController {
         duijieshenqingService.updateById(duijieshenqing);//全部更新
         
         // 检查是否是审核操作（sfsh 字段有变化）
-        if (oldEntity != null && !oldEntity.getSfsh().equals(duijieshenqing.getSfsh())) {
+        if (oldEntity != null && StringUtils.isNotBlank(duijieshenqing.getSfsh())
+                && !StringUtils.equals(oldEntity.getSfsh(), duijieshenqing.getSfsh())) {
             // 发送审核结果消息
             MessageEntity message = new MessageEntity();
             message.setUserid(duijieshenqing.getUserid());
             message.setTitle("对接申请审核结果");
             String content = "您的对接申请（" + duijieshenqing.getShenqingbianhao() + "）已完成审核。";
-            if ("是".equals(duijieshenqing.getSfsh())) {
+            if ("通过".equals(duijieshenqing.getSfsh()) || "是".equals(duijieshenqing.getSfsh())) {
                 content += "审核结果：通过";
-            } else {
+                // 审核通过后自动创建帮扶实施记录
+                try {
+                    BangfushishiEntity bangfushishi = new BangfushishiEntity();
+                    bangfushishi.setShishibianhao("SS" + System.currentTimeMillis());
+                    bangfushishi.setXiangmumingcheng(duijieshenqing.getXiangmumingcheng());
+                    bangfushishi.setBangfuzhuangtai("待分配");
+                    bangfushishi.setDuijieshijian(new Date());
+                    bangfushishi.setBangfufangzhanghao(duijieshenqing.getShenqingrenzhanghao());
+                    bangfushishi.setAddtime(new Date());
+                    bangfushishiService.insert(bangfushishi);
+                    content += "，帮扶实施记录已自动创建。";
+                } catch (Exception e) {
+                    // 忽略实施记录创建错误，不影响审核流程
+                }
+            } else if ("驳回".equals(duijieshenqing.getSfsh()) || "已拒绝".equals(duijieshenqing.getSfsh())) {
                 content += "审核结果：驳回";
+            } else {
+                content += "审核结果：" + duijieshenqing.getSfsh();
             }
             if (StringUtils.isNotBlank(duijieshenqing.getShhf())) {
                 content += "，审核意见：" + duijieshenqing.getShhf();
@@ -214,6 +239,8 @@ public class DuijieshenqingController {
 
 
 
+    
+
 
     /**
      * 删除
@@ -229,6 +256,7 @@ public class DuijieshenqingController {
 
 
 
+	
 
 
 }

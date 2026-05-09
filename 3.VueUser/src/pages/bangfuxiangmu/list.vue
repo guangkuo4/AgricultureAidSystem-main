@@ -65,11 +65,15 @@
               <div class="project-meta">
                 <span class="project-type">{{ project.xiangmuleixing }}</span>
                 <span class="project-date">{{ formatDate(project.faburiqi) }}</span>
+                <span :class="['project-urgency', getUrgencyClass(project.xuqiujinji)]">{{ project.xuqiujinji || '普通' }}</span>
               </div>
               <p class="project-desc">{{ truncate(project.xiangmuxiangqing, 50) }}</p>
               <div class="project-contact">
                 <span class="contact-person"><i class="el-icon-user"></i> {{ project.lianxiren }}</span>
                 <span class="contact-location"><i class="el-icon-location"></i> {{ project.suozaidiqu || '未填写' }}</span>
+              </div>
+              <div class="project-expect">
+                <span class="expect-time"><i class="el-icon-clock"></i> 期望帮扶：{{ project.qiwangshijian || '未指定' }}</span>
               </div>
               <div class="project-footer">
                 <span class="view-count"><i class="el-icon-view"></i> {{ project.clicknum || 0 }} 次浏览</span>
@@ -113,12 +117,7 @@
               <option value="产品采购">产品采购</option>
               <option value="农机帮扶">农机帮扶</option>
             </select>
-            <select v-model="resourceArea" @change="searchResources">
-              <option value="">全部地区</option>
-              <option value="河南">河南</option>
-              <option value="山东">山东</option>
-              <option value="河北">河北</option>
-            </select>
+            
           </div>
         </div>
 
@@ -187,18 +186,6 @@
             </el-form-item>
             <el-form-item label="帮扶内容" prop="bangfuneirong">
               <el-input type="textarea" v-model="resourceForm.bangfuneirong" :rows="4" placeholder="请详细描述可提供的帮扶内容"></el-input>
-            </el-form-item>
-            <el-form-item label="资质照片">
-              <el-upload
-                :action="uploadUrl"
-                :headers="uploadHeaders"
-                name="file"
-                list-type="picture-card"
-                :on-success="handleResourceImageSuccess"
-                :file-list="resourceImageList"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
             </el-form-item>
             <el-form-item label="联系人" prop="lianxiren">
               <el-input v-model="resourceForm.lianxiren" placeholder="请输入联系人姓名"></el-input>
@@ -277,18 +264,6 @@
             </el-form-item>
             <el-form-item label="需求描述" prop="xuqiumiaoshu">
               <el-input type="textarea" v-model="needForm.xuqiumiaoshu" :rows="4" placeholder="请详细描述您的需求"></el-input>
-            </el-form-item>
-            <el-form-item label="需求图片">
-              <el-upload
-                :action="uploadUrl"
-                :headers="uploadHeaders"
-                name="file"
-                list-type="picture-card"
-                :on-success="handleNeedImageSuccess"
-                :file-list="needImageList"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
             </el-form-item>
             <el-form-item label="紧急程度">
               <el-radio-group v-model="needForm.xuqiujinji">
@@ -375,7 +350,7 @@
                 <p><strong>项目编号：</strong>{{ docking.xiangmubianhao }}</p>
                 <p><strong>申请日期：</strong>{{ docking.shenqingriqi }}</p>
                 <p><strong>对接说明：</strong>{{ docking.shenqingshuoming }}</p>
-                <div v-if="docking.sfsh === '已通过'" class="contact-info">
+                <div v-if="docking.sfsh === '已通过' || docking.sfsh === '通过'" class="contact-info">
                   <h4>对接联系方式</h4>
                   <p><strong>需求方名称：</strong>{{ docking.xuqiumingcheng }}</p>
                   <p><strong>联系人：</strong>{{ docking.shenqingrenxingming }}</p>
@@ -392,14 +367,46 @@
               </div>
               <div class="docking-actions">
                 <el-button v-if="docking.sfsh === '待审核'" type="danger" size="mini" icon="el-icon-delete" @click="deleteDocking(docking.id)">删除申请</el-button>
-                <el-button v-if="docking.sfsh === '已通过'" type="primary" size="mini" icon="el-icon-edit" @click="showUpdateProgress(docking)">更新进度</el-button>
-                <el-button v-if="docking.sfsh === '已通过'" type="success" size="mini" icon="el-icon-check" @click="confirmComplete(docking)">确认完成</el-button>
+                <el-button v-if="docking.sfsh === '已通过' || docking.sfsh === '通过'" type="primary" size="mini" icon="el-icon-edit" @click="showUpdateProgress(docking)">更新进度</el-button>
+                <el-button v-if="docking.sfsh === '已通过' || docking.sfsh === '通过'" type="success" size="mini" icon="el-icon-check" @click="confirmComplete(docking)">确认完成</el-button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- 我的资源 -->
+      <div v-if="activeTab === 'myResources'" class="tab-panel">
+        <div v-if="myResourcesLoading" class="loading">加载中...</div>
+        <div v-else-if="myResources.length === 0" class="empty-state">
+          <i class="el-icon-folder" style="font-size: 48px; color: #ccc;"></i>
+          <p>暂无发布的资源</p>
+          <button class="publish-btn" @click="activeTab = 'publishResource'">去发布资源</button>
+        </div>
+        <div v-else class="my-resources-list">
+          <div v-for="resource in myResources" :key="resource.id" class="my-resource-card">
+            <div class="resource-header">
+              <h3>{{ resource.bangfufangming }}</h3>
+              <span :class="['resource-status', getResourceStatusClass(resource.sfsh)]">{{ resource.sfsh }}</span>
+            </div>
+            <div class="resource-info">
+              <p><strong>帮扶类型：</strong>{{ resource.bangfuleixing }}</p>
+              <p><strong>擅长领域：</strong>{{ resource.shanchanglingyu }}</p>
+              <p><strong>所在地区：</strong>{{ resource.suozaidiqu }}</p>
+              <p><strong>响应时效：</strong>{{ resource.xiangyingshixiao }}</p>
+              <p><strong>帮扶内容：</strong>{{ resource.bangfuneirong }}</p>
+              <p><strong>联系人：</strong>{{ resource.lianxiren }}</p>
+              <p><strong>联系电话：</strong>{{ resource.lianxidianhua }}</p>
+              <div v-if="resource.zizhengzhaopian" class="resource-image">
+                <img :src="getImageUrl(resource.zizhengzhaopian)" alt="资质照片" />
+              </div>
+            </div>
+            <div class="resource-actions">
+              <el-button type="primary" size="mini" icon="el-icon-edit" @click="editResource(resource)">编辑</el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteMyResource(resource.id)">删除</el-button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 删除确认弹窗 -->
@@ -472,7 +479,52 @@
         </span>
       </el-dialog>
 
-  </div>
+      <!-- 编辑资源弹窗 -->
+      <el-dialog title="编辑资源" :visible.sync="editResourceVisible" width="600px" :close-on-click-modal="false">
+        <el-form :model="editResourceForm" label-width="130px">
+          <el-form-item label="帮扶方名称" required>
+            <el-input v-model="editResourceForm.bangfufangming" placeholder="请输入帮扶方名称"></el-input>
+          </el-form-item>
+          <el-form-item label="帮扶类型">
+            <el-select v-model="editResourceForm.bangfuleixing" placeholder="请选择帮扶类型">
+              <el-option label="技术帮扶" value="技术帮扶"></el-option>
+              <el-option label="资金帮扶" value="资金帮扶"></el-option>
+              <el-option label="产品采购帮扶" value="产品采购帮扶"></el-option>
+              <el-option label="农机帮扶" value="农机帮扶"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="擅长领域" required>
+            <el-input v-model="editResourceForm.shanchanglingyu" placeholder="请输入擅长领域"></el-input>
+          </el-form-item>
+          <el-form-item label="所在地区" required>
+            <el-input v-model="editResourceForm.suozaidiqu" placeholder="请输入所在地区"></el-input>
+          </el-form-item>
+          <el-form-item label="响应时效">
+            <el-select v-model="editResourceForm.xiangyingshixiao" placeholder="请选择响应时效">
+              <el-option label="24小时内" value="24小时内"></el-option>
+              <el-option label="一周内" value="一周内"></el-option>
+              <el-option label="两周内" value="两周内"></el-option>
+              <el-option label="一月内" value="一月内"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="帮扶内容" required>
+            <el-input type="textarea" :rows="4" v-model="editResourceForm.bangfuneirong" placeholder="请详细描述可提供的帮扶内容"></el-input>
+          </el-form-item>
+          <el-form-item label="联系人" required>
+            <el-input v-model="editResourceForm.lianxiren" placeholder="请输入联系人姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" required>
+            <el-input v-model="editResourceForm.lianxidianhua" placeholder="请输入联系电话"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer">
+          <el-button @click="editResourceVisible = false">取消</el-button>
+          <el-button type="primary" @click="saveResource">保存</el-button>
+        </span>
+      </el-dialog>
+
+      </div> <!-- .tab-content -->
+    </div> <!-- .page -->
 </template>
 
 <script>
@@ -487,7 +539,8 @@ export default {
         { key: 'publishNeed', label: '发布需求', icon: 'el-icon-edit' },
         { key: 'publishResource', label: '发布资源', icon: 'el-icon-plus' },
         { key: 'myNeeds', label: '我的需求', icon: 'el-icon-document' },
-        { key: 'myDocking', label: '我的对接', icon: 'el-icon-link' }
+        { key: 'myDocking', label: '我的对接', icon: 'el-icon-link' },
+        { key: 'myResources', label: '我的资源', icon: 'el-icon-bank-card' }
       ],
 
       // 项目列表数据
@@ -516,7 +569,6 @@ export default {
         suozaidiqu: '',
         xiangyingshixiao: '',
         bangfuneirong: '',
-        zizhengzhaopian: '',
         lianxiren: '',
         lianxidianhua: ''
       },
@@ -531,7 +583,6 @@ export default {
         lianxiren: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         lianxidianhua: [{ required: true, message: '请输入联系电话', trigger: 'blur' }]
       },
-      resourceImageList: [],
 
       // 我的需求
       myNeeds: [],
@@ -547,7 +598,6 @@ export default {
         xuqiumingcheng: '',
         xuqiuleixing: '',
         xuqiumiaoshu: '',
-        xuqiutupian: '',
         xuqiujinji: '普通',
         qiwangshijian: '',
         suozaidiqu: '',
@@ -561,11 +611,17 @@ export default {
         suozaidiqu: [{ required: true, message: '请选择所在省份', trigger: 'change' }],
         lianxidianhua: [{ required: true, message: '请输入联系方式', trigger: 'blur' }]
       },
-      needImageList: [],
-
       // 我的对接
       myDockings: [],
       dockingLoading: false,
+
+      // 我的资源
+      myResources: [],
+      myResourcesLoading: false,
+
+      // 编辑资源表单
+      editResourceForm: {},
+      editResourceVisible: false,
 
       // 申请对接弹窗
       applyDialogVisible: false,
@@ -611,6 +667,7 @@ export default {
       if (val === 'resources') this.loadResources()
       if (val === 'myNeeds') this.loadMyNeeds()
       if (val === 'myDocking') this.loadMyDockings()
+      if (val === 'myResources') this.loadMyResources()
     }
   },
   methods: {
@@ -800,7 +857,6 @@ export default {
         sfsh: '已通过'
       }
       if (this.resourceType) params.bangfuleixing = this.resourceType
-      if (this.resourceArea) params.suozaidiqu = this.resourceArea
       if (this.resourceSearch) params.bangfufangming = this.resourceSearch
 
       console.log('请求参数:', params)
@@ -841,10 +897,80 @@ export default {
       const body = typeof res === 'string' ? (function() { try { return JSON.parse(res) } catch (e) { return {} } })() : res
       return (body && body.file) ? body.file : null
     },
-    handleResourceImageSuccess(response) {
-      const name = this.parseUploadPayload(response)
-      if (name) this.resourceForm.zizhengzhaopian = name
+    // 我的资源方法
+    loadMyResources() {
+      console.log('正在加载我的资源...')
+      this.myResourcesLoading = true
+      const userInfo = JSON.parse(localStorage.getItem('sessionForm') || '{}')
+      
+      this.$http.get('/bangfuziyuan/list', {
+        params: {
+          page: 1,
+          limit: 100,
+          userid: userInfo.id
+        }
+      }).then(res => {
+        if (res.data.code === 0) {
+          this.myResources = res.data.data.list || []
+        }
+        this.myResourcesLoading = false
+      }).catch(() => {
+        this.myResourcesLoading = false
+      })
     },
+    getResourceStatusClass(status) {
+      const statusMap = {
+        '待审核': 'status-pending',
+        '已通过': 'status-approved',
+        '已拒绝': 'status-rejected'
+      }
+      return statusMap[status] || 'status-pending'
+    },
+    editResource(resource) {
+      this.editResourceForm = { ...resource }
+      this.editResourceVisible = true
+    },
+    deleteMyResource(id) {
+      this.$confirm('确定删除该资源吗？删除后不可恢复！', '删除确认', { type: 'warning' }).then(() => {
+        this.$http.post('/bangfuziyuan/delete', [id]).then(res => {
+          if (res.data.code === 0) {
+            this.$message.success('删除成功')
+            this.loadMyResources()
+          } else {
+            this.$message.error(res.data.msg || '删除失败')
+          }
+        }).catch(() => {
+          this.$message.error('删除失败')
+        })
+      }).catch(() => {})
+    },
+    getImageUrl(filename) {
+      return `/api/file/download?filename=${encodeURIComponent(filename)}`
+    },
+    saveResource() {
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', '/api/bangfuziyuan/update')
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText)
+          if (res.code === 0) {
+            this.$message.success('保存成功')
+            this.editResourceVisible = false
+            this.loadMyResources()
+          } else {
+            this.$message.error(res.msg || '保存失败')
+          }
+        } else {
+          this.$message.error('保存失败')
+        }
+      }
+      xhr.onerror = () => {
+        this.$message.error('保存失败')
+      }
+      xhr.send(JSON.stringify(this.editResourceForm))
+    },
+
     submitResource() {
       this.$refs.resourceForm.validate(valid => {
         if (valid) {
@@ -871,7 +997,6 @@ export default {
     },
     resetResourceForm() {
       this.$refs.resourceForm.resetFields()
-      this.resourceImageList = []
     },
 
     // 我的需求方法
@@ -919,6 +1044,13 @@ export default {
       }
       return statusMap[status] || 'status-pending'
     },
+    getUrgencyClass(urgency) {
+      const urgencyMap = {
+        '紧急': 'urgency-urgent',
+        '普通': 'urgency-normal'
+      }
+      return urgencyMap[urgency] || 'urgency-normal'
+    },
     // 全选需求
     handleSelectAll(val) {
       if (val) {
@@ -962,10 +1094,6 @@ export default {
     },
 
     // 发布需求方法
-    handleNeedImageSuccess(response) {
-      const name = this.parseUploadPayload(response)
-      if (name) this.needForm.xuqiutupian = name
-    },
     submitNeed() {
       this.$refs.needForm.validate(valid => {
         if (valid) {
@@ -1005,8 +1133,7 @@ export default {
     },
     resetNeedForm() {
       this.$refs.needForm.resetFields()
-      this.needImageList = []
-    },
+      },
 
     // 通用方法
     formatDate(date) {
@@ -1072,15 +1199,15 @@ export default {
 
     // 我的对接方法
     loadMyDockings() {
-      const account = this.sessionAccount()
-      if (!account) {
+      const uid = this.sessionUserId()
+      if (!uid) {
         console.log('用户未登录，跳过加载对接记录')
         return
       }
       this.dockingLoading = true
       this.$http.get('/duijieshenqing/list', {
         params: {
-          shenqingrenzhanghao: account
+          userid: uid
         }
       }).then(res => {
         if (res.data.code === 0) {
@@ -1130,7 +1257,10 @@ export default {
         this.$message.warning('请输入进度说明')
         return
       }
-      this.$http.post('/duijieshenqing/update', this.progressForm).then(res => {
+      this.$http.post('/duijieshenqing/update', this.progressForm, {
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        emulateJSON: false
+      }).then(res => {
         if (res.data.code === 0) {
           this.$message.success('进度已更新')
           this.updateProgressVisible = false
@@ -1150,7 +1280,10 @@ export default {
           bangfuzhuangtai: '已完成',
           bangfujindu: docking.bangfujindu ? docking.bangfujindu + '（已完成）' : '对接已完成'
         }
-        this.$http.post('/duijieshenqing/update', updateData).then(res => {
+        this.$http.post('/duijieshenqing/update', updateData, {
+          headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+          emulateJSON: false
+        }).then(res => {
           if (res.data.code === 0) {
             this.$message.success('已确认完成对接')
             this.loadMyDockings()
@@ -1426,6 +1559,34 @@ export default {
 }
 
 .contact-person {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.project-urgency {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+}
+
+.urgency-urgent {
+  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+  color: #fff;
+}
+
+.urgency-normal {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.project-expect {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #555;
+}
+
+.expect-time {
   display: flex;
   align-items: center;
   gap: 4px;

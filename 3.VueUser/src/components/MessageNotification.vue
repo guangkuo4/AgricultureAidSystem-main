@@ -21,11 +21,8 @@
             <div class="message-time">{{ formatTime(message.addtime) }}</div>
           </div>
         </el-dropdown-item>
-        <el-dropdown-item divided @click="markAllRead">
+        <el-dropdown-item divided @click.native="markAllRead">
           标记全部已读
-        </el-dropdown-item>
-        <el-dropdown-item @click="goToMessageCenter">
-          查看全部消息
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -125,24 +122,31 @@ export default {
     markAllRead() {
       const unreadMessages = this.messages.filter(m => m.status === '未读')
       const ids = unreadMessages.map(m => m.id)
-      if (ids.length === 0) return
+      if (ids.length === 0) {
+        this.$message.info('没有未读消息')
+        return
+      }
 
-      this.$http.post('/message/update', {
-        ids: ids,
-        status: '已读'
-      }).then(res => {
-        if (res.data.code === 0) {
+      const promises = ids.map(id => {
+        return this.$http.post('/message/update', {
+          id: id,
+          status: '已读'
+        })
+      })
+
+      Promise.all(promises).then(results => {
+        const allSuccess = results.every(res => res.data && res.data.code === 0)
+        if (allSuccess) {
           unreadMessages.forEach(m => {
             m.status = '已读'
           })
           this.unreadCount = 0
+          this.$message.success('已全部标记为已读')
         }
       }).catch(err => {
         console.error('标记全部已读失败:', err)
+        this.$message.error('标记失败')
       })
-    },
-    goToMessageCenter() {
-      this.$router.push('/index/message')
     },
     formatTime(time) {
       if (!time) return ''

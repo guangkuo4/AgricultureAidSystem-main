@@ -67,7 +67,17 @@ public class BangfushishiEntity<T> implements Serializable {
 	 */
 					
 	private String ziyuanbianhao;
-	
+
+	/**
+	 * 项目编号
+	 */
+	private String xiangmubianhao;
+
+	/**
+	 * 项目名称
+	 */
+	private String xiangmumingcheng;
+
 	/**
 	 * 帮扶类型
 	 */
@@ -186,6 +196,18 @@ public class BangfushishiEntity<T> implements Serializable {
 	 */
 	public String getZiyuanbianhao() {
 		return ziyuanbianhao;
+	}
+	/**
+	 * 设置：项目名称
+	 */
+	public void setXiangmumingcheng(String xiangmumingcheng) {
+		this.xiangmumingcheng = xiangmumingcheng;
+	}
+	/**
+	 * 获取：项目名称
+	 */
+	public String getXiangmumingcheng() {
+		return xiangmumingcheng;
 	}
 	/**
 	 * 设置：帮扶类型

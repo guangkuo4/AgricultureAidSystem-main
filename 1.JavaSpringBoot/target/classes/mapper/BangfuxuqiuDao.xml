@@ -12,7 +12,9 @@
         <result property="xuqiutupian" column="xuqiutupian"/>
         <result property="xuqiujinji" column="xuqiujinji"/>
         <result property="qiwangshijian" column="qiwangshijian"/>
+        <result property="suozaidiqu" column="suozaidiqu"/>
         <result property="jutidizhi" column="jutidizhi"/>
+        <result property="lianxidianhua" column="lianxidianhua"/>
         <result property="shenqingrenzhanghao" column="shenqingrenzhanghao"/>
         <result property="shenqingrenxingming" column="shenqingrenxingming"/>
         <result property="shenqingridi" column="shenqingridi"/>

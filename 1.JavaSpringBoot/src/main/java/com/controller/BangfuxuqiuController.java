@@ -20,8 +20,10 @@ import com.annotation.IgnoreAuth;
 
 import com.entity.BangfuxuqiuEntity;
 import com.entity.view.BangfuxuqiuView;
+import com.entity.MessageEntity;
 
 import com.service.BangfuxuqiuService;
+import com.service.MessageService;
 import com.utils.PageUtils;
 import com.utils.R;
 import com.utils.MPUtil;
@@ -38,6 +40,8 @@ import com.utils.MPUtil;
 public class BangfuxuqiuController {
     @Autowired
     private BangfuxuqiuService bangfuxuqiuService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * 后端列表
@@ -118,7 +122,34 @@ public class BangfuxuqiuController {
     @IgnoreAuth
     @RequestMapping("/update")
     public R update(@RequestBody BangfuxuqiuEntity bangfuxuqiu, HttpServletRequest request) {
+        // 获取原数据，检查是否是审核操作
+        BangfuxuqiuEntity oldEntity = bangfuxuqiuService.selectById(bangfuxuqiu.getId());
         bangfuxuqiuService.updateById(bangfuxuqiu);
+        
+        // 检查是否是审核操作（sfsh 字段有变化）
+        if (oldEntity != null && StringUtils.isNotBlank(bangfuxuqiu.getSfsh())
+                && !StringUtils.equals(oldEntity.getSfsh(), bangfuxuqiu.getSfsh())) {
+            // 发送审核结果消息
+            MessageEntity message = new MessageEntity();
+            message.setUserid(oldEntity.getUserid());
+            message.setTitle("需求审核结果");
+            String content = "您的帮扶需求（" + oldEntity.getXuqiubianhao() + "）已完成审核。";
+            if ("通过".equals(bangfuxuqiu.getSfsh()) || "已通过".equals(bangfuxuqiu.getSfsh()) || "是".equals(bangfuxuqiu.getSfsh())) {
+                content += "审核结果：通过";
+            } else if ("驳回".equals(bangfuxuqiu.getSfsh()) || "已拒绝".equals(bangfuxuqiu.getSfsh())) {
+                content += "审核结果：驳回";
+            } else {
+                content += "审核结果：" + bangfuxuqiu.getSfsh();
+            }
+            if (StringUtils.isNotBlank(bangfuxuqiu.getShhf())) {
+                content += "，审核意见：" + bangfuxuqiu.getShhf();
+            }
+            message.setContent(content);
+            message.setStatus("未读");
+            message.setType("审核通知");
+            message.setAddtime(new Date());
+            messageService.insert(message);
+        }
         return R.ok();
     }
 
