@@ -14,9 +14,9 @@
 	<div class="detail-preview nongji-detail__wrap">
 		<div class="nongji-detail__card">
 			<div class="nongji-detail__grid">
-				<div class="nongji-detail__media" v-if="detailBanner.length">
+				<div class="nongji-detail__media" v-if="detailBanner && detailBanner.length">
 					<div class="nongji-detail__media-main">
-						<img id="big" class="nongji-detail__media-img" :src="getSwiperImg(swiperBigUrl)" alt="课程图片">
+						<img id="big" class="nongji-detail__media-img" :src="getSwiperImg(detailBanner[0])" alt="课程图片">
 					</div>
 					<div class="nongji-detail__thumbs">
 						<button
@@ -89,16 +89,14 @@
 			<div class="nongji-detail__video" v-if="detail.kechengshipin">
 				<div class="nongji-detail__video-label"><i class="el-icon-video-camera"></i> 课程视频</div>
 				<div class="nongji-detail__video-box">
-					<video class="nongji-detail__video-el" :src="getSwiperImg(detail.kechengshipin)" controls playsinline>
-						您的浏览器不支持视频播放
-					</video>
+					<video class="nongji-detail__video-el" :src="getSwiperImg(detail.kechengshipin)" controls playsinline>您的浏览器不支持视频播放</video>
 				</div>
 			</div>
 		</div>
 
 		<el-tabs class="detail nongji-detail__tabs" v-model="activeName">
 			<el-tab-pane label="课程详情" name="first">
-				<div class="nongji-detail__rich" v-html="detail.kechengxiangqing"></div>
+				<div class="nongji-detail__rich" v-html="detailContent"></div>
 			</el-tab-pane>
 			<el-tab-pane label="评论" name="second">
 				<el-form class="add comment nongji-detail__comment-form" :model="form" :rules="rules" ref="form">
@@ -124,7 +122,7 @@
 						@mouseleave="discussLeave"
 					>
 						<div class="user">
-							<el-image v-if="item.avatarurl" :size="50" :src="baseUrl + 'upload/' + item.avatarurl"></el-image>
+							<el-image v-if="item.avatarurl" :size="50" :src="baseUrl + 'file/uploads?fileName=' + item.avatarurl"></el-image>
 							<el-image v-if="!item.avatarurl" :size="50" :src="require('@/assets/avator.svg')"></el-image>
 							<div class="name">{{ item.nickname }}</div>
 						</div>
@@ -217,6 +215,14 @@
 		swiperBigUrl: null,
       }
     },
+	computed: {
+		detailContent() {
+			if (!this.detail.kechengxiangqing) return '';
+			return this.detail.kechengxiangqing
+				.replace(/src="\/upload\//g, 'src="' + this.baseUrl + 'file/uploads?fileName=')
+				.replace(/src="upload\//g, 'src="' + this.baseUrl + 'file/uploads?fileName=');
+		}
+	},
     created() {
 		if(this.$route.query.centerType) {
 			this.centerType = true
@@ -234,9 +240,9 @@
         getSwiperImg(item) {
             if (!item) return '';
             if (String(item).substr(0, 4) == 'http') return item;
-            // 去掉已有的 upload/ 前缀，统一加完整前缀
+            // 去掉已有的 upload/ 前缀，用后端 /file/uploads 接口访问
             var name = String(item).replace(/^upload\//, '');
-            return this.baseUrl + 'upload/' + name;
+            return this.baseUrl + 'file/uploads?fileName=' + name;
         },
         init() {
 		  this.id = this.$route.query.id
@@ -246,6 +252,11 @@
               this.detail = res.data.data;
               this.title = this.detail.kechengbiaoti;
               this.detailBanner = this.detail.kechengzhaopian ? this.detail.kechengzhaopian.split(",") : [];
+              
+              if (this.detailBanner.length) {
+                this.swiperBigUrl = this.getSwiperImg(this.detailBanner[0])
+              }
+              
               this.$forceUpdate();
 
 			  this.getDiscussList(1);
@@ -254,9 +265,6 @@
 				}
 
             }
-			if (this.detailBanner.length) {
-				this.swiperBigUrl = this.getSwiperImg(this.detailBanner[0])
-			}
           });
         },
       storeup(type) {

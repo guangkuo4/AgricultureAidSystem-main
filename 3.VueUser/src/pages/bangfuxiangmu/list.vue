@@ -708,7 +708,7 @@ export default {
           const convertedNeeds = needs.map(need => ({
             id: need.id,
             xiangmubianhao: need.xuqiubianhao,
-            xiangmumingcheng: need.xuqiuleixing + '需求',
+            xiangmumingcheng: need.xuqiumingcheng || (need.xuqiuleixing + '需求'),
             xiangmuleixing: need.xuqiuleixing,
             faburiqi: need.shenqingridi,
             lianxiren: need.shenqingrenxingming,
@@ -716,6 +716,9 @@ export default {
             xiangmuxiangqing: need.xuqiumiaoshu,
             tupian: need.xuqiutupian,
             clicknum: 0,
+            suozaidiqu: need.suozaidiqu, // 添加所在省份字段
+            xuqiujinji: need.xuqiujinji, // 添加紧急程度字段
+            qiwangshijian: need.qiwangshijian, // 添加期望时间字段
             isNeed: true // 标记为需求转换的项目
           }))
           projects = [...projects, ...convertedNeeds]

@@ -34,7 +34,7 @@
           </el-form-item>
             <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' class="upload" v-else label="课程照片" prop="kechengzhaopian">
                 <img v-if="ruleForm.kechengzhaopian.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.kechengzhaopian.split(',')[0]" width="100" height="100">
-                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.kechengzhaopian.split(',')" :src="baseUrl+'upload/'+item" width="100" height="100">
+                <img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.kechengzhaopian.split(',')" :src="baseUrl+'file/uploads?fileName='+item" width="100" height="100">
             </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程视频" v-if="type!='cross' || (type=='cross' && !ro.kechengshipin)" prop="kechengshipin">
             <file-upload
